@@ -1,4 +1,4 @@
-package server.nanum.Domain;
+package server.nanum.domain;
 
 import jakarta.persistence.*;
 
