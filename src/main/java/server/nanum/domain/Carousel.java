@@ -8,7 +8,7 @@ public class Carousel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "carousel_id")
-    private Long carouselId;
+    private Long id;
 
     @Column(name = "name")
     private String name;

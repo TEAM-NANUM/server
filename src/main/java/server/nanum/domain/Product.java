@@ -2,6 +2,8 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.mapping.ToOne;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +13,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
-    private Long productId;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -35,6 +37,7 @@ public class Product {
     @Column(name = "rating_avg")
     private Float ratingAvg;
 
+    @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
@@ -46,7 +49,7 @@ public class Product {
     @JoinColumn(name = "sub_category_id")
     private SubCategory subCategory;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "carousel_id")
     private Carousel carousel;
 

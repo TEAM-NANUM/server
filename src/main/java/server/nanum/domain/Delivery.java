@@ -2,6 +2,7 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +12,7 @@ public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "delivery_id")
-    private Long deliveryId;
+    private Long id;
 
     @Column(name = "nickname")
     private String nickname;
@@ -31,6 +32,7 @@ public class Delivery {
     @Column(name = "is_default")
     private boolean isDefault;
 
+    @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createAt;
 

@@ -2,6 +2,7 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +12,7 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Long userId;
+    private Long id;
 
     @Column(name = "name")
     private String name;
@@ -23,6 +24,7 @@ public class User {
     @Column(name = "invite_code")
     private String inviteCode;
 
+    @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createAt;
 

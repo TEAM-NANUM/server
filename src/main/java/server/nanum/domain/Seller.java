@@ -1,6 +1,7 @@
 package server.nanum.domain;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -10,10 +11,10 @@ public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "seller_id")
-    private Long sellerId;
+    private Long id;
 
-    @Column(name = "username")
-    private String username;
+    @Column(name = "name")
+    private String name;
 
     @Column(name = "phone_number")
     private String phoneNumber;
@@ -36,6 +37,7 @@ public class Seller {
     @Column(name = "point")
     private Long point;
 
+    @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createAt;
 

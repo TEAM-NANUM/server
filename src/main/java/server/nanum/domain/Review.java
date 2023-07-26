@@ -2,6 +2,7 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
@@ -11,7 +12,7 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "review_id")
-    private Long reviewId;
+    private Long id;
 
     @Column(name = "rating")
     private Float rating;
@@ -19,12 +20,13 @@ public class Review {
     @Column(name = "comment")
     private String comment;
 
-    @ManyToOne
-    @JoinColumn(name = "order_id")
-    private Order order;
-
+    @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createAt;
+
+    @OneToOne
+    @JoinColumn(name = "order_id")
+    private Order order;
 
     // Getters and Setters
 }
