@@ -34,10 +34,11 @@ dependencies {
 tasks.named('test') {
 	useJUnitPlatform()
 }
-task copyPrivate(type: Copy) {
-	copy {
-		from './server-sub'
-		include "*.yml"
-		into 'src/main/resources'
-	}
+
+processResources.dependsOn('copySubmodule')
+
+task copySubmodule(type: Copy) {
+	from './config'
+	include '*.yml'
+	into './src/main/resources'
 }
