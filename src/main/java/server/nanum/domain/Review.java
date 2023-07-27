@@ -2,10 +2,14 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-
+@Getter
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "review")
 public class Review {
@@ -28,6 +32,12 @@ public class Review {
     @JoinColumn(name = "order_id")
     private Order order;
 
-    // Getters and Setters
+    public static Review makeReview(Order order,Float rating, String comment){
+        Review review = new Review();
+        review.rating=rating;
+        review.comment=comment;
+        review.order=order;
+        return review;
+    }
 }
 
