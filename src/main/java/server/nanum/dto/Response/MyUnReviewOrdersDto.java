@@ -4,10 +4,10 @@ import server.nanum.domain.Order;
 
 import java.util.List;
 
-public record MyUnReviewsOrderDto(
+public record MyUnReviewOrdersDto(
         Integer count,
         List<MyReviewDto> dto){
-    public static MyUnReviewsOrderDto toEntity(List<Order> orderList){
+    public static MyUnReviewOrdersDto toEntity(List<Order> orderList){
         List<MyReviewDto> DtoList = orderList.stream().map((order)-> {
             return MyReviewDto.builder()
                     .orderId(order.getId())
@@ -17,7 +17,7 @@ public record MyUnReviewsOrderDto(
                     .comment(order.getReview().getComment())
                     .build();
         }).toList();
-        return new MyUnReviewsOrderDto(DtoList.size(),DtoList);
+        return new MyUnReviewOrdersDto(DtoList.size(),DtoList);
     }
 
 }

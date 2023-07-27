@@ -10,7 +10,7 @@ import server.nanum.domain.Review;
 import server.nanum.domain.User;
 import server.nanum.dto.Request.AddReviewDto;
 import server.nanum.dto.Response.MyReviewOrdersDto;
-import server.nanum.dto.Response.MyUnReviewsOrderDto;
+import server.nanum.dto.Response.MyUnReviewOrdersDto;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ReviewRepository;
 import server.nanum.repository.UserRepository;
@@ -33,11 +33,11 @@ public class ReviewService {
         order.setReview(review);
     }
 
-    public MyUnReviewsOrderDto GetUnReviewOrder(Long userId){
+    public MyUnReviewOrdersDto GetUnReviewOrder(Long userId){
         User user = userRepository.findById(userId)
                 .orElseThrow(()-> new RuntimeException());
         List<Order> orderList = orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
-        return MyUnReviewsOrderDto.toEntity(orderList);
+        return MyUnReviewOrdersDto.toEntity(orderList);
     }
     public MyReviewOrdersDto GetReviewedOrder(Long userId){
         User user = userRepository.findById(userId)

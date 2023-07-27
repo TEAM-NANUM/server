@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.dto.Request.AddReviewDto;
 import server.nanum.dto.Response.MyReviewOrdersDto;
-import server.nanum.dto.Response.MyUnReviewsOrderDto;
+import server.nanum.dto.Response.MyUnReviewOrdersDto;
 import server.nanum.service.ReviewService;
 
 @Slf4j
@@ -16,9 +16,9 @@ import server.nanum.service.ReviewService;
 public class ReviewController {
     private final ReviewService reviewService;
     @GetMapping("/delivered")
-    public ResponseEntity<MyUnReviewsOrderDto> getDeliveredOrder(){
+    public ResponseEntity<MyUnReviewOrdersDto> getDeliveredOrder(){
         Long userId=1L; // 가상으로 지정
-        MyUnReviewsOrderDto dto = reviewService.GetUnReviewOrder(userId);
+        MyUnReviewOrdersDto dto = reviewService.GetUnReviewOrder(userId);
         return ResponseEntity.ok().build();
     }
     @GetMapping("/my")
