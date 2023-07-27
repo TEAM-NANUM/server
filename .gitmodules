@@ -1,3 +1,4 @@
 [submodule "config"]
 	path = config
 	url = https://github.com/TEAM-NANUM/config.git
+	branch=main
