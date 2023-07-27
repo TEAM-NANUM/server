@@ -1,0 +1,3 @@
+[submodule "server-sub"]
+	path = server-sub
+	url = https://github.com/TEAM-NANUM/server-sub.git
