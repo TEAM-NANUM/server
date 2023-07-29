@@ -1,13 +1,15 @@
-package server.nanum.dto.Response;
+package server.nanum.dto.response;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import server.nanum.domain.Order;
 
 import java.util.List;
-
-public record MyUnReviewOrdersDto(
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
+public record MyReviewOrdersDto(
         Integer count,
-        List<MyReviewDto> dto){
-    public static MyUnReviewOrdersDto toEntity(List<Order> orderList){
+        List<MyReviewDto> orders){
+    public static MyReviewOrdersDto toEntity(List<Order> orderList){
         List<MyReviewDto> DtoList = orderList.stream().map((order)-> {
             return MyReviewDto.builder()
                     .orderId(order.getId())
@@ -17,7 +19,7 @@ public record MyUnReviewOrdersDto(
                     .comment(order.getReview().getComment())
                     .build();
         }).toList();
-        return new MyUnReviewOrdersDto(DtoList.size(),DtoList);
+        return new MyReviewOrdersDto(DtoList.size(),DtoList);
     }
 
 }
