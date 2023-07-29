@@ -1,8 +1,10 @@
-package server.nanum.dto.Request;
+package server.nanum.dto.request;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import server.nanum.domain.Order;
 import server.nanum.domain.Review;
-
+@JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public record AddReviewDto(
         Long orderId,
         Float rating,
