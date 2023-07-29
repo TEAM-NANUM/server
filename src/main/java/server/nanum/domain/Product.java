@@ -2,6 +2,8 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.mapping.ToOne;
 
@@ -9,6 +11,8 @@ import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "product")
+@Builder
+@Getter
 public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +56,10 @@ public class Product {
     @OneToOne
     @JoinColumn(name = "carousel_id")
     private Carousel carousel;
+
+    public void setRatingAvg(Float ratingAvg) {
+        this.ratingAvg = ratingAvg;
+    }
 
     // Getters and Setters
 }
