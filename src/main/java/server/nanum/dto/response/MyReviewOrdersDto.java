@@ -11,13 +11,12 @@ public record MyReviewOrdersDto(
         List<MyReviewDto> orders){
     public static MyReviewOrdersDto toEntity(List<Order> orderList){
         List<MyReviewDto> DtoList = orderList.stream().map((order)-> {
-            return MyReviewDto.builder()
-                    .id(order.getId())
-                    .name(order.getProduct().getName())
-                    .imgUrl(order.getProduct().getImgUrl())
-                    .rating(order.getReview().getRating())
-                    .comment(order.getReview().getComment())
-                    .build();
+            return new MyReviewDto(
+                    order.getId(),
+                    order.getProduct().getName(),
+                    order.getProduct().getImgUrl(),
+                    order.getReview().getRating(),
+                    order.getReview().getComment());
         }).toList();
         return new MyReviewOrdersDto(DtoList.size(),DtoList);
     }
