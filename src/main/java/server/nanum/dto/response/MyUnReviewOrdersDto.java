@@ -13,8 +13,8 @@ public record MyUnReviewOrdersDto(
     public static MyUnReviewOrdersDto toEntity(List<Order> orderList){
         List<MyUnReviewDto> DtoList = orderList.stream().map((order)-> {
             return MyUnReviewDto.builder()
-                    .orderId(order.getId())
-                    .orderName(order.getProduct().getName())
+                    .id(order.getId())
+                    .name(order.getProduct().getName())
                     .imgUrl(order.getProduct().getImgUrl())
                     .build();
         }).toList();

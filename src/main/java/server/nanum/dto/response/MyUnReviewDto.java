@@ -7,7 +7,7 @@ import lombok.Builder;
 @Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public record MyUnReviewDto(
-        Long orderId,
-        String orderName,
+        Long id,
+        String name,
         String imgUrl){
 }

@@ -7,8 +7,8 @@ import lombok.Builder;
 @Builder
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
 public record MyReviewDto(
-        Long orderId,
-        String orderName,
+        Long id,
+        String name,
         String imgUrl,
         Float rating,
         String comment){
