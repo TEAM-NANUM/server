@@ -2,12 +2,13 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.mapping.ToOne;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Getter
 @Table(name = "product")
 public class Product {
     @Id
