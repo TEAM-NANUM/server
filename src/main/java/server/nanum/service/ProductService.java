@@ -20,6 +20,7 @@ public class ProductService {
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
 
+    @Transactional(readOnly = true)
     public ProductDTO.CategoryList getAllCategories() {
         List<Category> result = categoryRepository.findAll();
 
@@ -34,14 +35,15 @@ public class ProductService {
                 .build();
     }
 
-    // Method to fetch subcategories by category ID
+    @Transactional(readOnly = true)
     public ProductDTO.SubCategoryList getSubCategoriesByCategoryId(Long categoryId) {
-        List<SubCategory> result = subCategoryRepository.findByCategoryId(categoryId);
 
-        if (result.isEmpty()) {
-            // TODO: 1차 카테고리에 대한 하위 카테고리를 찾지 못한 경우에 대한 예외 처리
+        if(categoryRepository.findById(categoryId).orElse(null) == null) {
+            // TODO: 1차 카테고리에 대한 하위 카테고리를 찾지 못한 경우에 대한 예외 처리 (예외 클래스 변경 필요)
             throw new RuntimeException("NotFound");
         }
+
+        List<SubCategory> result = subCategoryRepository.findByCategoryId(categoryId);
 
         List<ProductDTO.CategoryItem> categoryItems = result.stream()
                 .map(category -> ProductDTO.CategoryItem.builder()
