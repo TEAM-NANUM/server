@@ -1,4 +1,4 @@
-package server.nanum.config;
+package server.nanum.config.properties;
 
 import lombok.Getter;
 import lombok.Setter;

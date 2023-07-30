@@ -1,4 +1,4 @@
-package server.nanum.security.oauth;
+package server.nanum.security.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

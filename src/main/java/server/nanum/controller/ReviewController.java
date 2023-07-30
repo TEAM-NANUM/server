@@ -4,9 +4,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.nanum.dto.Request.AddReviewDto;
-import server.nanum.dto.Response.MyReviewOrdersDto;
-import server.nanum.dto.Response.MyUnReviewOrdersDto;
+import server.nanum.domain.dto.Request.AddReviewDto;
+import server.nanum.domain.dto.Response.MyReviewOrdersDto;
+import server.nanum.domain.dto.Response.MyUnReviewOrdersDto;
 import server.nanum.service.ReviewService;
 
 @Slf4j

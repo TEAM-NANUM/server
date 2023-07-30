@@ -1,8 +1,9 @@
-package server.nanum.security.oauth;
+package server.nanum.domain.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * KakaoUserInfoResponse
@@ -14,11 +15,15 @@ import lombok.Getter;
  * 작성일: 2023-07-30
  */
 @Getter
+@Slf4j
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class KakaoUserInfoResponse {
+public class KakaoUserDTO implements UserDTO {
 
     @JsonProperty("kakao_account")
     private KakaoAccount kakaoAccount;
+
+    @JsonProperty("id")
+    private Long uid;
 
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
@@ -29,10 +34,15 @@ public class KakaoUserInfoResponse {
     @Getter
     @JsonIgnoreProperties(ignoreUnknown = true)
     static class KakaoProfile {
-        private String nickname;
+        @JsonProperty("nickname")
+        private String name;
     }
 
-    public String getNickname() {
-        return kakaoAccount.getProfile().getNickname();
+    public Long getUid() {
+        return uid;
+    }
+
+    public String getName() {
+        return kakaoAccount.getProfile().getName();
     }
 }

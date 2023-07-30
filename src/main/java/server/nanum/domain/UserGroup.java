@@ -1,9 +1,15 @@
 package server.nanum.domain;
 
 import jakarta.persistence.*;
+import lombok.*;
+
 
 @Entity
+@Builder
 @Table(name = "user_group")
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserGroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

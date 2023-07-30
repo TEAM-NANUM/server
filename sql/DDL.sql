@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS users (
     invite_code VARCHAR(255),
     create_at DATETIME,
     user_group_id BIGINT,
+    uid BIGINT NOT NULL,
     FOREIGN KEY (user_group_id) REFERENCES user_group(user_group_id)
     );
 
