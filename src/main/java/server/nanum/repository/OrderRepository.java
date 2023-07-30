@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.Order;
-import server.nanum.domain.Product;
+import server.nanum.domain.product.Product;
 import server.nanum.domain.User;
 
 import java.util.List;
