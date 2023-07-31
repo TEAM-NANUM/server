@@ -20,6 +20,12 @@ import java.util.List;
 public class ProductController {
     private final ProductService productService;
 
+    @GetMapping("/products/carousel")
+    public ResponseEntity<ProductDTO.CarouselList> getCarouselProducts() {
+        ProductDTO.CarouselList carouselProducts = productService.getCarouselProducts();
+        return ResponseEntity.ok(carouselProducts);
+    }
+
     @GetMapping("/categories")
     public ResponseEntity<ProductDTO.CategoryList> getCategories() {
         ProductDTO.CategoryList categoryList = productService.getAllCategories();
