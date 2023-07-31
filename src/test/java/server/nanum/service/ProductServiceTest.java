@@ -8,9 +8,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
+import server.nanum.domain.product.Carousel;
 import server.nanum.domain.product.Category;
 import server.nanum.domain.product.SubCategory;
 import server.nanum.dto.response.ProductDTO;
+import server.nanum.repository.CarouselRepository;
 import server.nanum.repository.CategoryRepository;
 import server.nanum.repository.SubCategoryRepository;
 
@@ -21,15 +24,52 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@ActiveProfiles("test") // 괄호 안에 실행 환경을 명시해준다.
 class ProductServiceTest {
     @InjectMocks
     ProductService productService;
+
+    @Mock
+    private CarouselRepository carouselRepository;
 
     @Mock
     private CategoryRepository categoryRepository;
 
     @Mock
     private SubCategoryRepository subCategoryRepository;
+
+    @Nested
+    @DisplayName("캐러셀 테스트")
+    class CarouselTest {
+
+        private ArrayList<Carousel> carouselList;
+
+        @BeforeEach
+        void innerSetup() {
+            carouselList = new ArrayList<>();
+            carouselList.add(new Carousel(1L, "Carousel 1", "Carousel 1 Url"));
+            carouselList.add(new Carousel(2L, "Carousel 2", "Carousel 2 Url"));
+            carouselList.add(new Carousel(3L, "Carousel 3", "Carousel 3 Url"));
+        }
+
+        @Test
+        @DisplayName("캐러셀 상품 목록을 가져올 수 있다.")
+        void testGetCarouselProducts() {
+            when(carouselRepository.findAll()).thenReturn(carouselList);
+
+            ProductDTO.CarouselList result = productService.getCarouselProducts();
+
+            assertAll(
+                    () -> assertEquals(3, result.getProducts().size(), () -> "캐러셀 상품의 총 개수는 3개여야 한다."),
+                    () -> assertEquals("Carousel 1", result.getProducts().get(0).getName(), () -> "첫 번째 캐러셀 상품의 name은 Carousel 1 이어야 한다."),
+                    () -> assertEquals("Carousel 1 Url", result.getProducts().get(0).getImgUrl(), () -> "첫 번째 캐러셀 상품의 imgUrl은 Carousel 1 Url 이어야 한다."),
+                    () -> assertEquals("Carousel 2", result.getProducts().get(1).getName(), () -> "두 번째 캐러셀 상품의 name은 Carousel 2 이어야 한다."),
+                    () -> assertEquals("Carousel 2 Url", result.getProducts().get(1).getImgUrl(), () -> "두 번째 캐러셀 상품의 imgUrl은 Carousel 2 Url 이어야 한다."),
+                    () -> assertEquals("Carousel 3", result.getProducts().get(2).getName(), () -> "세 번째 캐러셀 상품의 name은 Carousel 3 이어야 한다."),
+                    () -> assertEquals("Carousel 3 Url", result.getProducts().get(2).getImgUrl(), () -> "세 번째 캐러셀 상품의 imgUrl은 Carousel 3 Url 이어야 한다.")
+            );
+        }
+    }
 
     @Nested
     @DisplayName("카테고리 테스트")
@@ -91,5 +131,4 @@ class ProductServiceTest {
             assertThrows(RuntimeException.class, () -> productService.getSubCategoriesByCategoryId(categoryId));
         }
     }
-
 }

@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import server.nanum.domain.product.Carousel;
 import server.nanum.domain.product.Category;
 import server.nanum.domain.product.SubCategory;
 import server.nanum.dto.response.ProductDTO;
+import server.nanum.repository.CarouselRepository;
 import server.nanum.repository.CategoryRepository;
 import server.nanum.repository.SubCategoryRepository;
 
@@ -17,8 +19,25 @@ import java.util.List;
 @Transactional
 @Slf4j
 public class ProductService {
+    private final CarouselRepository carouselRepository;
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
+
+    @Transactional(readOnly = true)
+    public ProductDTO.CarouselList getCarouselProducts() {
+        List<Carousel> result = carouselRepository.findAll();
+
+        List<ProductDTO.CarouselItem> carouselItems = result.stream()
+                .map(carousel -> ProductDTO.CarouselItem.builder()
+                        .id(carousel.getId())
+                        .name(carousel.getName())
+                        .imgUrl(carousel.getImgUrl()).build())
+                .toList();
+
+        return ProductDTO.CarouselList.builder()
+                .products(carouselItems)
+                .build();
+    }
 
     @Transactional(readOnly = true)
     public ProductDTO.CategoryList getAllCategories() {
