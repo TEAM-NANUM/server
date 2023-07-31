@@ -13,7 +13,6 @@ import java.util.List;
 public class ProductDTO {
     @Builder
     @Getter
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class CategoryItem {
         private Long id;
         private String name;
@@ -21,14 +20,26 @@ public class ProductDTO {
 
     @Builder
     @Getter
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+    public static class CarouselItem {
+        private Long id;
+        private String name;
+        private String imgUrl;
+    }
+
+    @Builder
+    @Getter
+    public static class CarouselList {
+        private List<CarouselItem> products;
+    }
+
+    @Builder
+    @Getter
     public static class CategoryList {
         private List<CategoryItem> categories;
     }
 
     @Builder
     @Getter
-    @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
     public static class SubCategoryList {
         private List<CategoryItem> subcategories;
     }
