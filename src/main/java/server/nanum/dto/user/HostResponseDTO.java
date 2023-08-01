@@ -5,8 +5,8 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class UserResponseDTO {
-    private final String userId;
+public class HostResponseDTO {
+    private final String Id;
     private final String name;
     private final boolean isGuest;
     private final int point;

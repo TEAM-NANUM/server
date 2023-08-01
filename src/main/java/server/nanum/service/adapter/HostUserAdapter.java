@@ -4,12 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.Seller;
 import server.nanum.domain.User;
 import server.nanum.dto.user.HostDTO;
 import server.nanum.dto.user.LoginResponseDTO;
 import server.nanum.repository.UserRepository;
-import server.nanum.security.dto.KakaoUserResponse;
 import server.nanum.dto.user.UserDTO;
 import server.nanum.security.jwt.JwtProvider;
 
@@ -55,18 +53,17 @@ public class HostUserAdapter implements UserAdapter {
         String token = jwtProvider.createToken(String.format("%s:%s", user.getId(), user.getUserRole()));
         UserResponseDTO userResponseDTO = createUserResponseDTO(user);
 
-        return LoginResponseDTO.builder()
+        return builder()
                 .token(token)
-                .user(userResponseDTO)
+                .userResponseDTO(userResponseDTO)
                 .build();
     }
 
     private UserResponseDTO createUserResponseDTO(User user) {
         return UserResponseDTO.builder()
-                .id(String.valueOf(user.getId()))
+                .id(String.valueOf((user.getId())))
                 .username(user.getName())
-                .role("HOST")
+                .role(String.valueOf(user.getUserRole()))
                 .build();
     }
 }
-
