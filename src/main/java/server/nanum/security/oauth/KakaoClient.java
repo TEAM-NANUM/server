@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import server.nanum.security.dto.KakaoAuthRequest;
-import server.nanum.domain.dto.user.KakaoUserDTO;
+import server.nanum.security.dto.KakaoUserResponse;
 
 import java.net.URI;
 
@@ -46,10 +46,10 @@ public class KakaoClient {
      * @param req KakaoAuthRequest 객체로부터 인증 정보를 받아옵니다.
      * @return 로그인 완료 메시지
      */
-    public KakaoUserDTO handleCallback(KakaoAuthRequest req) {
+    public KakaoUserResponse handleCallback(KakaoAuthRequest req) {
         String accessToken = authClient.requestKakaoAccessToken(req);
 
-        KakaoUserDTO userInfo = authClient.requestKakaoUserInfo(accessToken);
+        KakaoUserResponse userInfo = authClient.requestKakaoUserInfo(accessToken);
         log.info("카카오 액세스 토근 발급 성공: {}", accessToken);
 
         return userInfo;

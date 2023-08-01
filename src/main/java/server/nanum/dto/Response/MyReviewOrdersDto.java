@@ -1,4 +1,4 @@
-package server.nanum.domain.dto.Response;
+package server.nanum.dto.Response;
 
 import server.nanum.domain.Order;
 

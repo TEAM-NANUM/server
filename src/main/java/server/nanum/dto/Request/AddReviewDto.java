@@ -1,4 +1,4 @@
-package server.nanum.domain.dto.Request;
+package server.nanum.dto.Request;
 
 import server.nanum.domain.Order;
 import server.nanum.domain.Review;

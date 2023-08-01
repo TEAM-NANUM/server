@@ -17,5 +17,5 @@ public class UserGroup {
     private Long id;
 
     @Column(name = "point")
-    private Long point;
+    private int point;
 }

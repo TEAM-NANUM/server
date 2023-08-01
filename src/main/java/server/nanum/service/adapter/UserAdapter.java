@@ -1,7 +1,7 @@
-package server.nanum.service.user.adapter;
+package server.nanum.service.adapter;
 
-import server.nanum.domain.dto.user.AuthResponseDTO;
-import server.nanum.domain.dto.user.UserDTO;
+import server.nanum.dto.user.LoginResponseDTO;
+import server.nanum.dto.user.UserDTO;
 
 /**
  * 사용자 어댑터 인터페이스
@@ -22,11 +22,12 @@ public interface UserAdapter {
     boolean supports(UserDTO userDTO);
 
     /**
-     * 주어진 사용자 정보를 기반으로 로그인 또는 회원 가입을 처리합니다.
+     * 주어진 사용자 정보를 기반으로 로그인을 처리합니다.
      *
-     * @param userDTO 로그인 또는 회원 가입에 필요한 사용자 정보 객체
+     * @param userDTO 로그인에 필요한 사용자 정보 객체
      * @return 인증 응답 DTO
      */
-    AuthResponseDTO loginOrRegister(UserDTO userDTO);
+    LoginResponseDTO login(UserDTO userDTO);
 }
+
 

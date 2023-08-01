@@ -14,7 +14,7 @@ import server.nanum.config.properties.KakaoProperties;
 import server.nanum.exception.KakaoClientException;
 import server.nanum.security.dto.KakaoAuthRequest;
 import server.nanum.security.dto.KakaoAuthResponse;
-import server.nanum.domain.dto.user.KakaoUserDTO;
+import server.nanum.security.dto.KakaoUserResponse;
 
 /**
  * KakaoAuthClient
@@ -65,7 +65,7 @@ public class KakaoAuthClient {
      * @return 사용자 정보를 담고 있는 KakaoUserInfoResponse 객체
      * @throws KakaoClientException 카카오 API 호출 중 예외가 발생했을 경우
      */
-    public KakaoUserDTO requestKakaoUserInfo(String accessToken) {
+    public KakaoUserResponse requestKakaoUserInfo(String accessToken) {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
         httpHeaders.set("Authorization", "Bearer " + accessToken);
@@ -76,7 +76,7 @@ public class KakaoAuthClient {
         HttpEntity<?> httpEntity = new HttpEntity<>(body, httpHeaders);
 
         try {
-            return restTemplate.postForObject(kakaoProperties.getUserInfoUri(), httpEntity, KakaoUserDTO.class);
+            return restTemplate.postForObject(kakaoProperties.getUserInfoUri(), httpEntity, KakaoUserResponse.class);
         } catch (RestClientException e) {
             throw new KakaoClientException("카카오 API에서 사용자 정보 요청 중 예외가 발생했습니다: " + e.getMessage(), e);
         }

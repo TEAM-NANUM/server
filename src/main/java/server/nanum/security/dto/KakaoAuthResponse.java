@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * KakaoAuthResponse
- * 카카오 API 인증 응답 클래스
+ * 카카오 인증 서버에서  받은  응답 객체
  * Access Token을 포함한 응답 정보를 담고 있다.
  *
  * 작성자: hyunjin

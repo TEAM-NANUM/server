@@ -1,13 +1,4 @@
-package server.nanum.service.user.adapter;
-
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.dto.user.AuthResponseDTO;
-import server.nanum.domain.dto.user.GuestUserDTO;
-import server.nanum.repository.UserRepository;
-import server.nanum.domain.dto.user.UserDTO;
+package server.nanum.service.adapter;
 
 //@Service
 //@RequiredArgsConstructor

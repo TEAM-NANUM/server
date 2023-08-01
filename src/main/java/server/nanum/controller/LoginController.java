@@ -1,5 +1,6 @@
 package server.nanum.controller;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -7,11 +8,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import server.nanum.domain.dto.user.AuthResponseDTO;
+import server.nanum.dto.user.LoginResponseDTO;
 import server.nanum.security.dto.KakaoAuthRequest;
-import server.nanum.domain.dto.user.KakaoUserDTO;
+import server.nanum.security.dto.KakaoUserResponse;
 import server.nanum.security.oauth.KakaoClient;
-import server.nanum.service.user.UserService;
+import server.nanum.service.LoginService;
 
 /**
  * 회원 인증 컨트롤러
@@ -24,19 +25,19 @@ import server.nanum.service.user.UserService;
  */
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/kakao")
+@RequestMapping("/api/login")
 @Slf4j
-public class AuthController {
+public class LoginController {
 
     private final KakaoClient kakaoClient;
-    private final UserService userService;
+    private final LoginService loginService;
 
     /**
      * 카카오 로그인 페이지로 리다이렉트합니다.
      *
      * @return ResponseEntity<Void> 리다이렉트 응답
      */
-    @GetMapping("/login")
+    @GetMapping("/kakao")
     public ResponseEntity<Void> redirectToKakaoLogin() {
         return kakaoClient.redirectToKakaoAuth();
     }
@@ -47,14 +48,15 @@ public class AuthController {
      * @param authorizationCode 인가 코드
      * @return AuthResponseDTO 로그인 또는 회원 가입 결과를 담은 응답 DTO
      */
+    @Hidden
     @GetMapping("/callback")
-    public AuthResponseDTO processKakaoLoginCallback(@RequestParam("code") String authorizationCode) {
+    public LoginResponseDTO processKakaoLoginCallback(@RequestParam("code") String authorizationCode) {
         KakaoAuthRequest params = new KakaoAuthRequest(authorizationCode);
-        KakaoUserDTO response = kakaoClient.handleCallback(params);
+        KakaoUserResponse response = kakaoClient.handleCallback(params);
 
         log.info("사용자 이름: {}", response.getName());
         log.info("사용자 UID: {}", response.getUid());
 
-        return userService.loginOrCreate(response);
+        return loginService.loginOrCreate(response.toHostDTO());
     }
 }

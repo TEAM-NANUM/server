@@ -8,7 +8,7 @@ import org.springframework.util.MultiValueMap;
 
 /**
  * KakaoAuthRequest
- * 카카오 API 요청을 생성하기 위한 클래스
+ * 카카오 인증 서버로 보내는 요청 객체
  * 인가 코드(authorizationCode)를 이용하여 API 요청을 생성
  *
  * 작성자: hyunjin

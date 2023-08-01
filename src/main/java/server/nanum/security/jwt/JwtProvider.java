@@ -1,11 +1,11 @@
-package server.nanum.utils;
+package server.nanum.security.jwt;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import server.nanum.config.properties.JwtProperties;
+import server.nanum.domain.UserRole;
 
 import javax.crypto.spec.SecretKeySpec;
 import java.sql.Timestamp;
@@ -19,17 +19,26 @@ import java.util.Date;
 public class JwtProvider {
     private final JwtProperties jwtProperties;
 
-    public String createToken(String id) {
+    public String createToken(String userSpecification) {
         String secretKey = jwtProperties.getSecretKey();
         long expirationHours = jwtProperties.getExpirationHours();
         String issuer = jwtProperties.getIssuer();
 
         return Jwts.builder()
                 .signWith(SignatureAlgorithm.HS512, new SecretKeySpec(secretKey.getBytes(), SignatureAlgorithm.HS512.getJcaName()))
-                .setSubject(id)
+                .setSubject(userSpecification)
                 .setIssuer(issuer)
                 .setIssuedAt(Timestamp.valueOf(LocalDateTime.now()))
                 .setExpiration(Date.from(Instant.now().plus(expirationHours, ChronoUnit.HOURS)))
                 .compact();
+    }
+
+    public String validateTokenAndGetSubject(String token) {
+        String secretKey = jwtProperties.getSecretKey();
+        return Jwts.parser()
+                .setSigningKey(secretKey.getBytes())
+                .parseClaimsJws(token)
+                .getBody()
+                .getSubject();
     }
 }

@@ -1,12 +1,12 @@
-package server.nanum.service.user;
+package server.nanum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.dto.user.AuthResponseDTO;
-import server.nanum.domain.dto.user.UserDTO;
-import server.nanum.service.user.adapter.UserAdapter;
+import server.nanum.dto.user.LoginResponseDTO;
+import server.nanum.dto.user.UserDTO;
+import server.nanum.service.adapter.UserAdapter;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,7 +27,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
-public class UserService {
+public class LoginService {
     private final List<UserAdapter> userAdapters;
 
     /**
@@ -37,9 +37,10 @@ public class UserService {
      * @return 인증 응답 DTO
      * @throws IllegalArgumentException 지원되지 않는 사용자일 경우 예외를 던집니다.
      */
-    public AuthResponseDTO loginOrCreate(UserDTO userDTO) {
+
+    public LoginResponseDTO loginOrCreate(UserDTO userDTO) {
         return getUserAdapterFor(userDTO)
-                .map(adapter -> adapter.loginOrRegister(userDTO))
+                .map(adapter -> adapter.login(userDTO))
                 .orElseThrow(() -> new IllegalArgumentException("지원되지 않는 사용자입니다."));
     }
 
