@@ -2,11 +2,11 @@ package server.nanum.domain.product;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import org.hibernate.annotations.CreationTimestamp;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
 import server.nanum.domain.DeliveryType;
 import server.nanum.domain.Seller;
 
@@ -15,8 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Getter
 @Entity
+@Getter
 @Table(name = "product")
 public class Product {
     @Id
