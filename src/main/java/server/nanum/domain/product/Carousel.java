@@ -1,7 +1,15 @@
-package server.nanum.domain;
+package server.nanum.domain.product;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Entity
 @Table(name = "carousel")
 public class Carousel {
@@ -15,6 +23,4 @@ public class Carousel {
 
     @Column(name = "img_url")
     private String imgUrl;
-
-    // Getters and Setters
 }

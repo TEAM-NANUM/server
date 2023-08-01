@@ -1,12 +1,14 @@
 package server.nanum.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "seller")
+@Getter
 public class Seller {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

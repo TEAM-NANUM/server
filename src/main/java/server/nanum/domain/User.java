@@ -2,6 +2,7 @@ package server.nanum.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import server.nanum.dto.user.HostDTO;
 
@@ -10,9 +11,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "users")
 @Builder
-@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
+@Getter
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

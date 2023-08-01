@@ -2,11 +2,9 @@ package server.nanum.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import server.nanum.domain.Review;
-
-import java.util.List;
+import server.nanum.domain.product.Carousel;
 
 @Repository
-public interface ReviewRepository extends JpaRepository<Review,Long> {
+public interface CarouselRepository extends JpaRepository<Carousel, Long> {
 
 }
