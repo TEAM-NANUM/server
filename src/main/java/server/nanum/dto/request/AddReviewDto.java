@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import server.nanum.domain.Order;
 import server.nanum.domain.Review;
 @JsonNaming(PropertyNamingStrategy.SnakeCaseStrategy.class)
-public record AddReviewDto(
+public record AddReviewDTO(
         Long orderId,
         Float rating,
         String comment) {
