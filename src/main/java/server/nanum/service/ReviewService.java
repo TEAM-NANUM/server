@@ -5,9 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.*;
-import server.nanum.dto.request.AddReviewDto;
-import server.nanum.dto.response.MyUnReviewOrdersDto;
-import server.nanum.dto.response.MyReviewOrdersDto;
+import server.nanum.dto.request.AddReviewDTO;
+import server.nanum.dto.response.MyUnReviewOrdersDTO;
+import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ReviewRepository;
 import server.nanum.repository.UserRepository;
@@ -20,8 +20,7 @@ import java.util.List;
 public class ReviewService {
     private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
-    private final UserRepository userRepository;
-    public void createReview(AddReviewDto dto){
+    public void createReview(AddReviewDTO dto){
         Order order = orderRepository.findById(dto.orderId())
                 .orElseThrow(()-> new RuntimeException());
         Review review = dto.toEntity(order);
@@ -37,16 +36,12 @@ public class ReviewService {
 
     }
 
-    public MyUnReviewOrdersDto GetUnReviewOrder(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException());
+    public MyUnReviewOrdersDTO GetUnReviewOrder(User user){
         List<Order> orderList = orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
-        return MyUnReviewOrdersDto.toEntity(orderList);
+        return MyUnReviewOrdersDTO.toEntity(orderList);
     }
-    public MyReviewOrdersDto GetReviewedOrder(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(()-> new RuntimeException());
+    public MyReviewOrdersDTO GetReviewedOrder(User user){
         List<Order> orderList = orderRepository.findByUserAndReviewIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
-        return MyReviewOrdersDto.toEntity(orderList);
+        return MyReviewOrdersDTO.toEntity(orderList);
     }
 }

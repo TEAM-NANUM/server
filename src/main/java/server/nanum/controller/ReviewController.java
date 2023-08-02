@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.nanum.dto.request.AddReviewDto;
-import server.nanum.dto.response.MyUnReviewOrdersDto;
-import server.nanum.dto.response.MyReviewOrdersDto;
+import server.nanum.annotation.CurrentUser;
+import server.nanum.domain.User;
+import server.nanum.dto.request.AddReviewDTO;
+import server.nanum.dto.response.MyUnReviewOrdersDTO;
+import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.service.ReviewService;
 @Slf4j
 @RequiredArgsConstructor
@@ -15,19 +17,17 @@ import server.nanum.service.ReviewService;
 public class ReviewController {
     private final ReviewService reviewService;
     @GetMapping("/delivered")
-    public ResponseEntity<MyUnReviewOrdersDto> getDeliveredOrder(){
-        Long userId=1L; // 가상으로 지정
-        MyUnReviewOrdersDto dto = reviewService.GetUnReviewOrder(userId);
+    public ResponseEntity<MyUnReviewOrdersDTO> getDeliveredOrder(@CurrentUser User user){
+        MyUnReviewOrdersDTO dto = reviewService.GetUnReviewOrder(user);
         return ResponseEntity.ok().body(dto);
     }
     @GetMapping("/my")
-    public ResponseEntity<MyReviewOrdersDto> getMyOrder(){
-        Long userId=1L; // 가상으로 지정
-        MyReviewOrdersDto dto = reviewService.GetReviewedOrder(userId);
+    public ResponseEntity<MyReviewOrdersDTO> getMyOrder(@CurrentUser User user){
+        MyReviewOrdersDTO dto = reviewService.GetReviewedOrder(user);
         return ResponseEntity.ok().body(dto);
     }
     @PostMapping()
-    public ResponseEntity<Void> addReview(@RequestBody AddReviewDto dto){
+    public ResponseEntity<Void> addReview(@RequestBody AddReviewDTO dto){
         reviewService.createReview(dto);
         return ResponseEntity.ok().build();
     }
