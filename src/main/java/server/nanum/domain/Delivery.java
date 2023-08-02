@@ -2,12 +2,17 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "delivery")
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
