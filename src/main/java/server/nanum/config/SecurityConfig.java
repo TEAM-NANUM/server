@@ -15,6 +15,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.web.cors.CorsConfigurationSource;
 import server.nanum.filter.JwtAuthenticationFilter;
+import server.nanum.security.custom.CustomAuthenticationEntryPoint;
 
 @EnableMethodSecurity
 @RequiredArgsConstructor
@@ -25,6 +26,7 @@ public class SecurityConfig {
     private final CorsConfigurationSource corsConfigurationSource;
 
     private static final String[] ALLOWED_URIS = {"/api/swagger", "/swagger-ui/**", "/v3/**", "api/login/**", "api/products"};
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {

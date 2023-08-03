@@ -147,27 +147,27 @@ public class ProductService {
                 .build();
     }
 
-    @Transactional(readOnly = true)
-    public ProductDTO.ProductDetail getProductDetailById(Long productId) {
-        Product product = productRepository.findById(productId)        // TODO: 404 예외처리
-                .orElseThrow(() -> new RuntimeException());
-
-        // 주소 정보 토큰화
-        String[] tokenizedCityAddress;
-        tokenizedCityAddress = product.getSeller().getDefaultAddress().split(" ");
-        // seller명 생성
-        String sellerNameWithAddress = tokenizedCityAddress[0] + " " + tokenizedCityAddress[1] + " " + product.getSeller().getName();
-
-
-
-        return ProductDTO.ProductDetail.builder()
-                .imgUrl(product.getImgUrl())
-                .seller(tokenizedCityAddress[0]+ " ")
-                .name("Example Product")
-                .unit(100)
-                .rating(4.8)
-                .price(50)
-                .description("This is an example product.")
-                .build();
-    }
+//    @Transactional(readOnly = true)
+//    public ProductDTO.ProductDetail getProductDetailById(Long productId) {
+//        Product product = productRepository.findById(productId)        // TODO: 404 예외처리
+//                .orElseThrow(() -> new RuntimeException());
+//
+//        // 주소 정보 토큰화
+//        String[] tokenizedCityAddress;
+//        tokenizedCityAddress = product.getSeller().getDefaultAddress().split(" ");
+//        // seller명 생성
+//        String sellerNameWithAddress = tokenizedCityAddress[0] + " " + tokenizedCityAddress[1] + " " + product.getSeller().getName();
+//
+//
+//
+//        return ProductDTO.ProductDetail.builder()
+//                .imgUrl(product.getImgUrl())
+//                .seller(tokenizedCityAddress[0]+ " ")
+//                .name("Example Product")
+//                .unit(100)
+//                .rating(4.8)
+//                .price(50)
+//                .description("This is an example product.")
+//                .build();
+//    }
 }

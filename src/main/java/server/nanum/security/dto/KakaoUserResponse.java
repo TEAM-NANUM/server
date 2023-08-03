@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import server.nanum.dto.user.HostDTO;
+import server.nanum.dto.user.response.HostDTO;
 
 /**
  * KakaoUserDTO

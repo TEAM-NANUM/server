@@ -51,11 +51,11 @@ public class KakaoAuthClient {
         try {
             KakaoAuthResponse response = restTemplate.postForObject(kakaoProperties.getTokenUri(), httpEntity, KakaoAuthResponse.class);
             if (response == null || response.getAccessToken() == null) {
-                throw new KakaoClientException("카카오 API에서 액세스 토큰을 가져오지 못했습니다.");
+                throw new KakaoClientException("카카오 인증서버에서 액세스 토큰을 가져오지 못했습니다.\n" + "카카오 API 응답: " + response);
             }
             return response.getAccessToken();
         } catch (RestClientException e) {
-            throw new KakaoClientException("카카오 API에서 액세스 토큰 요청 중 예외가 발생했습니다: " + e.getMessage(), e);
+            throw new KakaoClientException("카카오 인증서버로 액세스 토큰 요청 중 예외가 발생했습니다\n" + "예외 메시지: " + e.getMessage());
         }
     }
 
@@ -78,7 +78,7 @@ public class KakaoAuthClient {
         try {
             return restTemplate.postForObject(kakaoProperties.getUserInfoUri(), httpEntity, KakaoUserResponse.class);
         } catch (RestClientException e) {
-            throw new KakaoClientException("카카오 API에서 사용자 정보 요청 중 예외가 발생했습니다: " + e.getMessage(), e);
+            throw new KakaoClientException("카카오 API에서 사용자 정보 요청 중 예외가 발생했습니다\n" +  "예외 메시지: " + e.getMessage());
         }
     }
 }

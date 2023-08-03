@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
-import server.nanum.dto.user.HostDTO;
+import server.nanum.dto.user.response.HostDTO;
 
 import java.time.LocalDateTime;
 
