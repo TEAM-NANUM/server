@@ -61,6 +61,16 @@ public class Product {
     @OneToOne
     @JoinColumn(name = "carousel_id")
     private Carousel carousel;
+
+    @Column(name = "view_cnt")
+    private Integer viewCnt;
+
+    @Column(name = "review_cnt")
+    private Integer reviewCnt;
+
+    @Column(name = "purchase_cnt")
+    private Integer purchaseCnt;
+
     
     public void setRatingAvg(Float ratingAvg) {
         this.ratingAvg = ratingAvg;
