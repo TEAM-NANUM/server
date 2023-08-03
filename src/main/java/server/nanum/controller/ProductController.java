@@ -45,10 +45,10 @@ public class ProductController {
         return ResponseEntity.ok(productList);
     }
 
-//    @GetMapping("/products/{product_id}")
-//    public ResponseEntity<ProductDTO.ProductDetail> getProductDetails(@PathVariable("product_id") Long productId) {
-//        ProductDTO.ProductDetail productDetail = productService.getProductDetailById(productId);
-//        return ResponseEntity.ok(productDetail);
-//    }
+    @GetMapping("/products/{product_id}")
+    public ResponseEntity<ProductDTO.ProductDetail> getProductDetails(@PathVariable("product_id") Long productId) {
+        ProductDTO.ProductDetail productDetail = productService.getProductDetailById(productId);
+        return ResponseEntity.ok(productDetail);
+    }
 
 }

@@ -66,7 +66,7 @@ public class ProductDTO {
         private String imgUrl;
         private String seller;
         private String name;
-        private Integer unit;
+        private String unit;
         private double rating;
         private Integer price;
         private String description;
