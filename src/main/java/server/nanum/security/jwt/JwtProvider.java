@@ -14,6 +14,15 @@ import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
 
+/**
+ * JWT 관리 클래스
+ * JWT 토큰의 생성과 검증을 담당하는 클래스입니다.
+ * JwtProperties 객체를 이용하여 토큰을 설정하고 관리합니다.
+ *
+ * 작성자: hyunjin
+ * 버전: 1.0.0
+ * 작성일: 2023년 7월 30일
+ */
 @Component
 @RequiredArgsConstructor
 public class JwtProvider {

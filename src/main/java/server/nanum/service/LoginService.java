@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.dto.user.LoginResponseDTO;
-import server.nanum.dto.user.UserDTO;
+import server.nanum.dto.user.response.LoginResponseDTO;
+import server.nanum.dto.user.response.UserDTO;
 import server.nanum.service.adapter.UserAdapter;
 
 import java.util.List;

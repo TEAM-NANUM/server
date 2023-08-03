@@ -1,4 +1,4 @@
-package server.nanum.dto.user;
+package server.nanum.dto.user.response;
 
 import lombok.Builder;
 
