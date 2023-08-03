@@ -83,7 +83,11 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * @throws JwtAuthenticationException JWT 인증 실패 예외
      */
     private Authentication authenticateWithToken(String token) {
-        String username = jwtProvider.validateTokenAndGetSubject(token);
+        String username = Optional.ofNullable(token)
+                .filter(subject -> subject.length() >= 10)
+                .map(jwtProvider::validateTokenAndGetSubject)
+                .orElse("anonymous:anonymous")
+                .split(":")[0];
 
         if (username.isEmpty()) {
             throw new JwtAuthenticationException("페이로드가 올바르지 않습니다");
