@@ -10,13 +10,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.product.*;
 import server.nanum.dto.response.ProductDTO;
-import server.nanum.repository.CarouselRepository;
-import server.nanum.repository.CategoryRepository;
-import server.nanum.repository.ProductRepository;
-import server.nanum.repository.SubCategoryRepository;
+import server.nanum.repository.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +24,7 @@ import java.util.stream.Collectors;
 public class ProductService {
     private final JPAQueryFactory queryFactory;
     private final ProductRepository productRepository;
-
+    private final SellerRepository sellerRepository;
     private final CarouselRepository carouselRepository;
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
@@ -146,6 +144,30 @@ public class ProductService {
         return ProductDTO.ProductList.builder()
                 .count((long) productItems.size())
                 .products(productItems)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ProductDTO.ProductDetail getProductDetailById(Long productId) {
+        Product product = productRepository.findById(productId)        // TODO: 404 예외처리
+                .orElseThrow(() -> new RuntimeException());
+
+        // 주소 정보 토큰화
+        String[] tokenizedCityAddress;
+        tokenizedCityAddress = product.getSeller().getDefaultAddress().split(" ");
+        // seller명 생성
+        String sellerNameWithAddress = tokenizedCityAddress[0] + " " + tokenizedCityAddress[1] + " " + product.getSeller().getName();
+
+
+
+        return ProductDTO.ProductDetail.builder()
+                .imgUrl(product.getImgUrl())
+                .seller(tokenizedCityAddress[0]+ " ")
+                .name("Example Product")
+                .unit(100)
+                .rating(4.8)
+                .price(50)
+                .description("This is an example product.")
                 .build();
     }
 }

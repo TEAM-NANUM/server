@@ -59,4 +59,17 @@ public class ProductDTO {
         private Long count;
         private List<ProductListItem> products;
     }
+
+    @Builder
+    @Getter
+    public static class ProductDetail {
+        private String imgUrl;
+        private String seller;
+        private String name;
+        private Integer unit;
+        private double rating;
+        private Integer price;
+        private String description;
+    }
+
 }
