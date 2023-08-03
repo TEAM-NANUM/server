@@ -2,12 +2,18 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "delivery")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +40,5 @@ public class Delivery {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Getters and Setters
 }
 
