@@ -24,7 +24,7 @@ public class SecurityConfig {
 //    private final AuthenticationEntryPoint entryPoint;
     private final CorsConfigurationSource corsConfigurationSource;
 
-    private static final String[] ALLOWED_URIS = {"/api/swagger", "/swagger-ui/**", "/v3/**", "api/login/**"};
+    private static final String[] ALLOWED_URIS = {"/api/swagger", "/swagger-ui/**", "/v3/**", "api/login/**", "api/products"};
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
