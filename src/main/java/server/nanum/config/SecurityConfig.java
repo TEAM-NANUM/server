@@ -25,7 +25,16 @@ public class SecurityConfig {
 //    private final AuthenticationEntryPoint entryPoint;
     private final CorsConfigurationSource corsConfigurationSource;
 
-    private static final String[] ALLOWED_URIS = {"/api/swagger", "/swagger-ui/**", "/v3/**", "api/login/**", "api/products"};
+    private static final String[] ALLOWED_URIS = {
+            "/api/swagger",
+            "/swagger-ui/**",
+            "/v3/**",
+            "api/login/**",
+            "api/products",
+            "api/products/{product_id}",
+            "api/{product_id}/reviews"
+    };
+
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     @Bean
