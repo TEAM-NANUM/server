@@ -16,8 +16,9 @@ import java.time.LocalDateTime;
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(KakaoClientException.class)
-    public ResponseEntity<String> handleKakaoClientException(KakaoClientException ex) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("카카오 클라이언트 오류가 발생했습니다.");
+    public ResponseEntity<ErrorDTO> handleKakaoClientException(KakaoClientException ex) {
+        ErrorDTO errorDto = new ErrorDTO("카카오 로그인 중 에러 발생!", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
     }
 
     @ExceptionHandler(JwtAuthenticationException.class)
@@ -25,5 +26,4 @@ public class GlobalExceptionHandler {
         ErrorDTO errorDto = new ErrorDTO("JWT 에러 발생!!", ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDto);
     }
-
 }

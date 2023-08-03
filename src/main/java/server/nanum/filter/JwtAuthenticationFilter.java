@@ -85,8 +85,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private Authentication authenticateWithToken(String token) {
         String username = jwtProvider.validateTokenAndGetSubject(token);
 
-        if (username.isEmpty() || token.length() < 10) {
-            throw new JwtAuthenticationException("유효하지 않은 토큰입니다.");
+        if (username.isEmpty()) {
+            throw new JwtAuthenticationException("페이로드가 올바르지 않습니다");
         }
 
         UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);

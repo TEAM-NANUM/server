@@ -1,4 +1,7 @@
 package server.nanum.dto.user.response;
 
-public class GuestDTO {
+import lombok.Builder;
+
+@Builder
+public record GuestDTO(String nickname, String zipCode, String defaultAddress, String detailAddress) {
 }

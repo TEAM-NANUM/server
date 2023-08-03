@@ -20,14 +20,8 @@ public class Delivery {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "zip_code")
-    private String zipCode;
-
-    @Column(name = "default_address")
-    private String defaultAddress;
-
-    @Column(name = "detail_address")
-    private String detailAddress;
+    @Embedded
+    private Address address;
 
     @Column(name = "is_default")
     private boolean isDefault;
