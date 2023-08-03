@@ -1,7 +1,7 @@
 package server.nanum.service.adapter;
 
-import server.nanum.dto.user.LoginResponseDTO;
-import server.nanum.dto.user.UserDTO;
+import server.nanum.dto.user.response.LoginResponseDTO;
+import server.nanum.dto.user.response.UserDTO;
 
 /**
  * 사용자 어댑터 인터페이스
