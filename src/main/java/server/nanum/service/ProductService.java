@@ -1,24 +1,32 @@
 package server.nanum.service;
 
+import com.querydsl.jpa.impl.JPAQuery;
+import com.querydsl.jpa.impl.JPAQueryFactory;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.product.Carousel;
-import server.nanum.domain.product.Category;
-import server.nanum.domain.product.SubCategory;
+import server.nanum.domain.product.*;
 import server.nanum.dto.response.ProductDTO;
 import server.nanum.repository.CarouselRepository;
 import server.nanum.repository.CategoryRepository;
+import server.nanum.repository.ProductRepository;
 import server.nanum.repository.SubCategoryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class ProductService {
+    private final JPAQueryFactory queryFactory;
+    private final ProductRepository productRepository;
+
     private final CarouselRepository carouselRepository;
     private final CategoryRepository categoryRepository;
     private final SubCategoryRepository subCategoryRepository;
@@ -72,6 +80,72 @@ public class ProductService {
 
         return ProductDTO.SubCategoryList.builder()
                 .subcategories(categoryItems)
+                .build();
+    }
+
+    @Transactional(readOnly = true)
+    public ProductDTO.ProductList getProductsByQueryParameters(
+            Long subcategory, String q, String sort, Integer limit
+    ) {
+        QProduct qProduct = QProduct.product;
+
+        // Start building the query
+        JPAQuery<Product> query = queryFactory.selectFrom(qProduct);
+
+        if (subcategory != null) {
+            query = query.where(qProduct.subCategory.id.eq(subcategory));
+        }
+
+        if (q != null && !q.isBlank()) {
+            String searchKeyword = "%" + q.trim() + "%";
+            query = query.where(
+                    qProduct.name.toLowerCase().like(searchKeyword.toLowerCase())
+                            .or(qProduct.description.toLowerCase().like(searchKeyword.toLowerCase()))
+            );
+        }
+
+        if (sort != null && !sort.isEmpty()) {
+            switch (sort) {
+                case "popular":
+                    query = query.orderBy(qProduct.purchaseCnt.desc());
+                    break;
+                case "review":
+                    query = query.orderBy(qProduct.reviewCnt.desc());
+                    break;
+                case "recent":
+                    query = query.orderBy(qProduct.createAt.desc());
+                    break;
+                case "rating":
+                    query = query.orderBy(qProduct.ratingAvg.desc());
+                    break;
+                default:
+                    // TODO: 400 애러 발생
+                    throw new RuntimeException("지원하지 않는 정렬");
+            }
+        }
+
+        // Apply limit if provided
+        if (limit != null && limit > 0) {
+            query = query.limit(limit);
+        }
+
+        List<Product> products = query.fetch();
+
+        // Entity ->  DTO
+        List<ProductDTO.ProductListItem> productItems = products.stream()
+                .map(product -> ProductDTO.ProductListItem.builder()
+                        .id(product.getId())
+                        .imgUrl(product.getImgUrl())
+                        .seller(product.getSeller().getName())
+                        .deliveryType(product.getDeliveryType().name())
+                        .name(product.getName())
+                        .price(product.getPrice())
+                        .build())
+                .toList();
+
+        return ProductDTO.ProductList.builder()
+                .count((long) productItems.size())
+                .products(productItems)
                 .build();
     }
 }

@@ -1,7 +1,5 @@
 package server.nanum.dto.response;
 
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,5 +40,23 @@ public class ProductDTO {
     @Getter
     public static class SubCategoryList {
         private List<CategoryItem> subcategories;
+    }
+
+    @Builder
+    @Getter
+    public static class ProductListItem {
+        private Long id;
+        private String imgUrl;
+        private String seller;
+        private String deliveryType;
+        private String name;
+        private Integer price;
+    }
+
+    @Builder
+    @Getter
+    public static class ProductList {
+        private Long count;
+        private List<ProductListItem> products;
     }
 }
