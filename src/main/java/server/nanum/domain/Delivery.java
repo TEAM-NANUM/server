@@ -29,16 +29,15 @@ public class Delivery {
     @Embedded
     private Address address;
 
-    @Column(name = "is_default")
+    @Column(name = "is_default", columnDefinition = "boolean default true")
     private boolean isDefault;
 
     @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
-
 }
 

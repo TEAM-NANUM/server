@@ -4,52 +4,32 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.Address;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
-import server.nanum.domain.UserRole;
 import server.nanum.dto.user.response.GuestDTO;
-import server.nanum.dto.user.response.LoginResponseDTO;
-import server.nanum.dto.user.response.UserDTO;
 import server.nanum.repository.DeliveryRepository;
-import server.nanum.repository.UserRepository;
 
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
 @Slf4j
 public class SignupService {
-    private final UserRepository userRepository;
+
     private final DeliveryRepository deliveryRepository;
 
-    public void registerGuestUser(GuestDTO guestDTO) {
-        User newUser = createUser(guestDTO);
-        createDelivery(newUser, guestDTO);;
-    }
+    /**
+     * 게스트 회원가입 처리
+     *
+     * @param user 현재 사용자 정보
+     * @param guestDTO 게스트 회원가입 요청 DTO
+     */
+    public void registerGuestUser(User user, GuestDTO guestDTO) {
+        // 게스트 정보를 사용자 정보로 변환
+        User guest = guestDTO.toGuest(user.getUserGroup());
 
-    private User createUser(GuestDTO guestDTO) {
-        User newUser = User.builder()
-                .uid(0L) // "0000000000"으로 초기화
-                .name(guestDTO.nickname())
-                .userRole(UserRole.HOST)
-                .inviteCode(UUID.randomUUID().toString())
-                .build();
-
-        return userRepository.save(newUser);
-    }
-
-    private void createDelivery(User user, GuestDTO guestDTO) {
-        Address address = new Address(guestDTO.zipCode(), guestDTO.defaultAddress(), guestDTO.detailAddress());
-        Delivery newDelivery = Delivery.builder()
-                .nickname(guestDTO.nickname())
-                .phoneNumber(null)
-                .address(address)
-                .isDefault(true)
-                .user(user)
-                .build();
-
+        // 새로운 배송 정보 생성 및 저장
+        Delivery newDelivery = guestDTO.toDelivery(guest);
         deliveryRepository.save(newDelivery);
     }
 }

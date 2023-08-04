@@ -37,24 +37,20 @@ public class User {
     @Column(name = "create_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_group_id")
     private UserGroup userGroup;
 
     // Host 사용자를 생성하는 메서드
-    public static User createHost(HostDTO hostDTO) {
-        // 새로운 UserGroup 생성 및 초기화
-        UserGroup newUserGroup = UserGroup.builder()
-                .point(0) // point는 0으로 초기화
-                .build();
-
+    public static User createHost(HostDTO hostDTO, UserGroup userGroup) {
         return User.builder()
                 .uid(hostDTO.uid())
                 .name(hostDTO.name())
                 .userRole(UserRole.HOST)
-                .userGroup(newUserGroup)
+                .userGroup(userGroup)
                 .build();
     }
+
 
     // 사용자가 속한 UserGroup의 포인트를 반환하는 메서드
     public int getUserGroupPoint() {
