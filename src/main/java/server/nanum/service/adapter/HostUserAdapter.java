@@ -1,17 +1,21 @@
 package server.nanum.service.adapter;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.User;
+import server.nanum.domain.UserGroup;
 import server.nanum.dto.user.response.HostDTO;
 import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.repository.UserRepository;
 import server.nanum.dto.user.response.UserDTO;
 import server.nanum.security.jwt.JwtProvider;
 
+import static server.nanum.domain.User.*;
 import static server.nanum.domain.User.createHost;
+import static server.nanum.domain.UserGroup.*;
 import static server.nanum.dto.user.response.LoginResponseDTO.*;
 
 /**
@@ -30,6 +34,7 @@ public class HostUserAdapter implements UserAdapter {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
+    private final EntityManager entityManager;
 
     /**
      * 사용자 정보를 통해 해당 어댑터를 사용할 수 있는지 판단하는 메서드
@@ -53,7 +58,9 @@ public class HostUserAdapter implements UserAdapter {
         return userRepository.findByUid(hostDTO.uid())
                 .map(this::createLoginResponse)
                 .orElseGet(() -> {
-                    User newUser = createHost(hostDTO);
+                    UserGroup newUserGroup = UserGroup.createUserGroup(0); // 새로운 UserGroup 생성
+                    entityManager.persist(newUserGroup);
+                    User newUser = User.createHost(hostDTO, newUserGroup); // 생성자를 통해 UserGroup 설정
                     userRepository.save(newUser);
                     return createLoginResponse(newUser);
                 });
@@ -68,7 +75,7 @@ public class HostUserAdapter implements UserAdapter {
         String token = jwtProvider.createToken(String.format("%s:%s", user.getId(), user.getUserRole()));
         UserResponseDTO userResponseDTO = createUserResponseDTO(user);
 
-        return builder()
+        return LoginResponseDTO.builder()
                 .token(token)
                 .userResponseDTO(userResponseDTO)
                 .build();

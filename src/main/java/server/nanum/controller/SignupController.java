@@ -3,14 +3,24 @@ package server.nanum.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import server.nanum.annotation.CurrentUser;
+import server.nanum.domain.User;
 import server.nanum.dto.user.response.GuestDTO;
 import server.nanum.service.SignupService;
 
+/**
+ * 회원가입 컨트롤러
+ *
+ * @author hyunjin
+ * @version 1.0.0
+ * @date 2023-08-05
+ */
 @RestController
+@RequestMapping("/api/signup")
 @RequiredArgsConstructor
 public class SignupController {
 
@@ -19,13 +29,14 @@ public class SignupController {
     /**
      * 게스트용 회원가입 API
      *
+     * @param user 현재 사용자 정보
      * @param guestDTO 게스트 회원가입 요청 DTO
-     * @return ResponseEntity<LoginResponseDTO> 회원가입 결과와 인증 응답 DTO
+     * @return ResponseEntity<Void> 회원가입 결과 응답
      */
     @PostMapping("/guest")
-    public ResponseEntity<Void> registerGuestUser(@RequestBody GuestDTO guestDTO) {
-        // 로그인 또는 회원가입 처리
-        signupService.registerGuestUser(guestDTO);
+    public ResponseEntity<Void> registerGuestUser(@CurrentUser User user, @RequestBody GuestDTO guestDTO) {
+
+        signupService.registerGuestUser(user, guestDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
