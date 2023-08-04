@@ -4,14 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.nanum.dto.request.AddReviewDto;
-import server.nanum.dto.response.MyReviewOrdersDto;
-import server.nanum.dto.response.MyUnReviewOrdersDto;
 import server.nanum.dto.response.ProductDTO;
 import server.nanum.service.ProductService;
-import server.nanum.service.ReviewService;
-
-import java.util.List;
 
 @Slf4j
 @RequiredArgsConstructor
@@ -37,4 +31,24 @@ public class ProductController {
         ProductDTO.SubCategoryList subCategoryList = productService.getSubCategoriesByCategoryId(categoryId);
         return ResponseEntity.ok(subCategoryList);
     }
+
+    @GetMapping("/products")
+    public ResponseEntity<ProductDTO.ProductList> getProducts(
+            @RequestParam(required = false) Long subcategory,
+            @RequestParam(required = false) String q,
+            @RequestParam(defaultValue = "recent") String sort,
+            @RequestParam(required = false) Integer limit
+    ) {
+        ProductDTO.ProductList productList =
+                productService.getProductsByQueryParameters(subcategory, q, sort, limit);
+
+        return ResponseEntity.ok(productList);
+    }
+
+    @GetMapping("/products/{product_id}")
+    public ResponseEntity<ProductDTO.ProductDetail> getProductDetails(@PathVariable("product_id") Long productId) {
+        ProductDTO.ProductDetail productDetail = productService.getProductDetailById(productId);
+        return ResponseEntity.ok(productDetail);
+    }
+
 }
