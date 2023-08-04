@@ -15,10 +15,10 @@ import server.nanum.service.SignupService;
 
 /**
  * 회원가입 컨트롤러
- *
- * @author hyunjin
+ * 게스트용 회원가입과 판매자용 회원가입 API를 제공합니다.
+ *@author hyunjin
  * @version 1.0.0
- * @date 2023-08-05
+ * @since 2023-08-05
  */
 @RestController
 @RequestMapping("/api/signup")
@@ -42,6 +42,12 @@ public class SignupController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /**
+     * 판매자용 회원가입 API
+     *
+     * @param sellerSignupDTO 판매자 회원가입 요청 DTO
+     * @return ResponseEntity<Void> 회원가입 결과 응답
+     */
     @PostMapping("/seller")
     public ResponseEntity<Void> registerSeller(@RequestBody SellerSignupDTO sellerSignupDTO) {
 

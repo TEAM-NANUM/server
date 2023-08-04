@@ -5,17 +5,22 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.Address;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.Seller;
 import server.nanum.domain.User;
-import server.nanum.dto.request.AddressDTO;
 import server.nanum.dto.user.request.SellerSignupDTO;
 import server.nanum.dto.user.request.GuestSignupDTO;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.SellerRepository;
 
-
+/**
+ * SignupService는 회원가입 관련 비즈니스 로직을 처리하는 서비스입니다.
+ * 게스트 회원가입과 판매자 회원가입을 처리하는 메서드를 제공합니다.
+ * 회원가입 정보를 사용하여 User, Delivery, Seller 등의 엔티티를 생성하고 저장합니다.
+ *@author hyunjin
+ * @version 1.0.0
+ * @since 2023-08-05
+ */
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -41,24 +46,22 @@ public class SignupService {
         deliveryRepository.save(newDelivery);
     }
 
+    /**
+     * 판매자 회원가입 처리
+     *
+     * @param sellerSignupDTO 판매자 회원가입 요청 DTO
+     */
     public void registerSeller(SellerSignupDTO sellerSignupDTO) {
-        Seller seller = createSellerFromDTO(sellerSignupDTO);
-        seller = seller.withPoint(0L); // point를 0으로 초기화
-        seller = seller.withEncryptedPassword(passwordEncoder.encode(seller.getPassword())); // password를 암호화
-        sellerRepository.save(seller); // Seller 엔티티 저장
-    }
+        Seller seller = sellerSignupDTO.toSeller();
 
-    private Seller createSellerFromDTO(SellerSignupDTO sellerSignupDTO) {
-        AddressDTO addressDTO = sellerSignupDTO.getAddressDTO();
-        Address address = new Address(addressDTO.getZipCode(), addressDTO.getDefaultAddress(), addressDTO.getDetailAddress());
+        // point를 0으로 초기화
+        seller.withPoint(0L);
 
-        return Seller.builder()
-                .name(sellerSignupDTO.getUsername())
-                .phoneNumber(sellerSignupDTO.getPhoneNumber())
-                .email(sellerSignupDTO.getEmail())
-                .password(sellerSignupDTO.getPassword())
-                .address(address)
-                .build();
+        // password를 암호화
+        seller.withEncryptedPassword(passwordEncoder.encode(seller.getPassword()));
+
+        sellerRepository.save(seller);
     }
 }
+
 
