@@ -1,7 +1,7 @@
 package server.nanum.service.adapter;
 
-import server.nanum.dto.user.response.LoginResponseDTO;
-import server.nanum.dto.user.response.UserDTO;
+import server.nanum.dto.user.response.CommonLoginResponseDTO;
+import server.nanum.dto.user.request.UserLoginRequestDTO;
 
 /**
  * 사용자 어댑터 인터페이스
@@ -16,18 +16,18 @@ public interface UserAdapter {
     /**
      * 해당 사용자 어댑터가 주어진 사용자 정보를 지원하는지 여부를 판별합니다.
      *
-     * @param userDTO 사용자 정보 객체
+     * @param userLoginRequestDTO 사용자 정보 객체
      * @return 해당 사용자 어댑터가 주어진 사용자 정보를 지원하는 경우 true, 그렇지 않은 경우 false
      */
-    boolean supports(UserDTO userDTO);
+    boolean supports(UserLoginRequestDTO userLoginRequestDTO);
 
     /**
      * 주어진 사용자 정보를 기반으로 로그인을 처리합니다.
      *
-     * @param userDTO 로그인에 필요한 사용자 정보 객체
+     * @param userLoginRequestDTO 로그인에 필요한 사용자 정보 객체
      * @return 인증 응답 DTO
      */
-    LoginResponseDTO login(UserDTO userDTO);
+    CommonLoginResponseDTO login(UserLoginRequestDTO userLoginRequestDTO);
 }
 
 

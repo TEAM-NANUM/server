@@ -1,4 +1,4 @@
-package server.nanum.dto.user.response;
+package server.nanum.dto.user.request;
 
 import lombok.Getter;
 import server.nanum.domain.*;
@@ -16,7 +16,7 @@ import java.util.UUID;
  * @see Delivery
  */
 @Getter
-public class GuestDTO extends AddressDTO {
+public class GuestSignupDTO extends AddressDTO {
 
     private String nickname;
 

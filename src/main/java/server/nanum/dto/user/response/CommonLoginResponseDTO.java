@@ -5,7 +5,7 @@ import lombok.Builder;
 
 @Builder
 // 로그인 응답 데이터 전송 객체
-public record LoginResponseDTO(
+public record CommonLoginResponseDTO(
         @JsonProperty("token") String token,
         @JsonProperty("user") UserResponseDTO userResponseDTO
 ) {

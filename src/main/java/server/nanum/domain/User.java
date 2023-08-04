@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
-import server.nanum.dto.user.response.HostDTO;
+import server.nanum.dto.user.request.HostLoginRequestDTO;
 
 import java.time.LocalDateTime;
 
@@ -42,7 +42,7 @@ public class User {
     private UserGroup userGroup;
 
     // Host 사용자를 생성하는 메서드
-    public static User createHost(HostDTO hostDTO, UserGroup userGroup) {
+    public static User createHost(HostLoginRequestDTO hostDTO, UserGroup userGroup) {
         return User.builder()
                 .uid(hostDTO.uid())
                 .name(hostDTO.name())
