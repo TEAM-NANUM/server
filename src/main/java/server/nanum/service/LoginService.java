@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.dto.user.response.LoginResponseDTO;
-import server.nanum.dto.user.response.UserDTO;
+import server.nanum.dto.user.response.CommonLoginResponseDTO;
+import server.nanum.dto.user.request.UserLoginRequestDTO;
 import server.nanum.service.adapter.UserAdapter;
 
 import java.util.List;
@@ -33,20 +33,20 @@ public class LoginService {
     /**
      * 로그인 또는 회원 가입 처리를 수행합니다.
      *
-     * @param userDTO 로그인 또는 회원 가입에 필요한 사용자 정보 객체
+     * @param userLoginRequestDTO 로그인 또는 회원 가입에 필요한 사용자 정보 객체
      * @return 인증 응답 DTO
      * @throws IllegalArgumentException 지원되지 않는 사용자일 경우 예외를 던집니다.
      */
 
-    public LoginResponseDTO loginOrCreate(UserDTO userDTO) {
-        return getUserAdapterFor(userDTO)
-                .map(adapter -> adapter.login(userDTO))
+    public CommonLoginResponseDTO loginOrCreate(UserLoginRequestDTO userLoginRequestDTO) {
+        return getUserAdapterFor(userLoginRequestDTO)
+                .map(adapter -> adapter.login(userLoginRequestDTO))
                 .orElseThrow(() -> new IllegalArgumentException("지원되지 않는 사용자입니다."));
     }
 
-    private Optional<UserAdapter> getUserAdapterFor(UserDTO userDTO) {
+    private Optional<UserAdapter> getUserAdapterFor(UserLoginRequestDTO userLoginRequestDTO) {
         return userAdapters.stream()
-                .filter(adapter -> adapter.supports(userDTO))
+                .filter(adapter -> adapter.supports(userLoginRequestDTO))
                 .findFirst();
     }
 }

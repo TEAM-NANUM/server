@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import server.nanum.dto.user.response.HostDTO;
+import server.nanum.dto.user.request.HostLoginRequestDTO;
 
 /**
  * KakaoUserDTO
@@ -46,8 +46,8 @@ public class KakaoUserResponse  {
         return kakaoAccount.getProfile().getName();
     }
 
-    public HostDTO toHostDTO() {
-        return HostDTO.builder()
+    public HostLoginRequestDTO toHostDTO() {
+        return HostLoginRequestDTO.builder()
                 .uid(uid)
                 .name(getName())
                 .build();

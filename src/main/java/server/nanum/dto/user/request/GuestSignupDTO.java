@@ -1,4 +1,4 @@
-package server.nanum.dto.user.response;
+package server.nanum.dto.user.request;
 
 import lombok.Getter;
 import server.nanum.domain.*;
@@ -8,15 +8,16 @@ import java.util.UUID;
 
 /**
  * 게스트 회원가입 요청 DTO
- *
- * 이 DTO는 게스트 회원가입에 필요한 정보를 담고 있습니다.
+ * 게스트 회원가입에 필요한 정보를 담고 있습니다.
  * AddressDTO를 상속받아 주소 정보를 포함하고 있습니다.
  *
  * @see User
  * @see Delivery
+ **@author hyunjin
+ * @since 2023-08-05
  */
 @Getter
-public class GuestDTO extends AddressDTO {
+public class GuestSignupDTO extends AddressDTO {
 
     private String nickname;
 
@@ -43,7 +44,7 @@ public class GuestDTO extends AddressDTO {
      * @return Delivery 생성된 배송 정보 객체
      */
     public Delivery toDelivery(User user) {
-        Address address = new Address(getZipCode(), getDefaultAddress(), getDetailAddress());
+        Address address = createAddress();
 
         return Delivery.builder()
                 .nickname("기본")
@@ -53,4 +54,13 @@ public class GuestDTO extends AddressDTO {
                 .user(user)
                 .build();
     }
+
+    private Address createAddress() {
+        return Address.builder()
+                .zipCode(getZipCode())
+                .defaultAddress(getDefaultAddress())
+                .detailAddress(getDetailAddress())
+                .build();
+    }
 }
+
