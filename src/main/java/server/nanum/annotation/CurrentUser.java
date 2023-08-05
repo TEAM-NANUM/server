@@ -9,6 +9,8 @@ import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.PARAMETER)
-@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : user")
+@AuthenticationPrincipal(expression = "#this instanceof T(server.nanum.security.custom.SellerWrapper) ? #this.getSeller() : (#this instanceof T(server.nanum.security.custom.UserWrapper) ? #this.getUser() : (#this != 'anonymousUser' ? #this : null))")
 public @interface CurrentUser {
 }
+
+

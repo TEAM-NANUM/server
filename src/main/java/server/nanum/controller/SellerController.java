@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.Seller;
 import server.nanum.dto.request.AddProductDTO;
 import server.nanum.dto.response.SellerInfoDTO;
@@ -18,7 +19,7 @@ import server.nanum.service.SellerService;
 public class SellerController {
     private final SellerService sellerService;
     @GetMapping()
-    public ResponseEntity<SellerInfoDTO> getSellerInfo(Seller seller){
+    public ResponseEntity<SellerInfoDTO> getSellerInfo(@CurrentUser  Seller seller){
         SellerInfoDTO dto = sellerService.getSellerInfo(seller);
         return ResponseEntity.ok().body(dto);
     }
@@ -37,4 +38,11 @@ public class SellerController {
         SellerOrdersDTO dto = sellerService.getSellerOrders(productId);
         return ResponseEntity.ok().body(dto);
     }
+
+    @GetMapping("/test")
+    public ResponseEntity<Seller> testSeller(@CurrentUser Seller seller){
+        log.info("seller = {}", seller.getName());
+        return ResponseEntity.ok().build();
+    }
+
 }

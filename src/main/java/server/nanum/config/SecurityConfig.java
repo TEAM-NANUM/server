@@ -40,7 +40,10 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors-> cors.configurationSource(corsConfigurationSource))
                 .authorizeHttpRequests((Requests) -> {
-                    Requests.requestMatchers("/api/user/**").authenticated();
+                    Requests.requestMatchers(
+                            "/api/user/**",
+                            "/api/signup/guest"
+                    ).authenticated();
 
                     Requests.anyRequest().permitAll();
                 })

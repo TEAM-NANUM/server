@@ -43,8 +43,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     /**
      * HTTP 요청에서 JWT 토큰을 추출하여 사용자 인증을 수행합니다.
      *
-     * @param request  HTTP 요청 객체
-     * @param response HTTP 응답 객체
+     * @param request     HTTP 요청 객체
+     * @param response    HTTP 응답 객체
      * @param filterChain 필터 체인
      * @throws ServletException 서블릿 예외
      * @throws IOException      입출력 예외
@@ -53,7 +53,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
             Optional<String> tokenOptional = extractTokenFromHeader(request);
-            
+
             tokenOptional.ifPresent(token -> {
                 Authentication authentication = authenticateWithToken(token);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -78,7 +78,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return Optional.empty();
         }
 
-        if(!authorizationHeader.get().startsWith("Bearer ")){
+        if (!authorizationHeader.get().startsWith("Bearer ")) {
             throw new JwtAuthenticationException("토큰 값 앞에 Bearer가 있어야 합니다!");
         }
 
@@ -93,17 +93,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * @throws JwtAuthenticationException JWT 인증 실패 예외
      */
     private Authentication authenticateWithToken(String token) {
-        String username = Optional.ofNullable(token)
+        String userInfo = Optional.ofNullable(token)
                 .filter(subject -> subject.length() >= 10)
                 .map(jwtProvider::validateTokenAndGetSubject)
-                .orElse("anonymous:anonymous")
-                .split(":")[0];
+                .orElseThrow(() -> new JwtAuthenticationException("페이로드가 올바르지 않습니다"));
 
-        if (username.isEmpty()) {
-            throw new JwtAuthenticationException("페이로드가 올바르지 않습니다");
-        }
-
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userInfo);
         return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }
 }

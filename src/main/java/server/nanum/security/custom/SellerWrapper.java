@@ -11,26 +11,26 @@ import java.util.Collection;
 import java.util.List;
 
 /**
- * 사용자 래퍼 클래스
- * 사용자 정보를 UserDetails 인터페이스에 맞게 감싸서 처리하는 클래스입니다.
+ * 판매자 래퍼 클래스
+ * 판매자 정보를 UserDetails 인터페이스에 맞게 감싸서 처리하는 클래스입니다.
  *
  * 작성자: hyunjin
  * 버전: 1.0.0
  * 작성일: 2023년 7월 30일
  */
 @Getter
-public class UserWrapper implements UserDetails {
-    private final User user;
+public class SellerWrapper implements UserDetails {
+    private final Seller seller;
 
     private final List<GrantedAuthority> authorities;
 
     /**
-     * 사용자 래퍼 생성자
-     * @param user 사용자 객체
+     * 판매자 래퍼 생성자
+     * @param seller 사용자 객체
      */
-    public UserWrapper(User user) {
-        this.user = user;
-        this.authorities = List.of(new SimpleGrantedAuthority(String.valueOf(user.getUserRole())));
+    public SellerWrapper(Seller seller) {
+        this.seller =seller;
+        this.authorities = List.of(new SimpleGrantedAuthority("SELLER"));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class UserWrapper implements UserDetails {
 
     @Override
     public String getUsername() {
-        return String.valueOf(user.getId());
+        return String.valueOf(seller.getId());
     }
 
     @Override
@@ -68,4 +68,3 @@ public class UserWrapper implements UserDetails {
         return true;
     }
 }
-
