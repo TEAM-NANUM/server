@@ -16,10 +16,4 @@ public class KakaoProperties {
     private String clientId;
     private String authorizationUri;
     private String grantType;
-
-//    private String clientSecret;
-//    private String[] scope;
-//    private String clientName;
-//    private String clientAuthenticationMethod;
-//    private String userNameAttribute;
 }

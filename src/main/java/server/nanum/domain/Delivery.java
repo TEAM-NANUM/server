@@ -2,12 +2,18 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "delivery")
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Delivery {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,26 +26,18 @@ public class Delivery {
     @Column(name = "phone_number")
     private String phoneNumber;
 
-    @Column(name = "zip_code")
-    private String zipCode;
+    @Embedded
+    private Address address;
 
-    @Column(name = "default_address")
-    private String defaultAddress;
-
-    @Column(name = "detail_address")
-    private String detailAddress;
-
-    @Column(name = "is_default")
+    @Column(name = "is_default", columnDefinition = "boolean default true")
     private boolean isDefault;
 
     @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "user_id")
     private User user;
-
-    // Getters and Setters
 }
 

@@ -1,18 +1,19 @@
 package server.nanum.service.adapter;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.User;
-import server.nanum.dto.user.HostDTO;
-import server.nanum.dto.user.LoginResponseDTO;
+import server.nanum.domain.UserGroup;
+import server.nanum.dto.user.request.HostLoginRequestDTO;
+import server.nanum.dto.user.response.CommonLoginResponseDTO;
 import server.nanum.repository.UserRepository;
-import server.nanum.dto.user.UserDTO;
+import server.nanum.dto.user.request.UserLoginRequestDTO;
 import server.nanum.security.jwt.JwtProvider;
 
-import static server.nanum.domain.User.createHost;
-import static server.nanum.dto.user.LoginResponseDTO.*;
+import static server.nanum.dto.user.response.CommonLoginResponseDTO.*;
 
 /**
  * 호스트 사용자 어댑터 클래스
@@ -30,35 +31,58 @@ public class HostUserAdapter implements UserAdapter {
 
     private final UserRepository userRepository;
     private final JwtProvider jwtProvider;
+    private final EntityManager entityManager;
 
+    /**
+     * 사용자 정보를 통해 해당 어댑터를 사용할 수 있는지 판단하는 메서드
+     * @param userLoginRequestDTO 사용자 정보
+     * @return 사용자 정보가 HostDTO의 인스턴스인 경우 true 반환
+     */
     @Override
-    public boolean supports(UserDTO userDTO) {
-        return userDTO instanceof HostDTO;
+    public boolean supports(UserLoginRequestDTO userLoginRequestDTO) {
+        return userLoginRequestDTO instanceof HostLoginRequestDTO;
     }
 
+    /**
+     * 로그인 처리를 하는 메서드
+     * @param userLoginRequestDTO 사용자 정보
+     * @return 로그인 응답 정보를 담은 LoginResponseDTO 반환
+     */
     @Override
-    public LoginResponseDTO login(UserDTO userDTO) {
-        HostDTO hostDTO = (HostDTO) userDTO;
+    public CommonLoginResponseDTO login(UserLoginRequestDTO userLoginRequestDTO) {
+        HostLoginRequestDTO hostDTO = (HostLoginRequestDTO) userLoginRequestDTO;
 
         return userRepository.findByUid(hostDTO.uid())
-                .map(user -> createLoginResponse(user))
+                .map(this::createLoginResponse)
                 .orElseGet(() -> {
-                    User newUser = createHost(hostDTO);
+                    UserGroup newUserGroup = UserGroup.createUserGroup(0); // 새로운 UserGroup 생성
+                    entityManager.persist(newUserGroup);
+                    User newUser = User.createHost(hostDTO, newUserGroup); // 생성자를 통해 UserGroup 설정
                     userRepository.save(newUser);
                     return createLoginResponse(newUser);
                 });
     }
 
-    private LoginResponseDTO createLoginResponse(User user) {
+    /**
+     * 로그인 응답 DTO를 생성하는 메서드
+     * @param user 로그인한 사용자 정보
+     * @return 로그인 응답 정보를 담은 LoginResponseDTO 반환
+     */
+    private CommonLoginResponseDTO createLoginResponse(User user) {
         String token = jwtProvider.createToken(String.format("%s:%s", user.getId(), user.getUserRole()));
         UserResponseDTO userResponseDTO = createUserResponseDTO(user);
 
-        return builder()
+        return CommonLoginResponseDTO.builder()
                 .token(token)
                 .userResponseDTO(userResponseDTO)
                 .build();
     }
 
+    /**
+     * 사용자 응답 DTO를 생성하는 메서드
+     * @param user 사용자 정보
+     * @return 사용자 응답 정보를 담은 UserResponseDTO 반환
+     */
     private UserResponseDTO createUserResponseDTO(User user) {
         return UserResponseDTO.builder()
                 .id(String.valueOf((user.getId())))

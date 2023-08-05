@@ -31,4 +31,10 @@ public class ReviewController {
         reviewService.createReview(dto);
         return ResponseEntity.ok().build();
     }
+
+    @GetMapping("/{product_id}/reviews")
+    public ResponseEntity<ProductReviewDTO.ReviewList> getProductReviews(@PathVariable("product_id") Long productId) {
+        ProductReviewDTO.ReviewList productReviews = reviewService.getProductReviews(productId);
+        return ResponseEntity.ok(productReviews);
+    }
 }

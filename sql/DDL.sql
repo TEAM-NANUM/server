@@ -76,6 +76,9 @@ CREATE TABLE IF NOT EXISTS product (
     seller_id BIGINT,
     sub_category_id BIGINT,
     carousel_id BIGINT,
+    view_cnt BIGINT,
+    review_cnt BIGINT,
+    purchase_cnt BIGINT,
     FOREIGN KEY (seller_id) REFERENCES seller(seller_id),
     FOREIGN KEY (sub_category_id) REFERENCES sub_category(sub_category_id),
     FOREIGN KEY (carousel_id) REFERENCES carousel(carousel_id)
