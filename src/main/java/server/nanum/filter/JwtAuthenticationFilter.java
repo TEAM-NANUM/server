@@ -1,23 +1,30 @@
 package server.nanum.filter;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import server.nanum.dto.ErrorDTO;
 import server.nanum.exception.JwtAuthenticationException;
 import server.nanum.security.custom.CustomUserDetailsService;
 import server.nanum.security.jwt.JwtProvider;
+import server.nanum.utils.JWTErrorResponseWriter;
 
 import java.io.IOException;
 import java.util.Optional;
+
+import static server.nanum.utils.JWTErrorResponseWriter.*;
 
 /**
  * JWT 인증 필터
@@ -44,15 +51,18 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Optional<String> tokenOptional = extractTokenFromHeader(request);
+        try {
+            Optional<String> tokenOptional = extractTokenFromHeader(request);
+            
+            tokenOptional.ifPresent(token -> {
+                Authentication authentication = authenticateWithToken(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            });
 
-        // 토큰이 존재하는 경우에만 인증을 수행합니다.
-        tokenOptional.ifPresent(token -> {
-            Authentication authentication = authenticateWithToken(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        });
-
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+        } catch (JwtAuthenticationException e) {
+            write(response, e.getMessage());
+        }
     }
 
     /**
