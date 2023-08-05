@@ -19,4 +19,8 @@ public class AddressDTO {
 
     @JsonProperty("detail_address")
     private String detailAddress;
+
+    public String toString(){
+        return this.zipCode.toString()+this.defaultAddress+this.detailAddress;
+    }
 }
