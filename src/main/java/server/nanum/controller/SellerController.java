@@ -38,11 +38,4 @@ public class SellerController {
         SellerOrdersDTO dto = sellerService.getSellerOrders(productId);
         return ResponseEntity.ok().body(dto);
     }
-
-    @GetMapping("/test")
-    public ResponseEntity<Seller> testSeller(@CurrentUser Seller seller){
-        log.info("seller = {}", seller.getName());
-        return ResponseEntity.ok().build();
-    }
-
 }
