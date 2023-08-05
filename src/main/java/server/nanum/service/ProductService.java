@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.product.*;
 import server.nanum.dto.response.ProductDTO;
+import server.nanum.exception.BadRequestException;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.*;
 import java.util.List;
 
@@ -58,8 +60,7 @@ public class ProductService {
     public ProductDTO.SubCategoryList getSubCategoriesByCategoryId(Long categoryId) {
 
         if(categoryRepository.findById(categoryId).orElse(null) == null) {
-            // TODO: 1차 카테고리에 대한 하위 카테고리를 찾지 못한 경우에 대한 예외 처리 (예외 클래스 변경 필요)
-            throw new RuntimeException("NotFound");
+            throw new NotFoundException("1차 카테고리에 대한 하위 카테고리가 존재하지 않습니다.");
         }
 
         List<SubCategory> result = subCategoryRepository.findByCategoryId(categoryId);
@@ -111,8 +112,7 @@ public class ProductService {
                     query = query.orderBy(qProduct.ratingAvg.desc());
                     break;
                 default:
-                    // TODO: 400 애러 발생
-                    throw new RuntimeException("지원하지 않는 정렬");
+                    throw new BadRequestException("지원하지 않는 정렬 형식입니다.");
             }
         }
 
@@ -143,8 +143,8 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO.ProductDetail getProductDetailById(Long productId) {
-        Product product = productRepository.findById(productId)        // TODO: 404 예외처리
-                .orElseThrow(() -> new RuntimeException());
+        Product product = productRepository.findById(productId)
+                .orElseThrow(() -> new NotFoundException("존재하지 않는 상품입니다."));
 
         // 주소 정보 토큰화
         String[] tokenizedCityAddress;
