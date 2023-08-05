@@ -3,7 +3,6 @@ package server.nanum.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.dto.response.ProductDTO;
 import server.nanum.service.ProductService;
@@ -21,7 +20,6 @@ public class ProductController {
         return ResponseEntity.ok(carouselProducts);
     }
 
-    @PreAuthorize(value = "hasRole('HOST')")
     @GetMapping("/categories")
     public ResponseEntity<ProductDTO.CategoryList> getCategories() {
         ProductDTO.CategoryList categoryList = productService.getAllCategories();
