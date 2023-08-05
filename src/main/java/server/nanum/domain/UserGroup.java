@@ -18,7 +18,9 @@ public class UserGroup {
 
     @Column(name = "point")
     private int point;
-
+    public void setPoint(int point) {
+        this.point = point;
+    }
     // UserGroup 생성하는 메서드
     public static UserGroup createUserGroup(int point) {
         return UserGroup.builder()

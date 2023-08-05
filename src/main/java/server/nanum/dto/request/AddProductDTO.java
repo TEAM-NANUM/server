@@ -5,7 +5,7 @@ import server.nanum.domain.product.Product;
 import server.nanum.domain.Seller;
 import server.nanum.domain.product.SubCategory;
 
-public record AddProductDto(
+public record AddProductDTO(
         String name,
         Integer price,
         Integer unit,
