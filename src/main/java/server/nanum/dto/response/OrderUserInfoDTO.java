@@ -12,8 +12,8 @@ public record OrderUserInfoDTO(
         return new OrderUserInfoDTO(
                 delivery.getUser().getName(),
                 delivery.getPhoneNumber(),
-                delivery.getDefaultAddress(),
-                delivery.getDetailAddress(),
+                delivery.getAddress().getDefaultAddress(),
+                delivery.getAddress().getDetailAddress(),
                 delivery.getUser().getUserGroupPoint());
     }
 }
