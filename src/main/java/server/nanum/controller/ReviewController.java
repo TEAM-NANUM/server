@@ -4,31 +4,30 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import server.nanum.dto.request.AddReviewDto;
-import server.nanum.dto.response.MyUnReviewOrdersDto;
-import server.nanum.dto.response.MyReviewOrdersDto;
-import server.nanum.dto.response.ProductReviewDTO;
+import server.nanum.annotation.CurrentUser;
+import server.nanum.domain.User;
+import server.nanum.dto.request.AddReviewDTO;
+import server.nanum.dto.response.MyUnReviewOrdersDTO;
+import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.service.ReviewService;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/reviews")
 public class ReviewController {
     private final ReviewService reviewService;
-    @GetMapping("/reviews/delivered")
-    public ResponseEntity<MyUnReviewOrdersDto> getDeliveredOrder(){
-        Long userId=1L; // 가상으로 지정
-        MyUnReviewOrdersDto dto = reviewService.GetUnReviewOrder(userId);
+    @GetMapping("/delivered")
+    public ResponseEntity<MyUnReviewOrdersDTO> getDeliveredOrder(@CurrentUser User user){
+        MyUnReviewOrdersDTO dto = reviewService.GetUnReviewOrder(user);
         return ResponseEntity.ok().body(dto);
     }
-    @GetMapping("/reviews/my")
-    public ResponseEntity<MyReviewOrdersDto> getMyOrder(){
-        Long userId=1L; // 가상으로 지정
-        MyReviewOrdersDto dto = reviewService.GetReviewedOrder(userId);
+    @GetMapping("/my")
+    public ResponseEntity<MyReviewOrdersDTO> getMyOrder(@CurrentUser User user){
+        MyReviewOrdersDTO dto = reviewService.GetReviewedOrder(user);
         return ResponseEntity.ok().body(dto);
     }
-    @PostMapping("/reviews")
-    public ResponseEntity<Void> addReview(@RequestBody AddReviewDto dto){
+    @PostMapping()
+    public ResponseEntity<Void> addReview(@RequestBody AddReviewDTO dto){
         reviewService.createReview(dto);
         return ResponseEntity.ok().build();
     }
