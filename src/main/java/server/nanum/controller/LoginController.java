@@ -57,7 +57,7 @@ public class LoginController {
     }
 
     /**
-     * 게스트 로그인을 처리하고 로그인 또는 회원 가입을 수행합니다.
+     * 게스트 로그인을 처리하고 로그인을 수행합니다.
      *
      * @param guestLoginRequestDTO 게스트 로그인 요청 DTO
      * @return LoginResponseDTO 로그인 또는 회원 가입 결과를 담은 응답 DTO
@@ -68,7 +68,7 @@ public class LoginController {
     }
 
     /**
-     * 판매자 로그인을 처리하고 로그인 또는 회원 가입을 수행합니다.
+     * 판매자 로그인을 처리하고 로그인을 수행합니다.
      *
      * @param sellerLoginRequestDTO 판매자 로그인 요청 DTO
      * @return LoginResponseDTO 로그인 또는 회원 가입 결과를 담은 응답 DTO
