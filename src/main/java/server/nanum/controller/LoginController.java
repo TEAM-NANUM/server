@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import server.nanum.dto.user.LoginResponseDTO;
+import server.nanum.dto.user.response.CommonLoginResponseDTO;
 import server.nanum.security.dto.KakaoAuthRequest;
 import server.nanum.security.dto.KakaoUserResponse;
 import server.nanum.security.oauth.KakaoClient;
@@ -50,7 +50,7 @@ public class LoginController {
      */
     @Hidden
     @GetMapping("/callback")
-    public LoginResponseDTO processKakaoLoginCallback(@RequestParam("code") String authorizationCode) {
+    public CommonLoginResponseDTO processKakaoLoginCallback(@RequestParam("code") String authorizationCode) {
         KakaoAuthRequest params = new KakaoAuthRequest(authorizationCode);
         KakaoUserResponse response = kakaoClient.handleCallback(params);
 
