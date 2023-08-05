@@ -30,7 +30,7 @@ public class SellerWrapper implements UserDetails {
      */
     public SellerWrapper(Seller seller) {
         this.seller =seller;
-        this.authorities = List.of(new SimpleGrantedAuthority("SELLER"));
+        this.authorities = List.of(new SimpleGrantedAuthority("ROLE_SELLER"));
     }
 
     @Override

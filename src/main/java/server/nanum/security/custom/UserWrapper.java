@@ -30,7 +30,7 @@ public class UserWrapper implements UserDetails {
      */
     public UserWrapper(User user) {
         this.user = user;
-        this.authorities = List.of(new SimpleGrantedAuthority(String.valueOf(user.getUserRole())));
+        this.authorities = List.of(new SimpleGrantedAuthority("ROLE_"+user.getUserRole()));
     }
 
     @Override

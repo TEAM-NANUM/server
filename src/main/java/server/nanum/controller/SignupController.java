@@ -3,6 +3,7 @@ package server.nanum.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,6 +35,7 @@ public class SignupController {
      * @param guestSignupDTO 게스트 회원가입 요청 DTO
      * @return ResponseEntity<Void> 회원가입 결과 응답
      */
+    @PreAuthorize("hasRole('ROLE_HOST')")
     @PostMapping("/guest")
     public ResponseEntity<Void> registerGuest(@CurrentUser User user, @RequestBody GuestSignupDTO guestSignupDTO) {
 
