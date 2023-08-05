@@ -1,5 +1,5 @@
 package server.nanum.dto.response;
-public record SellerInfoDto(
+public record SellerInfoDTO(
         String userName,
         Long point) {
 }
