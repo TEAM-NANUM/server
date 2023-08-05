@@ -6,7 +6,7 @@ import java.util.List;
 public record MyReviewOrdersDTO(
         Integer count,
         List<MyReviewDTO> orders){
-    public record MyReviewDTO(
+    public record MyReviewDTO( //리뷰 달린 주문 단건 정보 DTO
             Long id,
             String name,
             String imgUrl,
@@ -15,7 +15,7 @@ public record MyReviewOrdersDTO(
 
     }
     public static MyReviewOrdersDTO toEntity(List<Order> orderList){
-        List<MyReviewDTO> DtoList = orderList.stream().map((order)-> {
+        List<MyReviewDTO> DtoList = orderList.stream().map((order)-> { //주문 정보  -> 주문 단건 정보 DTO로 변환
             return new MyReviewDTO(
                     order.getId(),
                     order.getProduct().getName(),

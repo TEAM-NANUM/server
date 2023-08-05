@@ -14,26 +14,26 @@ import server.nanum.service.ReviewService;
 @Slf4j
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/api/reviews")
+@RequestMapping("/api")
 public class ReviewController {
     private final ReviewService reviewService;
-    @GetMapping("/delivered")
+    @GetMapping("/reviews/delivered")
     public ResponseEntity<MyUnReviewOrdersDTO> getDeliveredOrder(@CurrentUser User user){
         MyUnReviewOrdersDTO dto = reviewService.GetUnReviewOrder(user);
         return ResponseEntity.ok().body(dto);
     }
-    @GetMapping("/my")
+    @GetMapping("/reviews/my")
     public ResponseEntity<MyReviewOrdersDTO> getMyOrder(@CurrentUser User user){
         MyReviewOrdersDTO dto = reviewService.GetReviewedOrder(user);
         return ResponseEntity.ok().body(dto);
     }
-    @PostMapping()
+    @PostMapping("/reviews")
     public ResponseEntity<Void> addReview(@RequestBody AddReviewDTO dto){
         reviewService.createReview(dto);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{product_id}/reviews")
+    @GetMapping("/products/{product_id}/reviews")
     public ResponseEntity<ProductReviewDTO.ReviewList> getProductReviews(@PathVariable("product_id") Long productId) {
         ProductReviewDTO.ReviewList productReviews = reviewService.getProductReviews(productId);
         return ResponseEntity.ok(productReviews);

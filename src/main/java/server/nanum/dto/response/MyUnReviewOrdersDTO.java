@@ -7,7 +7,7 @@ public record MyUnReviewOrdersDTO(
         Integer count,
         List<MyUnReviewDTO> orders){
 
-    public record MyUnReviewDTO(
+    public record MyUnReviewDTO( //리뷰 안달린 주문 단건 정보 DTO
             Long id,
             String name,
             String imgUrl){

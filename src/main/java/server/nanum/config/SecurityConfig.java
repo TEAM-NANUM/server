@@ -42,7 +42,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests((Requests) -> {
                     Requests.requestMatchers(
                             "/api/user/**",
-                            "/api/signup/guest"
+                            "/api/signup/guest",
+                            "api/orders/**",
+                            "api/reviews/**",
+                            "/api/cart/**"
                     ).authenticated();
 
                     Requests.anyRequest().permitAll();

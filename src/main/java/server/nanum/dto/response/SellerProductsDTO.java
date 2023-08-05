@@ -7,7 +7,7 @@ public record SellerProductsDTO(
         Integer count,
         List<SellerProductOneDTO> products) {
 
-    public record SellerProductOneDTO(
+    public record SellerProductOneDTO( //판매자 제품 단건 정보 DTO
             Long productId,
             String name,
             String imgUrl,
@@ -17,7 +17,7 @@ public record SellerProductsDTO(
 
 
     public static SellerProductsDTO toEntity(List<Product> productList){
-        List<SellerProductOneDTO> dtoList = productList.stream().map((product)-> {
+        List<SellerProductOneDTO> dtoList = productList.stream().map((product)-> { //제품 객체 -> 판매자 제품 단건 정보 DTO
             return new SellerProductOneDTO(
                     product.getId(),
                     product.getName(),
