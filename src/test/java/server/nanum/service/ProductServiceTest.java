@@ -13,6 +13,7 @@ import server.nanum.domain.product.Carousel;
 import server.nanum.domain.product.Category;
 import server.nanum.domain.product.SubCategory;
 import server.nanum.dto.response.ProductDTO;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.CarouselRepository;
 import server.nanum.repository.CategoryRepository;
 import server.nanum.repository.SubCategoryRepository;
@@ -125,10 +126,9 @@ class ProductServiceTest {
         void testGetSubCategoriesByCategoryIdNotFound() {
             Long categoryId = 99L;
 
-            when(categoryRepository.findById(categoryId)).thenReturn(null);
+            when(categoryRepository.findById(categoryId)).thenReturn(Optional.empty());
 
-            // TODO: NotFound 예외로 변경 필요
-            assertThrows(RuntimeException.class, () -> productService.getSubCategoriesByCategoryId(categoryId));
+            assertThrows(NotFoundException.class, () -> productService.getSubCategoriesByCategoryId(categoryId));
         }
     }
 }

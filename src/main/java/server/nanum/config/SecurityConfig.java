@@ -43,7 +43,8 @@ public class SecurityConfig {
                     Requests.requestMatchers(
                             "/api/user/**",
                             "api/orders/**",
-                            "api/reviews/**"
+                            "api/reviews/**",
+                            "/api/cart/**"
                     ).authenticated();
 
                     Requests.anyRequest().permitAll();

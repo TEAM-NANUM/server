@@ -10,6 +10,7 @@ import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.dto.response.ProductDTO;
 import server.nanum.dto.response.ProductReviewDTO;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 import server.nanum.repository.ReviewRepository;
@@ -49,8 +50,7 @@ public class ReviewService {
     }
 
     public ProductReviewDTO.ReviewList getProductReviews(Long productId) {
-        // TODO: 404 에러 처리
-        productRepository.findById(productId).orElseThrow(()->new RuntimeException("404"));
+        productRepository.findById(productId).orElseThrow(()->new NotFoundException("존재하지 않는 상품입니다."));
 
         List<Review> result = reviewRepository.findAllByOrderProductId(productId);
 
