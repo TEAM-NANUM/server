@@ -1,8 +1,13 @@
-package server.nanum.domain;
+package server.nanum.domain.product;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+@Getter
 @Entity
 @Table(name = "category")
 public class Category {

@@ -2,10 +2,18 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
+import server.nanum.domain.product.Product;
 
 import java.time.LocalDateTime;
-
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+@Getter
 @Entity
 @Table(name = "orders")
 public class Order {
@@ -39,6 +47,11 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Getters and Setters
+    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
+    private Review review;
+
+    public void setReview(Review review){
+        this.review=review;
+    }
 }
 

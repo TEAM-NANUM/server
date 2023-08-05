@@ -2,6 +2,7 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import server.nanum.domain.product.Product;
 
 @Entity
 @Table(name = "cart")

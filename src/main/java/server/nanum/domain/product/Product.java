@@ -1,13 +1,22 @@
-package server.nanum.domain;
+package server.nanum.domain.product;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.mapping.ToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
+import server.nanum.domain.DeliveryType;
+import server.nanum.domain.Seller;
 
 import java.time.LocalDateTime;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Getter
 @Table(name = "product")
 public class Product {
     @Id
@@ -53,6 +62,18 @@ public class Product {
     @JoinColumn(name = "carousel_id")
     private Carousel carousel;
 
-    // Getters and Setters
+    @Column(name = "view_cnt")
+    private Integer viewCnt;
+
+    @Column(name = "review_cnt")
+    private Integer reviewCnt;
+
+    @Column(name = "purchase_cnt")
+    private Integer purchaseCnt;
+
+    
+    public void setRatingAvg(Float ratingAvg) {
+        this.ratingAvg = ratingAvg;
+    }
 }
 
