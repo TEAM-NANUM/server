@@ -9,7 +9,7 @@ public record MyProgressOrdersDTO(
         List<MyOrderDTO> progressOrders) {
 
     public static MyProgressOrdersDTO toEntity(List<Order> orderList){
-        List<MyOrderDTO> DtoList = orderList.stream().map((order)-> {
+        List<MyOrderDTO> DtoList = orderList.stream().map((order)-> { //주문 객체 -> 주문 조회 단건 DTO 정보로 변환
             return new MyOrderDTO(
                     order.getId(),
                     order.getUser().getName(),
