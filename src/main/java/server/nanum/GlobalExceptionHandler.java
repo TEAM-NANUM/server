@@ -30,13 +30,13 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<ErrorDTO> handleNotFoundException(JwtAuthenticationException ex) {
+    public ResponseEntity<ErrorDTO> handleNotFoundException(NotFoundException ex) {
         ErrorDTO errorDto = new ErrorDTO("Not Found", ex.getMessage());
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorDto);
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<ErrorDTO> handleBadRequestException(JwtAuthenticationException ex) {
+    public ResponseEntity<ErrorDTO> handleBadRequestException(BadRequestException ex) {
         ErrorDTO errorDto = new ErrorDTO("Bad Request", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
     }
