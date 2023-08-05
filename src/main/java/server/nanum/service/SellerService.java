@@ -28,9 +28,14 @@ public class SellerService {
     private final ProductRepository productRepository;
     private final SubCategoryRepository subCategoryRepository;
     public void createProduct(Seller seller, AddProductDTO dto){
+        //TODO: 404 에러 처리
         SubCategory subCategory = subCategoryRepository.findById(dto.subCategoryId())
-                .orElseThrow(()-> new RuntimeException());
+                .orElseThrow(()-> new RuntimeException("404"));
         Product product = dto.toEntity(seller,subCategory);
+        //TODO: 409 에러 처리(이미 있는 상품)
+        if(productRepository.existsByName(product.getName())){
+            throw new RuntimeException("409");
+        }
         productRepository.save(product);
     }
     public SellerInfoDTO getSellerInfo(Seller seller){
@@ -40,9 +45,11 @@ public class SellerService {
          List<Product> productList = productRepository.findAllBySellerOrderByCreateAt(seller);
          return SellerProductsDTO.toEntity(productList);
     }
+
     public SellerOrdersDTO getSellerOrders(Long productId){
+        //TODO: 404 에러 처리
         Product product = productRepository.findById(productId)
-                .orElseThrow(()-> new RuntimeException());
+                .orElseThrow(()-> new RuntimeException("404"));
         List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(product);
         return SellerOrdersDTO.toEntity(product,orderList);
     }
