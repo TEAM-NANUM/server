@@ -20,10 +20,4 @@ public class GlobalExceptionHandler {
         ErrorDTO errorDto = new ErrorDTO("카카오 로그인 중 에러 발생!", ex.getMessage());
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(errorDto);
     }
-
-    @ExceptionHandler(JwtAuthenticationException.class)
-    public ResponseEntity<ErrorDTO> handleJwtAuthenticationException(JwtAuthenticationException ex) {
-        ErrorDTO errorDto = new ErrorDTO("JWT 에러 발생!!", ex.getMessage());
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(errorDto);
-    }
 }
