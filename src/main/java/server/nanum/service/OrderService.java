@@ -28,14 +28,22 @@ public class OrderService {
     private final ProductRepository productRepository;
     private final DeliveryRepository deliveryRepository;
     public void createOrder(AddOrderDTO dto, User user){
+        // TODO: 404 오류 처리
         Product product = productRepository.findById(dto.productId())
-                .orElseThrow(()-> new RuntimeException());
+                .orElseThrow(()-> new RuntimeException("404"));
+        //ToDO: 402 오류 처리 (포인트 부족)
+        if(user.getUserGroup().getPoint()-dto.quantity()*product.getPrice()<0){
+            throw new RuntimeException("402");
+        }
+        user.getUserGroup().setPoint(user.getUserGroup().getPoint()-dto.quantity()*product.getPrice());
         Order order = dto.toEntity(product,user);
         orderRepository.save(order);
+
     }
     public OrderUserInfoDTO getUserDefaultInfo(User user){
+        // TODO: 404 오류 처리
         Delivery delivery = deliveryRepository.findByUserAndIsDefaultTrue(user)
-                        .orElseThrow(()-> new RuntimeException());
+                        .orElseThrow(()-> new RuntimeException("404"));
         return OrderUserInfoDTO.toEntity(delivery);
     }
 

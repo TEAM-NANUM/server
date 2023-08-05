@@ -18,4 +18,7 @@ public class UserGroup {
 
     @Column(name = "point")
     private int point;
+    public void setPoint(int point){
+        this.point=point;
+    }
 }
