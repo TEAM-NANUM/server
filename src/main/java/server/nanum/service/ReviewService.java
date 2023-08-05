@@ -21,8 +21,9 @@ public class ReviewService {
     private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
     public void createReview(AddReviewDTO dto){
+        ///TODO: 404 에러 처리
         Order order = orderRepository.findById(dto.orderId())
-                .orElseThrow(()-> new RuntimeException());
+                .orElseThrow(()-> new RuntimeException("404"));
         Review review = dto.toEntity(order);
         reviewRepository.save(review);
         order.setReview(review);
@@ -33,9 +34,7 @@ public class ReviewService {
         }
         order.getProduct().setRatingAvg(ratingAll/(orderList.size()));
 
-
     }
-
     public MyUnReviewOrdersDTO GetUnReviewOrder(User user){
         List<Order> orderList = orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
         return MyUnReviewOrdersDTO.toEntity(orderList);
