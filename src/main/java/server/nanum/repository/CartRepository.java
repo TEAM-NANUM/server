@@ -7,10 +7,12 @@ import server.nanum.domain.User;
 import server.nanum.domain.product.Product;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface CartRepository extends JpaRepository<Cart,Long> {
+    Optional<Cart> findByIdAndUser(Long id, User user);
     List<Cart> findByUser(User user);
-    Cart findByUserAndProduct(User user, Product product);
+    Optional<Cart> findByUserAndProduct(User user, Product product);
     List<Cart> findByUserAndIdIn(User user, List<Long> cartIds);
 }
