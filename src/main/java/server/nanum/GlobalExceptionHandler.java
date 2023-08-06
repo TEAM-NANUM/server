@@ -9,8 +9,6 @@ import server.nanum.dto.error.ErrorDTO;
 import server.nanum.exception.BadRequestException;
 import server.nanum.exception.KakaoClientException;
 import server.nanum.exception.NotFoundException;
-import org.springframework.web.client.HttpClientErrorException;
-import server.nanum.dto.ErrorDTO;
 import server.nanum.exception.*;
 
 @RestControllerAdvice
