@@ -1,4 +1,4 @@
-package server.nanum.dto;
+package server.nanum.dto.error;
 
 import java.time.LocalDateTime;
 

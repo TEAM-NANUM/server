@@ -6,7 +6,7 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import server.nanum.dto.ErrorDTO;
+import server.nanum.dto.error.ErrorDTO;
 
 import java.io.IOException;
 

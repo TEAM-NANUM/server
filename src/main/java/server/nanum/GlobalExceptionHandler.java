@@ -5,11 +5,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import server.nanum.dto.error.ErrorDTO;
+import server.nanum.exception.BadRequestException;
+import server.nanum.exception.KakaoClientException;
+import server.nanum.exception.NotFoundException;
 import org.springframework.web.client.HttpClientErrorException;
 import server.nanum.dto.ErrorDTO;
 import server.nanum.exception.*;
-
-import java.time.LocalDateTime;
 
 @RestControllerAdvice
 @Slf4j

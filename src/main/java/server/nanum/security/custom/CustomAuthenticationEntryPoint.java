@@ -10,7 +10,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
-import server.nanum.dto.ErrorDTO;
+import server.nanum.dto.error.ErrorDTO;
 
 import java.io.IOException;
 
