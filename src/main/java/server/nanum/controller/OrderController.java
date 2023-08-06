@@ -3,6 +3,7 @@ package server.nanum.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
@@ -16,6 +17,7 @@ import server.nanum.service.OrderService;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/orders")
+@PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
 public class OrderController {
     private final OrderService orderService;
     @PostMapping()
