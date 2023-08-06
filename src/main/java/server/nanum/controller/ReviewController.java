@@ -3,6 +3,7 @@ package server.nanum.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
@@ -17,16 +18,19 @@ import server.nanum.service.ReviewService;
 @RequestMapping("/api")
 public class ReviewController {
     private final ReviewService reviewService;
+    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @GetMapping("/reviews/delivered")
     public ResponseEntity<MyUnReviewOrdersDTO> getDeliveredOrder(@CurrentUser User user){
         MyUnReviewOrdersDTO dto = reviewService.GetUnReviewOrder(user);
         return ResponseEntity.ok().body(dto);
     }
+    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @GetMapping("/reviews/my")
     public ResponseEntity<MyReviewOrdersDTO> getMyOrder(@CurrentUser User user){
         MyReviewOrdersDTO dto = reviewService.GetReviewedOrder(user);
         return ResponseEntity.ok().body(dto);
     }
+    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @PostMapping("/reviews")
     public ResponseEntity<Void> addReview(@RequestBody AddReviewDTO dto){
         reviewService.createReview(dto);

@@ -3,6 +3,7 @@ package server.nanum.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.Seller;
@@ -16,6 +17,7 @@ import server.nanum.service.SellerService;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/seller")
+@PreAuthorize("hasRole('ROLE_SELLER')")
 public class SellerController {
     private final SellerService sellerService;
     @GetMapping()
@@ -24,12 +26,12 @@ public class SellerController {
         return ResponseEntity.ok().body(dto);
     }
     @GetMapping("/products")
-    public ResponseEntity<SellerProductsDTO> getSellerProducts(Seller seller){
+    public ResponseEntity<SellerProductsDTO> getSellerProducts(@CurrentUser Seller seller){
         SellerProductsDTO dto = sellerService.getSellerProducts(seller);
         return ResponseEntity.ok().body(dto);
     }
     @PostMapping("/product")
-    public ResponseEntity<Void> addProduct(Seller seller, @RequestBody AddProductDTO dto){
+    public ResponseEntity<Void> addProduct(@CurrentUser Seller seller, @RequestBody AddProductDTO dto){
         sellerService.createProduct(seller,dto);
         return ResponseEntity.ok().build();
     }
