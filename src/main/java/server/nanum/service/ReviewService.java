@@ -10,6 +10,7 @@ import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.dto.response.ProductDTO;
 import server.nanum.dto.response.ProductReviewDTO;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 import server.nanum.repository.ReviewRepository;
@@ -24,33 +25,31 @@ public class ReviewService {
     private final ProductRepository productRepository;
     private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
-    public void createReview(AddReviewDTO dto){
-        ///TODO: 404 에러 처리
-        Order order = orderRepository.findById(dto.orderId())
-                .orElseThrow(()-> new RuntimeException("404"));
+    public void createReview(AddReviewDTO dto){ //리뷰 작성
+        Order order = orderRepository.findById(dto.orderId()) //리뷰 작성을 위한 주문 찾기
+                .orElseThrow(()-> new NotFoundException("존재하지 않는 주문입니다."));
         Review review = dto.toEntity(order);
         reviewRepository.save(review);
-        order.setReview(review);
-        List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(order.getProduct());
+        order.setReview(review); //리뷰는 제품 정보를 가지고 있지  않기 때문에 별점 계산을 위해 주문에 리뷰 정보를 넣음
+        List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(order.getProduct()); //제품이 가지고 있는 모든 주문 가져오기
         Float ratingAll = (float) 0;
-        for(Order orderData: orderList){
+        for(Order orderData: orderList){ //별점 총합 구하기 TODO: 리팩토링 방법 있으면 사용
             ratingAll+= orderData.getReview().getRating();
         }
-        order.getProduct().setRatingAvg(ratingAll/(orderList.size()));
+        order.getProduct().setRatingAvg(ratingAll/(orderList.size())); //평균 별점 변경
 
     }
-    public MyUnReviewOrdersDTO GetUnReviewOrder(User user){
-        List<Order> orderList = orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
+    public MyUnReviewOrdersDTO GetUnReviewOrder(User user){ //리뷰 안달린 주문 모두 구하기
+        List<Order> orderList = orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString()); //리뷰가 null이고 배달이 완료된 주문 찾기
         return MyUnReviewOrdersDTO.toEntity(orderList);
     }
-    public MyReviewOrdersDTO GetReviewedOrder(User user){
-        List<Order> orderList = orderRepository.findByUserAndReviewIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
+    public MyReviewOrdersDTO GetReviewedOrder(User user){ //리뷰 달린 주문 모두 구하기
+        List<Order> orderList = orderRepository.findByUserAndReviewIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString()); //리뷰가 작성됐고 배달이 완료된 주문 찾기
         return MyReviewOrdersDTO.toEntity(orderList);
     }
 
     public ProductReviewDTO.ReviewList getProductReviews(Long productId) {
-        // TODO: 404 에러 처리
-        productRepository.findById(productId).orElseThrow(()->new RuntimeException("404"));
+        productRepository.findById(productId).orElseThrow(()->new NotFoundException("존재하지 않는 상품입니다."));
 
         List<Review> result = reviewRepository.findAllByOrderProductId(productId);
 

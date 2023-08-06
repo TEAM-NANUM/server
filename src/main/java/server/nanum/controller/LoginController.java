@@ -4,21 +4,20 @@ import io.swagger.v3.oas.annotations.Hidden;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-import server.nanum.dto.user.response.CommonLoginResponseDTO;
+import org.springframework.web.bind.annotation.*;
+import server.nanum.dto.user.request.GuestLoginRequestDTO;
+import server.nanum.dto.user.request.SellerLoginRequestDTO;
+import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.security.dto.KakaoAuthRequest;
 import server.nanum.security.dto.KakaoUserResponse;
 import server.nanum.security.oauth.KakaoClient;
 import server.nanum.service.LoginService;
 
 /**
- * 회원 인증 컨트롤러
- * 카카오 OAuth2 인증 흐름을 처리합니다.
- * Kakao 서버와 통신하여 인가 코드를 얻고, Access Token을 발급받아 사용자 정보를 가져오는 역할을 수행합니다.
- *서비스 레이어의 로그인, 회원가입 메서드르 호출합니다.
+ *회원 인증 컨트롤러
+ * 판매자, 게스트, 호스트에 대한 로그인을 처리하는 컨트롤러입니다.
+ *  카카오와 통신하여 인가 코드를 얻고, Access Token을 발급받아 사용자 정보를 가져오는 역할을 수행합니다.
+ *서비스 레이어의 로그인 메서드를 호출하여 각 유형의 사용자 인증을 관리합니다.
  * Author: hyunjin
  * Version: 1.0.0
  * Date: 2023년 7월 30일
@@ -50,13 +49,32 @@ public class LoginController {
      */
     @Hidden
     @GetMapping("/callback")
-    public CommonLoginResponseDTO processKakaoLoginCallback(@RequestParam("code") String authorizationCode) {
+    public LoginResponseDTO processKakaoLoginCallback(@RequestParam("code") String authorizationCode) {
         KakaoAuthRequest params = new KakaoAuthRequest(authorizationCode);
         KakaoUserResponse response = kakaoClient.handleCallback(params);
 
-        log.info("사용자 이름: {}", response.getName());
-        log.info("사용자 UID: {}", response.getUid());
-
         return loginService.loginOrCreate(response.toHostDTO());
+    }
+
+    /**
+     * 게스트 로그인을 처리하고 로그인을 수행합니다.
+     *
+     * @param guestLoginRequestDTO 게스트 로그인 요청 DTO
+     * @return LoginResponseDTO 로그인 또는 회원 가입 결과를 담은 응답 DTO
+     */
+    @PostMapping("/guest")
+    public LoginResponseDTO loginGuest(@RequestBody GuestLoginRequestDTO guestLoginRequestDTO) {
+        return loginService.loginOrCreate(guestLoginRequestDTO);
+    }
+
+    /**
+     * 판매자 로그인을 처리하고 로그인을 수행합니다.
+     *
+     * @param sellerLoginRequestDTO 판매자 로그인 요청 DTO
+     * @return LoginResponseDTO 로그인 또는 회원 가입 결과를 담은 응답 DTO
+     */
+    @PostMapping("/seller")
+    public LoginResponseDTO loginGuest(@RequestBody SellerLoginRequestDTO sellerLoginRequestDTO) {
+        return loginService.loginOrCreate(sellerLoginRequestDTO);
     }
 }

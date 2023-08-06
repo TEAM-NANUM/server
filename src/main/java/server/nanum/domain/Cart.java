@@ -2,9 +2,15 @@ package server.nanum.domain;
 
 
 import jakarta.persistence.*;
+import lombok.*;
 import server.nanum.domain.product.Product;
 
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
+@Getter
+@Setter
 @Table(name = "cart")
 public class Cart {
     @Id

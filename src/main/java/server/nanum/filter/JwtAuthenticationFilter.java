@@ -19,6 +19,8 @@ import server.nanum.security.jwt.JwtProvider;
 import java.io.IOException;
 import java.util.Optional;
 
+import static server.nanum.utils.JWTErrorResponseWriter.*;
+
 /**
  * JWT 인증 필터
  * HTTP 요청에서 JWT 토큰을 추출하여 사용자 인증을 수행하는 필터입니다.
@@ -36,23 +38,26 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     /**
      * HTTP 요청에서 JWT 토큰을 추출하여 사용자 인증을 수행합니다.
      *
-     * @param request  HTTP 요청 객체
-     * @param response HTTP 응답 객체
+     * @param request     HTTP 요청 객체
+     * @param response    HTTP 응답 객체
      * @param filterChain 필터 체인
      * @throws ServletException 서블릿 예외
      * @throws IOException      입출력 예외
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Optional<String> tokenOptional = extractTokenFromHeader(request);
+        try {
+            Optional<String> tokenOptional = extractTokenFromHeader(request);
 
-        // 토큰이 존재하는 경우에만 인증을 수행합니다.
-        tokenOptional.ifPresent(token -> {
-            Authentication authentication = authenticateWithToken(token);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
-        });
+            tokenOptional.ifPresent(token -> {
+                Authentication authentication = authenticateWithToken(token);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            });
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+        } catch (JwtAuthenticationException e) {
+            write(response, e.getMessage());
+        }
     }
 
     /**
@@ -68,7 +73,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             return Optional.empty();
         }
 
-        if(!authorizationHeader.get().startsWith("Bearer ")){
+        if (!authorizationHeader.get().startsWith("Bearer ")) {
             throw new JwtAuthenticationException("토큰 값 앞에 Bearer가 있어야 합니다!");
         }
 
@@ -83,17 +88,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
      * @throws JwtAuthenticationException JWT 인증 실패 예외
      */
     private Authentication authenticateWithToken(String token) {
-        String username = Optional.ofNullable(token)
+        String userInfo = Optional.ofNullable(token)
                 .filter(subject -> subject.length() >= 10)
                 .map(jwtProvider::validateTokenAndGetSubject)
-                .orElse("anonymous:anonymous")
-                .split(":")[0];
+                .orElseThrow(() -> new JwtAuthenticationException("페이로드가 올바르지 않습니다"));
 
-        if (username.isEmpty()) {
-            throw new JwtAuthenticationException("페이로드가 올바르지 않습니다");
-        }
-
-        UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+        UserDetails userDetails = customUserDetailsService.loadUserByUsername(userInfo);
         return new UsernamePasswordAuthenticationToken(userDetails, token, userDetails.getAuthorities());
     }
 }

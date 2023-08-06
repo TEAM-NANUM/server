@@ -1,6 +1,6 @@
 package server.nanum.service.adapter;
 
-import server.nanum.dto.user.response.CommonLoginResponseDTO;
+import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.dto.user.request.UserLoginRequestDTO;
 
 /**
@@ -27,7 +27,7 @@ public interface UserAdapter {
      * @param userLoginRequestDTO 로그인에 필요한 사용자 정보 객체
      * @return 인증 응답 DTO
      */
-    CommonLoginResponseDTO login(UserLoginRequestDTO userLoginRequestDTO);
+    LoginResponseDTO login(UserLoginRequestDTO userLoginRequestDTO);
 }
 
 

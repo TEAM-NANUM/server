@@ -9,15 +9,23 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
+import server.nanum.domain.Address;
+import server.nanum.domain.DeliveryType;
+import server.nanum.domain.Seller;
 import server.nanum.domain.product.Carousel;
 import server.nanum.domain.product.Category;
+import server.nanum.domain.product.Product;
 import server.nanum.domain.product.SubCategory;
 import server.nanum.dto.response.ProductDTO;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.CarouselRepository;
 import server.nanum.repository.CategoryRepository;
+import server.nanum.repository.ProductRepository;
 import server.nanum.repository.SubCategoryRepository;
+import server.nanum.repository.querydsl.ProductRepositoryCustom;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,6 +45,9 @@ class ProductServiceTest {
 
     @Mock
     private SubCategoryRepository subCategoryRepository;
+
+    @Mock
+    private ProductRepository productRepository;
 
     @Nested
     @DisplayName("캐러셀 테스트")
@@ -108,7 +119,7 @@ class ProductServiceTest {
         void testGetSubCategoriesByCategoryId() {
             Long categoryId = 1L;
 
-            when(categoryRepository.findById(categoryId)).thenReturn(Optional.ofNullable(categoryList.get(0)));
+            when(categoryRepository.existsById(categoryId)).thenReturn(true);
             when(subCategoryRepository.findByCategoryId(categoryId)).thenReturn(subCategoryList);
 
             ProductDTO.SubCategoryList result = productService.getSubCategoriesByCategoryId(categoryId);
@@ -124,11 +135,55 @@ class ProductServiceTest {
         @DisplayName("1차 카테고리 Id가 존재하지 않는 경우 2차 카테고리 목록을 가져오려 할때 NotFound 예외가 발생한다.")
         void testGetSubCategoriesByCategoryIdNotFound() {
             Long categoryId = 99L;
+            when(categoryRepository.existsById(categoryId)).thenReturn(false);
+            assertThrows(NotFoundException.class, () -> productService.getSubCategoriesByCategoryId(categoryId));
+        }
+    }
 
-            when(categoryRepository.findById(categoryId)).thenReturn(null);
+    @Nested
+    @DisplayName("상품 테스트")
+    class ProductTest {
+        @Test
+        @DisplayName("쿼리 파라미터를 이용하여 상품 목록을 가져올 수 있다.")
+        void testGetProductsByQueryParameters() {
+            List<Product> productList = new ArrayList<>();
+            productList.add(Product.builder().price(100).name("Product 1").deliveryType(DeliveryType.DIRECT).seller(Seller.builder().build()).build());
+            productList.add(Product.builder().price(200).name("Product 2").deliveryType(DeliveryType.PACKAGE).seller(Seller.builder().build()).build());
 
-            // TODO: NotFound 예외로 변경 필요
-            assertThrows(RuntimeException.class, () -> productService.getSubCategoriesByCategoryId(categoryId));
+            Long subcategoryId = 1L;
+            String query = "test";
+            String sort = "recent";
+            Integer limit = 10;
+            when(productRepository.getProductsByQueryParameters(subcategoryId, query, sort, limit)).thenReturn(productList);
+
+            ProductDTO.ProductList result = productService.getProductsByQueryParameters(subcategoryId, query, sort, limit);
+
+            assertAll(
+                    () -> assertEquals(2, result.getProducts().size(), () -> "상품 목록의 총 개수는 2개여야 합니다."),
+                    () -> assertEquals("Product 1", result.getProducts().get(0).getName(), () -> "첫 번째 상품의 이름은 Product 1 이어야 합니다."),
+                    () -> assertEquals(100, result.getProducts().get(0).getPrice(), () -> "첫 번째 상품의 가격은 100 이어야 합니다."),
+                    () -> assertEquals("Product 2", result.getProducts().get(1).getName(), () -> "두 번째 상품의 이름은 Product 2 이어야 합니다."),
+                    () -> assertEquals(200, result.getProducts().get(1).getPrice(), () -> "두 번째 상품의 가격은 200 이어야 합니다.")
+            );
+        }
+
+        @Test
+        @DisplayName("상품 ID를 이용하여 상품 상세 정보를 가져올 수 있다.")
+        void testGetProductDetailById() {
+            Long productId = 1L;
+
+            Seller seller = Seller.builder().name("Seller Name").address(Address.builder().zipCode("zipcode").defaultAddress("City Street").detailAddress("detail").build()).build();
+            Product product = Product.builder().id(productId).price(100).name("Product 1").ratingAvg(4.2F).deliveryType(DeliveryType.DIRECT).seller(seller).build();
+
+            when(productRepository.findById(productId)).thenReturn(Optional.of(product));
+
+            ProductDTO.ProductDetail result = productService.getProductDetailById(productId);
+
+            assertAll(
+                    () -> assertEquals("Product 1", result.getName(), () -> "상품의 이름은 Test Product 이어야 합니다."),
+                    () -> assertEquals(100, result.getPrice(), () -> "상품의 가격은 100 이어야 합니다."),
+                    () -> assertEquals("City Street Seller Name", result.getSeller(), () -> "판매자 이름과 주소는 'City Street Seller Name' 이어야 합니다.")
+            );
         }
     }
 }

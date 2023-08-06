@@ -12,4 +12,6 @@ public interface UserRepository extends JpaRepository<User,Long> {
 
     @EntityGraph(attributePaths = {"userGroup"})
     Optional<User> findById(Long id);
+
+    Optional<User> findByInviteCode(String inviteCode);
 }

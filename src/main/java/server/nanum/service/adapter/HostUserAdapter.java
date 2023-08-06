@@ -8,16 +8,15 @@ import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.User;
 import server.nanum.domain.UserGroup;
 import server.nanum.dto.user.request.HostLoginRequestDTO;
-import server.nanum.dto.user.response.CommonLoginResponseDTO;
+import server.nanum.dto.user.response.LoginResponseDTO;
+import server.nanum.dto.user.response.LoginResponseFactory;
 import server.nanum.repository.UserRepository;
 import server.nanum.dto.user.request.UserLoginRequestDTO;
 import server.nanum.security.jwt.JwtProvider;
 
-import static server.nanum.dto.user.response.CommonLoginResponseDTO.*;
-
 /**
  * 호스트 사용자 어댑터 클래스
- * 카카오 사용자 정보를 기반으로 로그인 또는 회원 가입을 처리하는 사용자 어댑터입니다.
+ * 카카오 사용자 정보를 기반으로 호스트에 대한 로그인 또는 회원 가입을 처리하는 사용자 어댑터입니다.
  *
  * 작성자: hyunjin
  * 버전: 1.0.0
@@ -28,15 +27,16 @@ import static server.nanum.dto.user.response.CommonLoginResponseDTO.*;
 @Transactional
 @Slf4j
 public class HostUserAdapter implements UserAdapter {
-
     private final UserRepository userRepository;
-    private final JwtProvider jwtProvider;
     private final EntityManager entityManager;
+    private final JwtProvider jwtProvider;
+    private final LoginResponseFactory loginResponseFactory;
 
     /**
-     * 사용자 정보를 통해 해당 어댑터를 사용할 수 있는지 판단하는 메서드
-     * @param userLoginRequestDTO 사용자 정보
-     * @return 사용자 정보가 HostDTO의 인스턴스인 경우 true 반환
+     * 호스트 사용자 어댑터가 주어진 사용자 로그인 정보를 지원하는지 여부를 반환합니다.
+     *
+     * @param userLoginRequestDTO 사용자 로그인 정보
+     * @return true(호스트 로그인 정보일 경우) / false(그 외의 경우)
      */
     @Override
     public boolean supports(UserLoginRequestDTO userLoginRequestDTO) {
@@ -44,50 +44,29 @@ public class HostUserAdapter implements UserAdapter {
     }
 
     /**
-     * 로그인 처리를 하는 메서드
-     * @param userLoginRequestDTO 사용자 정보
-     * @return 로그인 응답 정보를 담은 LoginResponseDTO 반환
+     * 호스트 사용자를 로그인 또는 회원 가입 처리합니다.
+     * 이미 등록된 호스트일 경우 로그인을 수행하고, 새로운 호스트일 경우 회원 가입을 수행합니다.
+     *
+     * @param userLoginRequestDTO 호스트 사용자의 로그인 또는 회원 가입 정보
+     * @return 인증 응답 DTO
      */
     @Override
-    public CommonLoginResponseDTO login(UserLoginRequestDTO userLoginRequestDTO) {
+    public LoginResponseDTO login(UserLoginRequestDTO userLoginRequestDTO) {
         HostLoginRequestDTO hostDTO = (HostLoginRequestDTO) userLoginRequestDTO;
 
         return userRepository.findByUid(hostDTO.uid())
                 .map(this::createLoginResponse)
                 .orElseGet(() -> {
-                    UserGroup newUserGroup = UserGroup.createUserGroup(0); // 새로운 UserGroup 생성
+                    UserGroup newUserGroup = UserGroup.createUserGroup(0);
                     entityManager.persist(newUserGroup);
-                    User newUser = User.createHost(hostDTO, newUserGroup); // 생성자를 통해 UserGroup 설정
+                    User newUser = User.createHost(hostDTO, newUserGroup);
                     userRepository.save(newUser);
                     return createLoginResponse(newUser);
                 });
     }
 
-    /**
-     * 로그인 응답 DTO를 생성하는 메서드
-     * @param user 로그인한 사용자 정보
-     * @return 로그인 응답 정보를 담은 LoginResponseDTO 반환
-     */
-    private CommonLoginResponseDTO createLoginResponse(User user) {
+    private LoginResponseDTO createLoginResponse(User user) {
         String token = jwtProvider.createToken(String.format("%s:%s", user.getId(), user.getUserRole()));
-        UserResponseDTO userResponseDTO = createUserResponseDTO(user);
-
-        return CommonLoginResponseDTO.builder()
-                .token(token)
-                .userResponseDTO(userResponseDTO)
-                .build();
-    }
-
-    /**
-     * 사용자 응답 DTO를 생성하는 메서드
-     * @param user 사용자 정보
-     * @return 사용자 응답 정보를 담은 UserResponseDTO 반환
-     */
-    private UserResponseDTO createUserResponseDTO(User user) {
-        return UserResponseDTO.builder()
-                .id(String.valueOf((user.getId())))
-                .username(user.getName())
-                .role(String.valueOf(user.getUserRole()))
-                .build();
+        return loginResponseFactory.createLoginResponseDTO(user, token);
     }
 }

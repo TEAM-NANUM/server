@@ -4,6 +4,7 @@ import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import server.nanum.domain.Seller;
 import server.nanum.domain.User;
 
 import java.util.Collection;
@@ -29,7 +30,7 @@ public class UserWrapper implements UserDetails {
      */
     public UserWrapper(User user) {
         this.user = user;
-        this.authorities = List.of(new SimpleGrantedAuthority(String.valueOf(user.getUserRole())));
+        this.authorities = List.of(new SimpleGrantedAuthority("ROLE_"+user.getUserRole()));
     }
 
     @Override
@@ -49,22 +50,22 @@ public class UserWrapper implements UserDetails {
 
     @Override
     public boolean isAccountNonExpired() {
-        return true; // 계정 만료 여부를 결정하는 로직에 맞게 변경해야 합니다.
+        return true;
     }
 
     @Override
     public boolean isAccountNonLocked() {
-        return true; // 계정 잠금 여부를 결정하는 로직에 맞게 변경해야 합니다.
+        return true;
     }
 
     @Override
     public boolean isCredentialsNonExpired() {
-        return true; // 인증서 만료 여부를 결정하는 로직에 맞게 변경해야 합니다.
+        return true;
     }
 
     @Override
     public boolean isEnabled() {
-        return true; // 계정 활성화 여부를 결정하는 로직에 맞게 변경해야 합니다.
+        return true;
     }
 }
 
