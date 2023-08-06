@@ -1,5 +1,6 @@
 package server.nanum.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.Order;
 import server.nanum.domain.product.Product;
@@ -11,7 +12,9 @@ public record SellerOrdersDTO(
     public record SellerOrderOneDTO( //판매자 주문 단건 정보
             Long id,
             Integer quantity,
+            @JsonProperty("user_name")
             String userName,
+            @JsonProperty("delivery_status")
             DeliveryStatus deliveryStatus) {
     }
 
