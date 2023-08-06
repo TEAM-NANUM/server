@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import server.nanum.dto.error.ErrorDTO;
 import server.nanum.exception.BadRequestException;
-import server.nanum.exception.JwtAuthenticationException;
 import server.nanum.exception.KakaoClientException;
 import server.nanum.exception.NotFoundException;
+import org.springframework.web.client.HttpClientErrorException;
+import server.nanum.dto.ErrorDTO;
+import server.nanum.exception.*;
 
 @RestControllerAdvice
 @Slf4j
@@ -37,5 +39,15 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDTO> handleBadRequestException(BadRequestException ex) {
         ErrorDTO errorDto = new ErrorDTO("Bad Request", ex.getMessage());
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorDto);
+    }
+    @ExceptionHandler(ConflictException.class)
+    public ResponseEntity<ErrorDTO> handleConflictException(ConflictException ex){
+        ErrorDTO errorDTO = new ErrorDTO("Conflict", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(errorDTO);
+    }
+    @ExceptionHandler(PaymentRequiredException.class)
+    public ResponseEntity<ErrorDTO> handlePaymentRequired(PaymentRequiredException ex){
+        ErrorDTO errorDTO = new ErrorDTO("Payment Required", ex.getMessage());
+        return ResponseEntity.status(HttpStatus.PAYMENT_REQUIRED).body(errorDTO);
     }
 }
