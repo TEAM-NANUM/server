@@ -26,9 +26,8 @@ public class ReviewService {
     private final OrderRepository orderRepository;
     private final ReviewRepository reviewRepository;
     public void createReview(AddReviewDTO dto){ //리뷰 작성
-        ///TODO: 404 에러 처리
         Order order = orderRepository.findById(dto.orderId()) //리뷰 작성을 위한 주문 찾기
-                .orElseThrow(()-> new RuntimeException("404"));
+                .orElseThrow(()-> new NotFoundException("존재하지 않는 주문입니다."));
         Review review = dto.toEntity(order);
         reviewRepository.save(review);
         order.setReview(review); //리뷰는 제품 정보를 가지고 있지  않기 때문에 별점 계산을 위해 주문에 리뷰 정보를 넣음

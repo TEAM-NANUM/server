@@ -1,11 +1,13 @@
 package server.nanum.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import server.nanum.domain.Order;
 
 import java.util.List;
 
 public record MyCompleteOrdersDTO(
         Integer count,
+        @JsonProperty("complete_orders")
         List<MyOrderDTO> completeOrders) {
 
         public static MyCompleteOrdersDTO toEntity(List<Order> orderList){

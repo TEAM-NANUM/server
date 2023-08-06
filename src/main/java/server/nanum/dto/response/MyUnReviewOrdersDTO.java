@@ -1,5 +1,6 @@
 package server.nanum.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import server.nanum.domain.Order;
 import java.util.List;
 
@@ -10,6 +11,7 @@ public record MyUnReviewOrdersDTO(
     public record MyUnReviewDTO( //리뷰 안달린 주문 단건 정보 DTO
             Long id,
             String name,
+            @JsonProperty("img_url")
             String imgUrl){
     }
 
