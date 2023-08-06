@@ -6,10 +6,10 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
-@Getter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@Getter
 @Entity
 @Table(name = "review")
 public class Review {
