@@ -1,6 +1,7 @@
 package server.nanum.controller;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,8 @@ import server.nanum.security.dto.KakaoAuthRequest;
 import server.nanum.security.dto.KakaoUserResponse;
 import server.nanum.security.oauth.KakaoClient;
 import server.nanum.service.LoginService;
+
+import java.io.IOException;
 
 /**
  *회원 인증 컨트롤러
@@ -49,12 +52,17 @@ public class LoginController {
      */
     @Hidden
     @GetMapping("/callback")
-    public LoginResponseDTO processKakaoLoginCallback(@RequestParam("code") String authorizationCode) {
+    public void processKakaoLoginCallback(@RequestParam("code") String authorizationCode, HttpServletResponse response) throws IOException {
         KakaoAuthRequest params = new KakaoAuthRequest(authorizationCode);
-        KakaoUserResponse response = kakaoClient.handleCallback(params);
+        KakaoUserResponse kakaoResponse = kakaoClient.handleCallback(params);
+        LoginResponseDTO loginResponseDTO = loginService.loginOrCreate(kakaoResponse.toHostDTO());
 
-        return loginService.loginOrCreate(response.toHostDTO());
+        String token = loginResponseDTO.token();
+
+        String redirectUrl = "http://localhost:3000/?token=" + token;
+        response.sendRedirect(redirectUrl);
     }
+
 
     /**
      * 게스트 로그인을 처리하고 로그인을 수행합니다.
