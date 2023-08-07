@@ -25,7 +25,7 @@ public class SellerSignupDTO {
     private String email;
     private String password;
 
-    // "address" 필드는 AddressDTO 타입입니다.
+
     private AddressDTO address;
 
     /**
@@ -34,7 +34,7 @@ public class SellerSignupDTO {
      * @return Seller 생성된 판매자 객체
      */
     public Seller toSeller() {
-        Address address = createAddressFromDTO(this.address);  // 이 부분 수정
+        Address address = this.address.toAddress();
 
         return Seller.builder()
                 .name(username)
@@ -42,14 +42,6 @@ public class SellerSignupDTO {
                 .email(email)
                 .password(password)
                 .address(address)
-                .build();
-    }
-
-    private Address createAddressFromDTO(AddressDTO addressDTO) {
-        return Address.builder()
-                .zipCode(addressDTO.getZipCode())
-                .defaultAddress(addressDTO.getDefaultAddress())
-                .detailAddress(addressDTO.getDetailAddress())
                 .build();
     }
 }

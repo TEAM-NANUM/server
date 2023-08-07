@@ -17,9 +17,9 @@ import java.util.UUID;
  * @since 2023-08-05
  */
 @Getter
-public class GuestSignupDTO extends AddressDTO {
-
+public class GuestSignupDTO {
     private String nickname;
+    private AddressDTO address;
 
     /**
      * 게스트 정보를 사용자(User) 정보로 변환합니다.
@@ -44,7 +44,7 @@ public class GuestSignupDTO extends AddressDTO {
      * @return Delivery 생성된 배송 정보 객체
      */
     public Delivery toDelivery(User user) {
-        Address address = createAddress();
+        Address address = this.address.toAddress();
 
         return Delivery.builder()
                 .nickname("기본")
@@ -52,14 +52,6 @@ public class GuestSignupDTO extends AddressDTO {
                 .address(address)
                 .isDefault(true)
                 .user(user)
-                .build();
-    }
-
-    private Address createAddress() {
-        return Address.builder()
-                .zipCode(getZipCode())
-                .defaultAddress(getDefaultAddress())
-                .detailAddress(getDetailAddress())
                 .build();
     }
 }

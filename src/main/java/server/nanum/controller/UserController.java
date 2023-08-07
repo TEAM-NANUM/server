@@ -25,12 +25,12 @@ import server.nanum.service.UserService;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/user")
-@Tag(name = "사용자 관련 API입니다", description = "사용자 관련 API입니다. 사용자 조회, 로그아웃, 사용자 탈퇴, 포인트 충전을 수행합니다.")
+@Tag(name = "사용자 관련 API", description = "사용자 관련 API입니다. 사용자 조회, 로그아웃, 사용자 탈퇴, 포인트 충전을 수행합니다.")
 public class UserController {
 
     private final UserService userService;
 
-    @Operation(summary = "사용자 조회 API입니다", description = "GUEST, HOST의 마이페이지에서 사용자정보를 조회하는 API입니다.")
+    @Operation(summary = "사용자 조회 API", description = "GUEST, HOST의 마이페이지에서 사용자정보를 조회하는 API입니다.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation =HostGetResponseDTO.class))),
             @ApiResponse(responseCode = "401", description = "토큰이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
