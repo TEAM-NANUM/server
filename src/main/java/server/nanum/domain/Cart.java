@@ -29,6 +29,16 @@ public class Cart {
     @JoinColumn(name = "user_id")
     private User user;
 
-    // Getters and Setters
+    public static Cart createEmptyCartItem(User user, Product product) {
+        return Cart.builder()
+                .user(user)
+                .product(product)
+                .productCount(0)
+                .build();
+    }
+
+    public void increaseProductCount(Integer quantity) {
+        this.productCount += quantity;
+    }
 }
 
