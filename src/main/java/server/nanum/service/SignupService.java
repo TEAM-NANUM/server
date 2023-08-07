@@ -1,5 +1,6 @@
 package server.nanum.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,7 @@ public class SignupService {
     private final DeliveryRepository deliveryRepository;
     private final SellerRepository sellerRepository;
     private final PasswordEncoder passwordEncoder;
+    private final EntityManager entityManager;
 
     /**
      * 게스트 회원가입 처리
@@ -40,6 +42,7 @@ public class SignupService {
     public void registerGuest(User user, GuestSignupDTO guestSignupDTO) {
         // 게스트 정보를 사용자 정보로 변환
         User guest = guestSignupDTO.toGuest(user.getUserGroup());
+        entityManager.persist(guest);
 
         // 새로운 배송 정보 생성 및 저장
         Delivery newDelivery = guestSignupDTO.toDelivery(guest);

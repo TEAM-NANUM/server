@@ -36,8 +36,12 @@ public class Delivery {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public void changeDefaultStatus(boolean isDefault) {
+        this.isDefault = isDefault;
+    }
 }
 
