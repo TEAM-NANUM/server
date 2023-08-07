@@ -1,5 +1,6 @@
 package server.nanum;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -11,8 +12,9 @@ import server.nanum.exception.KakaoClientException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.exception.*;
 
-@RestControllerAdvice
 @Slf4j
+@RestControllerAdvice
+@RequiredArgsConstructor
 public class GlobalExceptionHandler {
 
     @ExceptionHandler(KakaoClientException.class)

@@ -33,7 +33,6 @@ public class KakaoClient {
      */
     public ResponseEntity<Void> redirectToKakaoAuth() {
         String authUrl = authUrlBuilder.buildKakaoAuthUrl();
-        log.info("카카오 로그인 주소 = {}", authUrl);
 
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(URI.create(authUrl));
@@ -49,9 +48,6 @@ public class KakaoClient {
     public KakaoUserResponse handleCallback(KakaoAuthRequest req) {
         String accessToken = authClient.requestKakaoAccessToken(req);
 
-        KakaoUserResponse userInfo = authClient.requestKakaoUserInfo(accessToken);
-        log.info("카카오 액세스 토근 발급 성공: {}", accessToken);
-
-        return userInfo;
+        return authClient.requestKakaoUserInfo(accessToken);
     }
 }

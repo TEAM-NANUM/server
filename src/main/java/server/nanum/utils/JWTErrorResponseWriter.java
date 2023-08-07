@@ -26,11 +26,9 @@ public class JWTErrorResponseWriter {
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         ErrorDTO errorDto = new ErrorDTO("JWT 에러 발생!!", message);
-        ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.registerModule(new JavaTimeModule());
-            objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
-        String json = objectMapper.writeValueAsString(errorDto);
+        String json = ObjectMapperUtil.getInstance().writeValueAsString(errorDto);
 
         response.getWriter().write(json);
     }
+
 }

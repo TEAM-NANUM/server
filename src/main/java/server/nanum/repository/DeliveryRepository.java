@@ -7,9 +7,13 @@ import org.springframework.stereotype.Repository;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
 
+import java.util.List;
 import java.util.Optional;
 @Repository
 public interface DeliveryRepository extends JpaRepository<Delivery,Long> {
     @Query(value="SELECT d FROM Delivery d WHERE d.user = :user AND d.isDefault = true")
     Optional<Delivery> findByUserAndIsDefaultTrue(@Param("user") User user);
+
+    Optional<Delivery> findByIdAndUser(Long id, User user);
+    List<Delivery> findByUser(User user);
 }

@@ -1,6 +1,12 @@
 package server.nanum.controller;
 
 import io.swagger.v3.oas.annotations.Hidden;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.dto.user.request.GuestLoginRequestDTO;
 import server.nanum.dto.user.request.SellerLoginRequestDTO;
+import server.nanum.dto.user.response.HostGetResponseDTO;
 import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.security.dto.KakaoAuthRequest;
 import server.nanum.security.dto.KakaoUserResponse;
@@ -27,6 +34,7 @@ import java.io.IOException;
  */
 @RestController
 @RequiredArgsConstructor
+@Tag(name = "로그인 관련 API", description = "로그인  관련 API입니다. Host 로그인(kakao 로그인), Guest 로그인, 판매자 로그인이 수행됩니다.")
 @RequestMapping("/api/login")
 @Slf4j
 public class LoginController {
@@ -39,6 +47,11 @@ public class LoginController {
      *
      * @return ResponseEntity<Void> 리다이렉트 응답
      */
+    @Operation(summary = "카카오 로그인 API", description = "카카오 로그인 API입니다. 스웨거나 포스트맨으로는 동작하지 않고 브라우저창을 통해 직접 주소에 접근하셔야 됩니다. ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공!, localhost:3000?token=?을 통해서 토큰을 전달합니다.", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
+    })
     @GetMapping("/kakao")
     public ResponseEntity<Void> redirectToKakaoLogin() {
         return kakaoClient.redirectToKakaoAuth();
@@ -58,6 +71,7 @@ public class LoginController {
         LoginResponseDTO loginResponseDTO = loginService.loginOrCreate(kakaoResponse.toHostDTO());
 
         String token = loginResponseDTO.token();
+        log.info("엑세스 토큰 = {}", token);
 
         String redirectUrl = "http://localhost:3000/?token=" + token;
         response.sendRedirect(redirectUrl);
@@ -70,6 +84,11 @@ public class LoginController {
      * @param guestLoginRequestDTO 게스트 로그인 요청 DTO
      * @return LoginResponseDTO 로그인 또는 회원 가입 결과를 담은 응답 DTO
      */
+    @Operation(summary = "게스트 로그인 API", description = "게스트 로그인 API입니다. 호스트가 등록한 게스트들은 초대코드를 통해서 손쉽게 로그인할 수 있습니다! ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공! HTTP Body를 통해서 사용자 정보를 전달합니다.", content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
+    })
     @PostMapping("/guest")
     public LoginResponseDTO loginGuest(@RequestBody GuestLoginRequestDTO guestLoginRequestDTO) {
         return loginService.loginOrCreate(guestLoginRequestDTO);
@@ -81,6 +100,11 @@ public class LoginController {
      * @param sellerLoginRequestDTO 판매자 로그인 요청 DTO
      * @return LoginResponseDTO 로그인 또는 회원 가입 결과를 담은 응답 DTO
      */
+    @Operation(summary = "판매자 로그인 API", description = "판매자 로그인 API입니다. ")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "로그인 성공! HTTP Body를 통해서 사용자 정보를 전달합니다.", content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
+            @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
+    })
     @PostMapping("/seller")
     public LoginResponseDTO loginGuest(@RequestBody SellerLoginRequestDTO sellerLoginRequestDTO) {
         return loginService.loginOrCreate(sellerLoginRequestDTO);
