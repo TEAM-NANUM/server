@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
@@ -45,6 +46,7 @@ public class DeliveryController {
             @ApiResponse(responseCode = "500", description= "다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
+    @PreAuthorize("hasRole('ROLE_HOST')")
     public DeliveryListResponse getDeliveryList(@CurrentUser User user) {
         return deliveryService.getDeliveryList(user);
     }
@@ -62,6 +64,7 @@ public class DeliveryController {
             @ApiResponse(responseCode = "500", description= "다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping
+    @PreAuthorize("hasRole('ROLE_HOST')")
     public ResponseEntity<Void> saveDelivery(@RequestBody DeliveryRequestDTO request, @CurrentUser User user) {
         deliveryService.saveDelivery(request, user);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -81,10 +84,53 @@ public class DeliveryController {
             @ApiResponse(responseCode = "409", description= "사욪자가 등록한 배송지 중에 is_default가 true, 즉 기본 배송지가 존재할 때", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description= "다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
-    @PutMapping
+    @PutMapping("/default")
+    @PreAuthorize("hasRole('ROLE_HOST')")
     public ResponseEntity<Void> udpateDefault(@RequestParam Long id, @CurrentUser User user) {
         deliveryService.toggleDefault(id, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+    /**
+     * 배송지 정보 수정 API
+     *
+     * @param id 수정하려는 배송지 ID
+     * @param request 배송지 정보 요청 DTO
+     * @param user 현재 사용자 정보
+     * @return ResponseEntity<Void> 배송지 수정 결과 응답
+     */
+    @Operation(summary = "배송지 정보 수정 API", description = "특정 배송지 정보를 수정하는 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "404", description = "ID를 통해 접근한 배송지가 존재하지 않을 때", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "500", description = "다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @PutMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_HOST')")
+    public ResponseEntity<Void> updateDelivery(@PathVariable Long id, @RequestBody DeliveryRequestDTO request, @CurrentUser User user) {
+        deliveryService.updateDelivery(id, request, user);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    /**
+     * 배송지 정보 삭제 API
+     *
+     * @param id 삭제하려는 배송지 ID
+     * @param user 현재 사용자 정보
+     * @return ResponseEntity<Void> 배송지 삭제 결과 응답
+     */
+    @Operation(summary = "배송지 정보 삭제 API", description = "특정 배송지 정보를 삭제하는 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "응답 성공!", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "404", description = "ID를 통해 접근한 배송지가 존재하지 않을 때", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "500", description = "다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ROLE_HOST')")
+    public ResponseEntity<Void> deleteDelivery(@PathVariable Long id, @CurrentUser User user) {
+        deliveryService.deleteDelivery(id, user);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
 }
 
