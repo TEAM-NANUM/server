@@ -2,8 +2,8 @@ package server.nanum.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -11,6 +11,7 @@ import java.util.List;
 @Builder
 @Table(name = "user_group")
 @Getter
+@DynamicUpdate
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserGroup {
@@ -25,7 +26,7 @@ public class UserGroup {
     @OneToMany(mappedBy = "userGroup")
     private List<User> users;
 
-    public void setPoint(int point) {
+    public void updatePoint(int point) {
         this.point = point;
     }
     // UserGroup 생성하는 메서드
@@ -33,12 +34,5 @@ public class UserGroup {
         return UserGroup.builder()
                 .point(point)
                 .build();
-    }
-
-    public List<User> getUsersList() {
-        if (users == null) {
-            throw new IllegalStateException("UserGroup의 사용자들이 존재하지 않습니다!");
-        }
-        return new ArrayList<>(users);
     }
 }
