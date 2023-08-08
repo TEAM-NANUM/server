@@ -107,5 +107,30 @@ public class DeliveryService {
             throw new ConflictException("기본 배송지는 중복될 수 없습니다!");
         }
     }
+
+    /**
+     * 배송지 정보 업데이트
+     *
+     * @param id 배송지 아이디
+     * @param request 업데이트할 배송지 정보
+     * @param user 현재 사용자 정보
+     */
+    @Transactional
+    public void updateDelivery(Long id, DeliveryRequestDTO request, User user) {
+        Delivery delivery = findDeliveryByIdAndUser(id, user);
+        delivery.updateDelivery(request.getNickname(), request.getPhoneNumber(), request.getAddress().toAddress());
+    }
+
+    /**
+     * 배송지 정보 삭제
+     *
+     * @param id 삭제할 배송지 아이디
+     * @param user 현재 사용자 정보
+     */
+    @Transactional
+    public void deleteDelivery(Long id, User user) {
+        Delivery delivery = findDeliveryByIdAndUser(id, user);
+        deliveryRepository.delete(delivery);
+    }
 }
 

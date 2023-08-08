@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import server.nanum.domain.Address;
 import server.nanum.domain.Delivery;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 public record DeliveryListResponse(@JsonProperty("delivery_address") List<DeliveryResponse> deliveryResponses) {
