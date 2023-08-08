@@ -3,6 +3,9 @@ package server.nanum.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 
 @Entity
 @Builder
@@ -18,6 +21,10 @@ public class UserGroup {
 
     @Column(name = "point")
     private int point;
+
+    @OneToMany(mappedBy = "userGroup")
+    private List<User> users;
+
     public void setPoint(int point) {
         this.point = point;
     }
@@ -26,5 +33,12 @@ public class UserGroup {
         return UserGroup.builder()
                 .point(point)
                 .build();
+    }
+
+    public List<User> getUsersList() {
+        if (users == null) {
+            throw new IllegalStateException("UserGroup의 사용자들이 존재하지 않습니다!");
+        }
+        return new ArrayList<>(users);
     }
 }

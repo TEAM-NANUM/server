@@ -50,6 +50,5 @@ public class Delivery {
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
-
 }
 
