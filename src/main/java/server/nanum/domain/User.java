@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import server.nanum.dto.user.request.HostLoginRequestDTO;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -40,6 +42,9 @@ public class User {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_group_id")
     private UserGroup userGroup;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL) // CASCADE 옵션 추가
+    private List<Delivery> deliveries = new ArrayList<>();
 
     // Host 사용자를 생성하는 메서드
     public static User createHost(HostLoginRequestDTO hostDTO, UserGroup userGroup) {
