@@ -51,6 +51,9 @@ public class User {
                 .build();
     }
 
+    public boolean isGuest() {
+        return userRole == UserRole.GUEST;
+    }
 
     // 사용자가 속한 UserGroup의 포인트를 반환하는 메서드
     public int getUserGroupPoint() {
