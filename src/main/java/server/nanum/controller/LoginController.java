@@ -86,7 +86,7 @@ public class LoginController {
      */
     @Operation(summary = "게스트 로그인 API", description = "게스트 로그인 API입니다. 호스트가 등록한 게스트들은 초대코드를 통해서 손쉽게 로그인할 수 있습니다! ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "로그인 성공! HTTP Body를 통해서 사용자 정보를 전달합니다.", content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "로그인 성공! HTTP Body를 통해서 사용자 정보를 전달합니다.", content = @Content(mediaType = "application/json" , schema = @Schema(implementation = LoginResponseDTO.class))),
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/guest")
@@ -102,7 +102,7 @@ public class LoginController {
      */
     @Operation(summary = "판매자 로그인 API", description = "판매자 로그인 API입니다. ")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "로그인 성공! HTTP Body를 통해서 사용자 정보를 전달합니다.", content = @Content(schema = @Schema(implementation = LoginResponseDTO.class))),
+            @ApiResponse(responseCode = "200", description = "로그인 성공! HTTP Body를 통해서 사용자 정보를 전달합니다.", content = @Content(mediaType = "application/json" ,schema = @Schema(implementation = LoginResponseDTO.class))),
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/seller")

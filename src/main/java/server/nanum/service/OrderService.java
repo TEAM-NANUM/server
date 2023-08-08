@@ -35,7 +35,7 @@ public class OrderService {
         if(user.getUserGroup().getPoint()-dto.quantity()*product.getPrice()<0){ //포인트 부족 시 402 오류
             throw new PaymentRequiredException("포인트가 부족합니다");
         }
-        user.getUserGroup().setPoint(user.getUserGroup().getPoint()-dto.quantity()*product.getPrice()); //주문 시 포인트 계산
+        user.getUserGroup().updatePoint(user.getUserGroup().getPoint()-dto.quantity()*product.getPrice()); //주문 시 포인트 계산
         Order order = dto.toEntity(product,user);
         orderRepository.save(order);
     }
