@@ -4,6 +4,7 @@ package server.nanum.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import server.nanum.dto.delivery.DeliveryRequestDTO;
 
 import java.time.LocalDateTime;
 
@@ -43,5 +44,12 @@ public class Delivery {
     public void changeDefaultStatus(boolean isDefault) {
         this.isDefault = isDefault;
     }
+
+    public void updateDelivery(String nickname, String phoneNumber, Address address) {
+        this.nickname = nickname;
+        this.phoneNumber = phoneNumber;
+        this.address = address;
+    }
+
 }
 
