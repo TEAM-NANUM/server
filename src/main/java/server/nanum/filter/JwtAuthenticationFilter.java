@@ -14,7 +14,8 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import server.nanum.exception.JwtAuthenticationException;
 import server.nanum.security.custom.CustomUserDetailsService;
-import server.nanum.security.jwt.JwtProvider;
+import server.nanum.service.LogoutService;
+import server.nanum.utils.JwtProvider;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -37,6 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     /**
      * HTTP 요청에서 JWT 토큰을 추출하여 사용자 인증을 수행합니다.
+     * 토큰이 블랙리스트에 있는지 확인하고, 유효한 토큰인 경우 사용자 인증을 수행합니다.
      *
      * @param request     HTTP 요청 객체
      * @param response    HTTP 응답 객체
@@ -47,13 +49,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         try {
-            Optional<String> tokenOptional = extractTokenFromHeader(request);
-
-            tokenOptional.ifPresent(token -> {
-                Authentication authentication = authenticateWithToken(token);
-                SecurityContextHolder.getContext().setAuthentication(authentication);
-            });
-
+            authenticateRequest(request);
             filterChain.doFilter(request, response);
         } catch (JwtAuthenticationException e) {
             write(response, e.getMessage());
@@ -61,27 +57,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     }
 
     /**
-     * 요청 헤더에서 Bearer 토큰을 추출합니다.
-     *
-     * @param request HTTP 요청 객체
-     * @return 추출한 토큰 문자열 (없을 경우 Optional.empty() 반환)
+     * 요청에서 토큰을 추출하고, 토큰이 블랙리스트에 있는지 확인 후 인증을 수행합니다.
      */
-    private Optional<String> extractTokenFromHeader(HttpServletRequest request) {
-        Optional<String> authorizationHeader = Optional.ofNullable(request.getHeader(HttpHeaders.AUTHORIZATION));
+    private void authenticateRequest(HttpServletRequest request) {
+        Optional<String> tokenOptional = jwtProvider.extractTokenFromHeader(request);
 
-        if (authorizationHeader.isEmpty()) {
-            return Optional.empty();
-        }
-
-        if (!authorizationHeader.get().startsWith("Bearer ")) {
-            throw new JwtAuthenticationException("토큰 값 앞에 Bearer가 있어야 합니다!");
-        }
-
-        return Optional.of(authorizationHeader.get().substring(7));
+        tokenOptional.ifPresent(token -> {
+            if (jwtProvider.isTokenBlacklisted(token)) {
+                throw new JwtAuthenticationException("이 토큰은 로그아웃 되어 현재 사용하실 수 없습니다!");
+            }
+            Authentication authentication = authenticateWithToken(token);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+        });
     }
 
     /**
      * 토큰을 이용하여 사용자 인증을 수행합니다.
+     * 토큰의 subject 길이를 확인하고, 토큰을 검증하여 인증 객체를 반환합니다.
      *
      * @param token JWT 토큰 문자열
      * @return 인증 객체

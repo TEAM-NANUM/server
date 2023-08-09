@@ -2,14 +2,13 @@ package server.nanum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.User;
-import server.nanum.dto.user.request.ChargeRequestDTO;
 import server.nanum.dto.user.response.HostGetResponseDTO;
-import server.nanum.repository.UserGroupRepository;
+import server.nanum.repository.TokenBlacklistRepository;
 import server.nanum.repository.UserRepository;
+import server.nanum.utils.JwtProvider;
 
 
 /**

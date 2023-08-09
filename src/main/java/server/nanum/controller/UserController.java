@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +20,7 @@ import server.nanum.dto.error.DefaultErrorResponse;
 import server.nanum.dto.error.ErrorDTO;
 import server.nanum.dto.user.request.ChargeRequestDTO;
 import server.nanum.dto.user.response.HostGetResponseDTO;
+import server.nanum.service.LogoutService;
 import server.nanum.service.UserService;
 
 /**
@@ -36,6 +38,7 @@ import server.nanum.service.UserService;
 public class UserController {
 
     private final UserService userService;
+    private final LogoutService logoutService;
 
     /**
      * 사용자 정보 조회 API
@@ -96,5 +99,26 @@ public class UserController {
         userService.deleteUser(user);
         return ResponseEntity.noContent().build();
     }
+
+
+    /**
+     * 사용자 로그아웃 API
+     *
+     * @param request 현재 HTTP 요청
+     * @return ResponseEntity<Void> 로그아웃 성공 응답
+     */
+    @Operation(summary = "회원 로그아웃 API", description = "사용자가 로그아웃하는 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "204", description = "로그아웃 성공!", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "401", description = "토큰이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "토큰은 있으나 권한이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "500", description= "다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logoutUser(HttpServletRequest request) {
+        logoutService.logout(request);
+        return ResponseEntity.noContent().build();
+    }
+
 }
 

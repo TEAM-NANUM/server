@@ -6,13 +6,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import server.nanum.domain.Seller;
-import server.nanum.domain.User;
 import server.nanum.exception.JwtAuthenticationException;
 import server.nanum.repository.SellerRepository;
 import server.nanum.repository.UserRepository;
-
-import java.util.function.Supplier;
 
 
 /**

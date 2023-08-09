@@ -11,7 +11,7 @@ import server.nanum.dto.user.request.UserLoginRequestDTO;
 import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.dto.user.response.LoginResponseFactory;
 import server.nanum.repository.SellerRepository;
-import server.nanum.security.jwt.JwtProvider;
+import server.nanum.utils.JwtProvider;
 
 /**
  * 판매자 사용자 어댑터 클래스
