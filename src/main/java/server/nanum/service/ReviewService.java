@@ -8,13 +8,12 @@ import server.nanum.domain.*;
 import server.nanum.dto.request.AddReviewDTO;
 import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
-import server.nanum.dto.response.ProductDTO;
 import server.nanum.dto.response.ProductReviewDTO;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 import server.nanum.repository.ReviewRepository;
-import server.nanum.repository.UserRepository;
+
 import java.util.List;
 
 @Service

@@ -22,7 +22,6 @@ import server.nanum.repository.CarouselRepository;
 import server.nanum.repository.CategoryRepository;
 import server.nanum.repository.ProductRepository;
 import server.nanum.repository.SubCategoryRepository;
-import server.nanum.repository.querydsl.ProductRepositoryCustom;
 
 import java.util.ArrayList;
 import java.util.List;
