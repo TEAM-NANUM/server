@@ -6,8 +6,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -39,9 +41,9 @@ public class OrderController {
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping()
-    public ResponseEntity<Void> createOrder(@RequestBody AddOrderDTO dto, @CurrentUser User user){
+    public ResponseEntity<Void> createOrder(@Valid @RequestBody AddOrderDTO dto, @CurrentUser User user){
         orderService.createOrder(dto,user);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "상품 구매용 유저 정보 조회 API", description = "상품 구매 페이지에서 사용자의 기본 정보를 가져오기 위한 API입니다. (API명세서 25번)")

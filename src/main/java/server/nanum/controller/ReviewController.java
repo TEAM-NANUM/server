@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -67,9 +69,9 @@ public class ReviewController {
     })
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @PostMapping("/reviews")
-    public ResponseEntity<Void> addReview(@RequestBody AddReviewDTO dto){
+    public ResponseEntity<Void> addReview(@Valid @RequestBody AddReviewDTO dto){
         reviewService.createReview(dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "상품의 리뷰 목록 조회 API", description = "상품 ID로 해당 상품에 작성된 리뷰를 모두 가져오는 API 입니다. (API명세서 11번)")
@@ -82,7 +84,6 @@ public class ReviewController {
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @GetMapping("/products/{product_id}/reviews")
     public ResponseEntity<ProductReviewDTO.ReviewList> getProductReviews(
-            @Parameter(name="ID",description = "상품의 id",in = ParameterIn.QUERY)
             @PathVariable("product_id") Long productId) {
         ProductReviewDTO.ReviewList productReviews = reviewService.getProductReviews(productId);
         return ResponseEntity.ok(productReviews);
