@@ -8,8 +8,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -64,9 +66,9 @@ public class SellerController {
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/product")
-    public ResponseEntity<Void> addProduct(@CurrentUser Seller seller, @RequestBody AddProductDTO dto){
+    public ResponseEntity<Void> addProduct(@CurrentUser Seller seller, @Valid @RequestBody AddProductDTO dto){
         sellerService.createProduct(seller,dto);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @Operation(summary = "상품에 등록된 주문 조회 API", description = "상품의 ID로 해당 상품에 등록된 주문을 모두 가져오는 API입니다. (API명세서 33번)")
@@ -79,7 +81,6 @@ public class SellerController {
     })
     @GetMapping("/{product_id}")
     public ResponseEntity<SellerOrdersDTO> getSellerOrders(
-            @Parameter(name="ID",description = "상품의 id",in = ParameterIn.QUERY)
             @PathVariable("product_id") Long productId){
         SellerOrdersDTO dto = sellerService.getSellerOrders(productId);
         return ResponseEntity.ok().body(dto);
