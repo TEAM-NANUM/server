@@ -22,6 +22,15 @@ import server.nanum.dto.response.OrderUserInfoDTO;
 import server.nanum.dto.user.response.HostGetResponseDTO;
 import server.nanum.service.OrderService;
 
+/**
+ * 주문 관련 컨트롤러
+ * 주문과 관련된 API를 제공합니다.
+ *
+ * @author 김민규
+ * @version 1.0.0
+ * @since 2023-08-10
+ */
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -30,6 +39,16 @@ import server.nanum.service.OrderService;
 @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
 public class OrderController {
     private final OrderService orderService;
+
+    /**
+     * 주문 생성 API
+     *
+     * @param dto 주문에 필요한 정보
+     * @param user 현재 사용자 정보를 가져옴
+     * @return ResponseEntity<Void> 주문 생성 결과 응답
+     *
+     */
+
     @Operation(summary = "주문 추가 API", description = "사용자가 상품 ID와 개수, 주소를 입력해 주문을 추가하는 API입니다. (API명세서 26번)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "주문 추가 성공", content = @Content(schema = @Schema(hidden = true))),
@@ -46,6 +65,14 @@ public class OrderController {
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
+    /**
+     * 상품 구매시 유저 정보 조회 API
+     *
+     * @param user 현재 사용자 정보를 가져옴
+     * @return ResponseEntity<OrderUserInfoDTO> 사용자 정보 응답
+     *
+     */
+
     @Operation(summary = "상품 구매용 유저 정보 조회 API", description = "상품 구매 페이지에서 사용자의 기본 정보를 가져오기 위한 API입니다. (API명세서 25번)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation =OrderUserInfoDTO.class))),
@@ -59,6 +86,13 @@ public class OrderController {
         return ResponseEntity.ok().body(dto);
     }
 
+    /**
+     * 현재 배송 진행중인 주문 조회 API
+     *
+     * @param user 현재 사용자의 정보를 가져옴
+     * @return ResponseEntity<MyPrgressOrdersDTO> 사용자의 현재 진행 중인 주문 정보와 개수 응답
+     */
+
     @Operation(summary = "진행중인 주문 내역 조회 API", description = "사용자의 주문 중 현재 배송이 진행중인 주문 내역을 조회하는 API입니다. (API명세서 23번)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation =MyProgressOrdersDTO.class))),
@@ -71,6 +105,13 @@ public class OrderController {
         MyProgressOrdersDTO dto = orderService.getInProgressOrder(user);
         return ResponseEntity.ok().body(dto);
     }
+
+    /**
+     * 배송 종료된 주문 조회 API
+     *
+     * @param user 현재 사용자의 정보를 가져옴
+     * @return ResponseEntity<MyCompleteOrdersDTO> 사용자의 배송 종료된 주문 정보와 개수 응답
+     */
 
     @Operation(summary = "완료된 주문 내역 조회 API", description = "사용자의 주문 중 배송이 완료된 주문 내역을 조회하는 API입니다. (API명세서 24번)")
     @ApiResponses(value = {
