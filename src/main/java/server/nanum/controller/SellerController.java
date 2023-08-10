@@ -19,7 +19,18 @@ import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.Seller;
 import server.nanum.dto.request.AddProductDTO;
 import server.nanum.dto.response.*;
+import server.nanum.exception.ConflictException;
+import server.nanum.exception.NotFoundException;
 import server.nanum.service.SellerService;
+
+/**
+ * 판매자 관련 컨트롤러
+ * 판매자와 관련된 API를 제공합니다.
+ *
+ * @author 김민규
+ * @version 1.0.0
+ * @since 2023-08-10
+ */
 
 @Slf4j
 @RequiredArgsConstructor
@@ -29,6 +40,14 @@ import server.nanum.service.SellerService;
 @PreAuthorize("hasRole('ROLE_SELLER')")
 public class SellerController {
     private final SellerService sellerService;
+
+    /**
+     * 상품 구매시 유저 정보 조회 API
+     *
+     * @param seller 현재 판매자(사용자)의 정보를 가져옴
+     * @return ResponseEntity<SellerInfoDTO> 판매자 정보 응답
+     *
+     */
     @Operation(summary = "판매자 정보 조회 API", description = "판매자 등록 상품 조회 페이지에서 판매자의 정보를 가져오는 API입니다. (API명세서 30번)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation = SellerInfoDTO.class))),
@@ -42,6 +61,13 @@ public class SellerController {
         return ResponseEntity.ok().body(dto);
     }
 
+    /**
+     * 판매자 등록상품 조회 API
+     *
+     * @param seller 현재 판매자(사용자)의 정보를 가져옴
+     * @return ResponseEntity<SellerProductsDTO> 판매자가 등록한 상품 정보와 그 개수 응답
+     */
+
     @Operation(summary = "판매자가 등록한 상품 조회 API", description = "판매자가 등록한 상품의 정보를 가져오는 API입니다. (API명세서 31번)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation = SellerProductsDTO.class))),
@@ -54,6 +80,15 @@ public class SellerController {
         SellerProductsDTO dto = sellerService.getSellerProducts(seller);
         return ResponseEntity.ok().body(dto);
     }
+
+    /**
+     * 상품 생성 API
+     *
+     * @param dto 상품에 필요한 정보
+     * @param seller 현재 판매자(사용자)의 정보를 가져옴
+     *  @return ResponseEntity<Void> 상품 생성 결과 응답
+     *
+     */
 
     @Operation(summary = "판매 상품 등록 API", description = "판매자가 상품의 대표 이미지, 배송 종류, 카테고리 ID, 이름, 개당가격, 판매 단위, 설명을 입력해 상품을 추가하는 API입니다. (API명세서 32번)")
     @ApiResponses(value = {
@@ -70,6 +105,14 @@ public class SellerController {
         sellerService.createProduct(seller,dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    /**
+     * 상품에 등록된 주문 조회 API
+     *
+     * @param productId 상품의 Id
+     * @return ResponseEntity<SellerOrdersDTO> 상품의 주문 정보와 그 개수 응답
+     *
+     */
 
     @Operation(summary = "상품에 등록된 주문 조회 API", description = "상품의 ID로 해당 상품에 등록된 주문을 모두 가져오는 API입니다. (API명세서 33번)")
     @ApiResponses(value = {

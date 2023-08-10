@@ -22,7 +22,19 @@ import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.dto.response.OrderUserInfoDTO;
 import server.nanum.dto.response.ProductReviewDTO;
+import server.nanum.exception.NotFoundException;
 import server.nanum.service.ReviewService;
+
+/**
+ * 리뷰 관련 컨트롤러
+ * 리뷰와 관련된 API를 제공합니다.
+ *
+ * @author 김민규
+ * @version 1.0.0
+ * @since 2023-08-10
+ */
+
+
 @Slf4j
 @RequiredArgsConstructor
 @RestController
@@ -30,6 +42,14 @@ import server.nanum.service.ReviewService;
 @RequestMapping("/api")
 public class ReviewController {
     private final ReviewService reviewService;
+
+    /**
+     * 리뷰가 없는 주문 조회 API
+     *
+     * @param user 현재 사용자의 정보를 가져옴
+     * @return ResponseEntity<MyUnReviewOrdersDTO> 사용자의 리뷰가 없는 주문 정보와 그 개수 응답
+     */
+
     @Operation(summary = "리뷰 작성 안 된 주문 조회 API", description = "사용자의 주문 중 사용자가 리뷰를 작성하지 않은 주문을 가져오기 위한 API입니다. (API명세서 27번)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation = MyUnReviewOrdersDTO.class))),
@@ -44,6 +64,13 @@ public class ReviewController {
         return ResponseEntity.ok().body(dto);
     }
 
+    /**
+     * 리뷰가 있는(작성된) 주문 조회 API
+     *
+     * @param user 현재 사용자의 정보를 가져옴
+     * @return ResponseEntity<MyReviewOrdersDTO> 사용자의 리뷰가 있는 주문 정보와 그 개수 응답
+     */
+
     @Operation(summary = "리뷰 작성 된 주문 조회 API", description = "사용자의 주문 중 사용자가 리뷰를 작성한 주문을 가져오기 위한 API입니다. (API명세서 28번)")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation = MyReviewOrdersDTO.class))),
@@ -57,6 +84,13 @@ public class ReviewController {
         MyReviewOrdersDTO dto = reviewService.GetReviewedOrder(user);
         return ResponseEntity.ok().body(dto);
     }
+
+    /**
+     * 새로운 리뷰 생성 API
+     *
+     * @param dto 리뷰에 필요한 정보
+     * @return ResponseEntity<Void> 리뷰 생성 결과 응답
+     */
 
     @Operation(summary = "리뷰 작성 API", description = "사용자가 주문 ID와 별점, 후기를 입력해 리뷰를 추가하는 API입니다. (API명세서 29번)")
     @ApiResponses(value = {
@@ -73,6 +107,14 @@ public class ReviewController {
         reviewService.createReview(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
+
+    /**
+     * 상품의 리뷰 전체 조회 API
+     *
+     * @param productId 상품의 Id
+     * @return ResponseEntity<ProductReviewDTO.ReviewList> 상품의 리뷰 정보 응답
+     *
+     */
 
     @Operation(summary = "상품의 리뷰 목록 조회 API", description = "상품 ID로 해당 상품에 작성된 리뷰를 모두 가져오는 API 입니다. (API명세서 11번)")
 
