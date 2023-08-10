@@ -32,10 +32,14 @@ public class ReviewService {
         order.setReview(review); //리뷰는 제품 정보를 가지고 있지  않기 때문에 별점 계산을 위해 주문에 리뷰 정보를 넣음
         List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(order.getProduct()); //제품이 가지고 있는 모든 주문 가져오기
         Float ratingAll = (float) 0;
+        int reviewedCount = 0;
         for(Order orderData: orderList){ //별점 총합 구하기 TODO: 리팩토링 방법 있으면 사용
-            ratingAll+= orderData.getReview().getRating();
+            if(orderData.getReview()!=null){
+                ratingAll+= orderData.getReview().getRating();
+                reviewedCount++;
+            }
         }
-        order.getProduct().setRatingAvg(ratingAll/(orderList.size())); //평균 별점 변경
+        order.getProduct().setRatingAvg(ratingAll/(reviewedCount)); //평균 별점 변경
 
     }
     public MyUnReviewOrdersDTO GetUnReviewOrder(User user){ //리뷰 안달린 주문 모두 구하기
