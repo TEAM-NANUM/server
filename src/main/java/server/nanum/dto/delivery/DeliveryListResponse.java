@@ -29,7 +29,7 @@ public record DeliveryListResponse(@JsonProperty("delivery_address") List<Delive
                     delivery.getNickname(),
                     delivery.isDefault(),
                     delivery.getPhoneNumber(),
-                    delivery.getUsername(),
+                    delivery.getReceiver(),
                     delivery.getAddress()
             );
         }
