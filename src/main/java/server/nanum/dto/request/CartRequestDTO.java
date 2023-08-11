@@ -11,6 +11,7 @@ import java.util.List;
 public class CartRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
+    @Setter
     @Getter
     public static class CartItem {
         @JsonProperty("product_id")
@@ -23,6 +24,7 @@ public class CartRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
+    @Setter
     public static class CartIdList {
         @JsonProperty("item_ids")
         List<Long> itemIds;
@@ -31,6 +33,7 @@ public class CartRequestDTO {
     @NoArgsConstructor
     @AllArgsConstructor
     @Getter
+    @Setter
     public static class CartItemQuantity {
         private Long id;
 
