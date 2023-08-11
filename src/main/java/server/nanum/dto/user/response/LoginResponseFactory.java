@@ -4,7 +4,7 @@ import org.springframework.stereotype.Service;
 import server.nanum.domain.Seller;
 import server.nanum.domain.User;
 
-import static server.nanum.dto.user.response.LoginResponseDTO.*;
+import static server.nanum.dto.user.response.LoginResponseDTO.UserResponseDTO;
 
 @Service
 public class LoginResponseFactory {

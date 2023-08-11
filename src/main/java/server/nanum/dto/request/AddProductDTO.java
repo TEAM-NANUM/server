@@ -5,8 +5,8 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import server.nanum.domain.DeliveryType;
-import server.nanum.domain.product.Product;
 import server.nanum.domain.Seller;
+import server.nanum.domain.product.Product;
 import server.nanum.domain.product.SubCategory;
 
 public record AddProductDTO( //제품 등록 DTO

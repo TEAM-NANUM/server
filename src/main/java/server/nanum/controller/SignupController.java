@@ -16,8 +16,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
-import server.nanum.dto.user.request.SellerSignupDTO;
 import server.nanum.dto.user.request.GuestSignupDTO;
+import server.nanum.dto.user.request.SellerSignupDTO;
 import server.nanum.service.SignupService;
 
 /**

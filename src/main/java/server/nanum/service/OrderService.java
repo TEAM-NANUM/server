@@ -2,10 +2,12 @@ package server.nanum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.*;
+import server.nanum.domain.Delivery;
+import server.nanum.domain.DeliveryStatus;
+import server.nanum.domain.Order;
+import server.nanum.domain.User;
 import server.nanum.domain.product.Product;
 import server.nanum.dto.request.AddOrderDTO;
 import server.nanum.dto.response.MyOrderListDTO;

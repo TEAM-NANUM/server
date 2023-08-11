@@ -1,8 +1,6 @@
 package server.nanum.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,9 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.Seller;
 import server.nanum.dto.request.AddProductDTO;
-import server.nanum.dto.response.*;
-import server.nanum.exception.ConflictException;
-import server.nanum.exception.NotFoundException;
+import server.nanum.dto.response.SellerInfoDTO;
+import server.nanum.dto.response.SellerOrdersDTO;
+import server.nanum.dto.response.SellerProductsDTO;
 import server.nanum.service.SellerService;
 
 /**

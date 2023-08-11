@@ -4,7 +4,6 @@ package server.nanum.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
-import server.nanum.dto.delivery.DeliveryRequestDTO;
 
 import java.time.LocalDateTime;
 

@@ -5,9 +5,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import server.nanum.domain.Order;
+import server.nanum.domain.User;
 import server.nanum.domain.UserGroup;
 import server.nanum.domain.product.Product;
-import server.nanum.domain.User;
 
 import java.util.List;
 

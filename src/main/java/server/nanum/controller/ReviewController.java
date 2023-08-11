@@ -1,8 +1,6 @@
 package server.nanum.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -18,11 +16,9 @@ import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
 import server.nanum.dto.request.AddReviewDTO;
-import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
-import server.nanum.dto.response.OrderUserInfoDTO;
+import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.ProductReviewDTO;
-import server.nanum.exception.NotFoundException;
 import server.nanum.service.ReviewService;
 
 /**

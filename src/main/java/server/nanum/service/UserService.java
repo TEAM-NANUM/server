@@ -6,9 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.User;
 import server.nanum.dto.user.response.HostGetResponseDTO;
-import server.nanum.repository.TokenBlacklistRepository;
 import server.nanum.repository.UserRepository;
-import server.nanum.utils.JwtProvider;
 
 
 /**

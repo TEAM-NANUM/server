@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static server.nanum.dto.response.UserGroupListResponseDTO.*;
+import static server.nanum.dto.response.UserGroupListResponseDTO.GuestDTO;
+import static server.nanum.dto.response.UserGroupListResponseDTO.HostDTO;
 
 /**
  * 사용자 그룹 정보를 생성하는 팩토리 클래스

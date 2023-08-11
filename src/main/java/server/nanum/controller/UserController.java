@@ -1,8 +1,6 @@
 package server.nanum.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -16,8 +14,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
-import server.nanum.dto.error.DefaultErrorResponse;
-import server.nanum.dto.error.ErrorDTO;
 import server.nanum.dto.user.request.ChargeRequestDTO;
 import server.nanum.dto.user.response.HostGetResponseDTO;
 import server.nanum.service.LogoutService;
