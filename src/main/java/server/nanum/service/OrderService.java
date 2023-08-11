@@ -4,14 +4,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.Delivery;
-import server.nanum.domain.DeliveryStatus;
-import server.nanum.domain.Order;
-import server.nanum.domain.User;
+import server.nanum.domain.*;
 import server.nanum.domain.product.Product;
 import server.nanum.dto.request.AddOrderDTO;
-import server.nanum.dto.response.MyCompleteOrdersDTO;
-import server.nanum.dto.response.MyProgressOrdersDTO;
+import server.nanum.dto.response.MyOrderListDTO;
 import server.nanum.dto.response.OrderUserInfoDTO;
 import server.nanum.exception.NotFoundException;
 import server.nanum.exception.PaymentRequiredException;
@@ -19,7 +15,10 @@ import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 
+import java.util.ArrayList;
+import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 주문 관리 서비스 클래스
@@ -72,28 +71,54 @@ public class OrderService {
     }
 
     /**
-     * 현재 배송 진행중인 주문 조회를 수행합니다
+     * 한개의 배송 상태로 사용자의 주문 조회를 수행합니다
      *
      * @param user 현재 사용자의 정보를 가져옴
-     * @return MyPrgressOrdersDTO 사용자의 현재 진행 중인 주문 정보와 개수
+     * @param deliveryStatus 배송 상태 enum을 가져옴
+     * @return MyOrderListDTO 사용자의 현재 진행 중인 주문 정보와 개수
      */
-    public MyProgressOrdersDTO getInProgressOrder(User user){ //진행중인 주문 정보
-        List<Order> orderList1 = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.IN_PROGRESS.toString());
-        /* 만약 결제 완료된 주문도 포함시킬 경우
-        List<Order> orderList2 = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.PAYMENT_COMPLETE.toString());
-        orderList1.addAll(orderList2);*/
-        return MyProgressOrdersDTO.toEntity(orderList1);
+    public MyOrderListDTO getUserOrder(User user,DeliveryStatus deliveryStatus){ //진행중인 주문 정보
+        /* host가 조회 시 그룹원들 주문도 조회
+        List<Order> orderList;
+        if(user.getUserRole() == UserRole.HOST){
+            orderList = orderRepository.findByUserUserGroupAndDeliveryStatusOrderByCreateAtDesc(user.getUserGroup(),deliveryStatus.toString());
+        }else{
+            orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+        }*/
+
+        //위에 주석 사용 시 이 코드 주석처리 해야함
+        List<Order> orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+
+        return MyOrderListDTO.toEntity(orderList);
     }
 
     /**
-     * 배송 종료된 주문 조회를 수행합니다
+     * 두개 이상의 배송 상태로 사용자의 주문 조회를 수행합니다
      *
      * @param user 현재 사용자의 정보를 가져옴
-     * @return MyCompleteOrdersDTO 사용자의 배송 종료된 주문 정보와 개수
+     * @param deliveryStatusList 배송 상태 enum의 List를 가져옴
+     * @return MyOrderListDTO 사용자의 현재 진행 중인 주문 정보와 개수
      */
-    public MyCompleteOrdersDTO getCompleteOrder(User user){
-        List<Order> orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
-        return MyCompleteOrdersDTO.toEntity(orderList);
+    public MyOrderListDTO getUserOrder(User user,List<DeliveryStatus> deliveryStatusList){
+        Set<Order> set = new LinkedHashSet<>();
+        for(DeliveryStatus deliveryStatus:deliveryStatusList){
+            /* host가 조회 시 그룹원들 주문도 조회
+            List<Order> orderListSub;
+            if(user.getUserRole() == UserRole.HOST){
+                orderListSub = orderRepository.findByUserUserGroupAndDeliveryStatusOrderByCreateAtDesc(user.getUserGroup(),deliveryStatus.toString());
+            }else{
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+            }*/
+
+            //위에 주석 사용 시 이 코드 주석처리 해야함
+            List<Order> orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+
+            set.addAll(orderListSub);
+        }
+        List<Order> orderList= new ArrayList<>(set);
+        return MyOrderListDTO.toEntity(orderList);
     }
+
+
 
 }

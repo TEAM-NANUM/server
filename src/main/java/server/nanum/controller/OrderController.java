@@ -14,12 +14,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
+import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.User;
 import server.nanum.dto.request.AddOrderDTO;
-import server.nanum.dto.response.MyCompleteOrdersDTO;
-import server.nanum.dto.response.MyProgressOrdersDTO;
+import server.nanum.dto.response.MyOrderListDTO;
 import server.nanum.dto.response.OrderUserInfoDTO;
-import server.nanum.dto.user.response.HostGetResponseDTO;
 import server.nanum.service.OrderService;
 
 /**
@@ -90,19 +89,19 @@ public class OrderController {
      * 현재 배송 진행중인 주문 조회 API
      *
      * @param user 현재 사용자의 정보를 가져옴
-     * @return ResponseEntity<MyPrgressOrdersDTO> 사용자의 현재 진행 중인 주문 정보와 개수 응답
+     * @return ResponseEntity<MyOrderListDTO> 사용자의 현재 진행 중인 주문 정보와 개수 응답
      */
 
     @Operation(summary = "진행중인 주문 내역 조회 API", description = "사용자의 주문 중 현재 배송이 진행중인 주문 내역을 조회하는 API입니다. (API명세서 23번)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation =MyProgressOrdersDTO.class))),
+            @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation =MyOrderListDTO.class))),
             @ApiResponse(responseCode = "401", description = "토큰이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "403", description = "토큰은 있으나 권한이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/in-progress")
-    public ResponseEntity<MyProgressOrdersDTO> getProgressOrders(@CurrentUser User user){
-        MyProgressOrdersDTO dto = orderService.getInProgressOrder(user);
+    public ResponseEntity<MyOrderListDTO> getProgressOrders(@CurrentUser User user){
+        MyOrderListDTO dto = orderService.getUserOrder(user, DeliveryStatus.IN_PROGRESS);
         return ResponseEntity.ok().body(dto);
     }
 
@@ -110,19 +109,19 @@ public class OrderController {
      * 배송 종료된 주문 조회 API
      *
      * @param user 현재 사용자의 정보를 가져옴
-     * @return ResponseEntity<MyCompleteOrdersDTO> 사용자의 배송 종료된 주문 정보와 개수 응답
+     * @return ResponseEntity<MyOrderListDTO> 사용자의 배송 종료된 주문 정보와 개수 응답
      */
 
     @Operation(summary = "완료된 주문 내역 조회 API", description = "사용자의 주문 중 배송이 완료된 주문 내역을 조회하는 API입니다. (API명세서 24번)")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation =MyCompleteOrdersDTO.class))),
+            @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation =MyOrderListDTO.class))),
             @ApiResponse(responseCode = "401", description = "토큰이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "403", description = "토큰은 있으나 권한이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/complete")
-    public ResponseEntity<MyCompleteOrdersDTO> getCompleteOrders(@CurrentUser User user){
-        MyCompleteOrdersDTO dto = orderService.getCompleteOrder(user);
+    public ResponseEntity<MyOrderListDTO> getCompleteOrders(@CurrentUser User user){
+        MyOrderListDTO dto = orderService.getUserOrder(user, DeliveryStatus.DELIVERED);
         return ResponseEntity.ok().body(dto);
     }
 }
