@@ -121,7 +121,7 @@ public class DeliveryService {
     @Transactional
     public void updateDelivery(Long id, DeliveryRequestDTO request, User user) {
         Delivery delivery = findDeliveryByIdAndUser(id, user);
-        delivery.updateDelivery(request.getNickname(), request.getPhoneNumber(), request.getAddress().toAddress());
+        delivery.updateDelivery(request.getReceiver(), request.getNickname(), request.getPhoneNumber(), request.getAddress().toAddress());
     }
 
     /**

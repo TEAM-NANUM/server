@@ -20,6 +20,9 @@ public class Delivery {
     @Column(name = "delivery_id")
     private Long id;
 
+    @Column(name = "receiver")
+    private String receiver;
+
     @Column(name = "nickname")
     private String nickname;
 
@@ -44,7 +47,8 @@ public class Delivery {
         this.isDefault = isDefault;
     }
 
-    public void updateDelivery(String nickname, String phoneNumber, Address address) {
+    public void updateDelivery(String receiver, String nickname, String phoneNumber, Address address) {
+        this.receiver = receiver;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.address = address;

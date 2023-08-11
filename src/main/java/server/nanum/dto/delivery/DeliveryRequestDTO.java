@@ -19,6 +19,7 @@ public class DeliveryRequestDTO {
     // DTO를 기반으로 Delivery 엔티티 객체를 생성하는 메서드
     public Delivery toEntity(User user) {
         return Delivery.builder()
+                .receiver(receiver)
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
                 .address(address.toAddress())
