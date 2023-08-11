@@ -62,6 +62,7 @@ public class DeliveryService {
      * @param id 변경하려는 배송지 ID
      * @param user 현재 사용자 정보
      */
+    @Transactional
     public void toggleDefault(Long id, User user) {
         Delivery delivery = findDeliveryByIdAndUser(id, user);
         updateDefaultStatus(delivery, user);
@@ -90,6 +91,7 @@ public class DeliveryService {
         if (delivery.isDefault()) {
             delivery.changeDefaultStatus(false);
         } else {
+            log.info("이 배송지는 현재 기본 배송지가 아닙니다!");
             ensureNoDuplicateDefault(user);
             delivery.changeDefaultStatus(true);
         }
