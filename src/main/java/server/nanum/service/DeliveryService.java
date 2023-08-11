@@ -81,6 +81,7 @@ public class DeliveryService {
                 .orElseThrow(() -> new NotFoundException("배송지 정보가 존재하지 않습니다."));
     }
 
+
     /**
      * 선택된 배송지의 기본 배송지 상태 변경 (설정/해제)
      *
@@ -91,23 +92,24 @@ public class DeliveryService {
         if (delivery.isDefault()) {
             delivery.changeDefaultStatus(false);
         } else {
-            log.info("이 배송지는 현재 기본 배송지가 아닙니다!");
-            ensureNoDuplicateDefault(user);
+            resetExistingDefault(user);
             delivery.changeDefaultStatus(true);
         }
     }
 
     /**
-     * 다른 기본 배송지 중복을 방지
+     * 기존의 기본 배송지를 해제
+     * 기존에 설정된 기본 배송지가 있다면 isDefault를 false로 설정합니다.
      *
      * @param user 현재 사용자 정보
-     * @throws ConflictException 이미 기본 배송지가 설정된 경우 발생
      */
-    private void ensureNoDuplicateDefault(User user) {
-        if (deliveryRepository.findByUserAndIsDefaultTrue(user).isPresent()) {
-            throw new ConflictException("기본 배송지는 중복될 수 없습니다!");
-        }
+    private void resetExistingDefault(User user) {
+        deliveryRepository.findByUserAndIsDefaultTrue(user)
+                .ifPresent(existingDefault -> {existingDefault
+                    .changeDefaultStatus(false);
+        });
     }
+
 
     /**
      * 배송지 정보 업데이트
