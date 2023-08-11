@@ -80,6 +80,9 @@ dependencies {
 	//LocalDateTime  직렬화
 	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
 
+	//NCP Object Storage 세팅(S3)
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
+
 }
 
 tasks.named('test') {
