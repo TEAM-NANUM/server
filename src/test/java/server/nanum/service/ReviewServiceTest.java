@@ -72,13 +72,6 @@ public class ReviewServiceTest {
             .defaultAddress("00동")
             .detailAddress("001호")
             .build();
-    Seller seller = Seller.builder()
-            .name("판매")
-            .address(address)
-            .email("string")
-            .password("qwer")
-            .phoneNumber("1234")
-            .build();
 
     AddressDTO dto = AddressDTO.builder()
             .zipCode(address.getZipCode())
@@ -95,14 +88,6 @@ public class ReviewServiceTest {
             .uid(100L)
             .userRole(UserRole.HOST)
             .userGroup(userGroup)
-            .build();
-    Delivery delivery = Delivery.builder()
-            .id(1L)
-            .isDefault(true)
-            .user(user)
-            .nickname("본가")
-            .address(address)
-            .phoneNumber("010-1234-5678")
             .build();
     Order order1 = Order.builder()
             .id(1L)
@@ -154,7 +139,6 @@ public class ReviewServiceTest {
         orderList.add(order2);
         orderList.add(order1);
         when(orderRepository.findByProductOrderByCreateAtDesc(product)).thenReturn(orderList);
-        order3.getProduct().getRatingAvg();
         Review reviewTest = dto.toEntity(order3);
         reviewService.createReview(dto);
 
