@@ -4,10 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.Delivery;
-import server.nanum.domain.DeliveryStatus;
-import server.nanum.domain.Order;
-import server.nanum.domain.User;
+import server.nanum.domain.*;
 import server.nanum.domain.product.Product;
 import server.nanum.dto.request.AddOrderDTO;
 import server.nanum.dto.response.MyOrderListDTO;
@@ -17,6 +14,7 @@ import server.nanum.exception.PaymentRequiredException;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
+import server.nanum.repository.UserRepository;
 
 import java.util.*;
 
@@ -37,6 +35,7 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final DeliveryRepository deliveryRepository;
+    private final UserRepository userRepository;
 
     /**
      * 새로운 주문 생성을 수행합니다
@@ -80,12 +79,27 @@ public class OrderService {
      */
     public MyOrderListDTO getUserOrder(User user,DeliveryStatus deliveryStatus){ //진행중인 주문 정보
         /* host가 조회 시 그룹원들 주문도 조회
-        List<Order> orderList;
-        if(user.getUserRole() == UserRole.HOST){
-            orderList = orderRepository.findByUserUserGroupAndDeliveryStatusOrderByCreateAtDesc(user.getUserGroup(),deliveryStatus.toString());
-        }else{
-            orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
-        }*/
+            List<Order> orderList;
+            if(user.getUserRole() == UserRole.HOST){
+                orderList = orderRepository.findByUserUserGroupAndDeliveryStatusOrdered(user.getUserGroup(),deliveryStatus.toString());
+            }else{
+                orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+            }*/
+
+
+        /* Guest가 조회 시 호스트 주문도 조회
+            Set<Order> set = new LinkedHashSet<>();
+            List<Order> orderListSub;
+            if(user.getUserRole() == UserRole.GUEST){
+                User hostUser = userRepository.findByUserGroupAndUserRole(user.getUserGroup(),UserRole.HOST.toString()).get();
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(hostUser,deliveryStatus.toString());
+                set.addAll(orderListSub);
+            }
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+                set.addAll(orderListSub);
+                List<Order> orderList= new ArrayList<>(set);
+            */
+
 
         //위에 주석 사용 시 이 코드 주석처리 해야함
         List<Order> orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
@@ -103,13 +117,26 @@ public class OrderService {
     public MyOrderListDTO getUserOrder(User user,List<DeliveryStatus> deliveryStatusList){
         Set<Order> set = new LinkedHashSet<>();
         for(DeliveryStatus deliveryStatus:deliveryStatusList){
+
             /* host가 조회 시 그룹원들 주문도 조회
             List<Order> orderListSub;
             if(user.getUserRole() == UserRole.HOST){
-                orderListSub = orderRepository.findByUserUserGroupAndDeliveryStatusOrderByCreateAtDesc(user.getUserGroup(),deliveryStatus.toString());
+                orderListSub = orderRepository.findByUserUserGroupAndDeliveryStatusOrdered(user.getUserGroup(),deliveryStatus.toString());
             }else{
                 orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
             }*/
+
+
+            /* Guest가 조회 시 호스트 주문도 조회
+            List<Order> orderListSub;
+            if(user.getUserRole() == UserRole.GUEST){
+                User hostUser = userRepository.findByUserGroupAndUserRole(user.getUserGroup(),UserRole.HOST.toString()).get();
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(hostUser,deliveryStatus.toString());
+                set.addAll(orderListSub);
+            }
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+            */
+
 
             //위에 주석 사용 시 이 코드 주석처리 해야함
             List<Order> orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
@@ -117,11 +144,21 @@ public class OrderService {
             set.addAll(orderListSub);
         }
         List<Order> orderList= new ArrayList<>(set);
-        Comparator<Order> comparator = Comparator.comparing(Order::getCreateAt).reversed();
-        orderList.sort(comparator);
         return MyOrderListDTO.toEntity(orderList);
+
+        /* 정렬 코드 -> 혹시 모르니 남겨둠
+        Collections.sort(orderList, new Comparator<Order>() {
+            @Override
+            public int compare(Order order1, Order order2) {
+                int nameComparison = order1.getUser().getName().compareTo(order2.getUser().getName());
+
+                if (nameComparison == 0) {
+                    return nameComparison;  // 이름이 다르면 이름으로 정렬
+                } else {
+                    return order2.getCreateAt().compareTo(order1.getCreateAt());  // 이름이 같으면 createAt으로 정렬
+                }
+            }
+        }); */
+
     }
-
-
-
 }
