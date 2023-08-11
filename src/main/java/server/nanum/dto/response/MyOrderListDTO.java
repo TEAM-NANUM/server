@@ -5,12 +5,12 @@ import server.nanum.domain.Order;
 
 import java.util.List;
 
-public record MyCompleteOrdersDTO(
+public record MyOrderListDTO(
         Integer count,
-        @JsonProperty("complete_orders")
-        List<MyOrderDTO> completeOrders) {
+        @JsonProperty("order_list")
+        List<MyOrderDTO> orderList) {
 
-        public static MyCompleteOrdersDTO toEntity(List<Order> orderList){
+        public static MyOrderListDTO toEntity(List<Order> orderList){
                 List<MyOrderDTO> DtoList = orderList.stream().map((order)-> { //주문 객체 -> 주문 조회 단건 DTO 정보로 변환
                         return new MyOrderDTO(
                                 order.getId(),
@@ -21,6 +21,6 @@ public record MyCompleteOrdersDTO(
                                 order.getProduct().getUnit(),
                                 order.getProductCount());
                 }).toList();
-                return new MyCompleteOrdersDTO(DtoList.size(),DtoList);
+                return new MyOrderListDTO(DtoList.size(),DtoList);
         }
 }

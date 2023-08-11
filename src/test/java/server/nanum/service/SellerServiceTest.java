@@ -18,6 +18,8 @@ import server.nanum.dto.request.AddressDTO;
 import server.nanum.dto.response.SellerInfoDTO;
 import server.nanum.dto.response.SellerOrdersDTO;
 import server.nanum.dto.response.SellerProductsDTO;
+import server.nanum.exception.ConflictException;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 import server.nanum.repository.SubCategoryRepository;
@@ -26,8 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
@@ -143,8 +144,15 @@ public class SellerServiceTest {
         AddProductDTO dto = new AddProductDTO("쌀",100,2,"유기농","string",DeliveryType.PACKAGE,1L);
         when(subCategoryRepository.findById(1L)).thenReturn(Optional.of(subCategory));
         when(productRepository.existsByName("쌀")).thenReturn(false);
+        when(productRepository.existsByName("망고")).thenReturn(true);
         Product productTest = dto.toEntity(seller,subCategory);
         sellerService.createProduct(seller, dto);
+
+        AddProductDTO dto2 = new AddProductDTO("망고",100,2,"유기농","string",DeliveryType.PACKAGE,1L);
+        AddProductDTO dto3 = new AddProductDTO("쌀",100,2,"유기농","string",DeliveryType.PACKAGE,2L);
+        assertThrows(ConflictException.class,()->sellerService.createProduct(seller,dto2));
+        assertThrows(NotFoundException.class,()->sellerService.createProduct(seller,dto3));
+
         assertAll(
                 ()->assertEquals("쌀",productTest.getSubCategory().getName(),()->"카테고리가 올바르지않음"),
                 ()->assertEquals("쌀",productTest.getName(),()->"이름이 쌀이여야함"),
@@ -158,6 +166,7 @@ public class SellerServiceTest {
     @org.junit.jupiter.api.Order(2)
     public void testGetSellerInfo() {
         SellerInfoDTO result = sellerService.getSellerInfo(seller);
+
         assertAll(
                 ()->assertEquals("판매",result.userName())
         );
@@ -171,6 +180,7 @@ public class SellerServiceTest {
         products.add(product);
         when(productRepository.findAllBySellerOrderByCreateAt(seller)).thenReturn(products);
         SellerProductsDTO result = sellerService.getSellerProducts(seller);
+
         assertAll(
                 ()->assertEquals(1L,result.products().get(0).productId(),()->"올바른 상품임"),
                 ()->assertEquals("토마토",result.products().get(0).name(),()->"이름이 토마토임"),
@@ -190,6 +200,9 @@ public class SellerServiceTest {
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(orderRepository.findByProductOrderByCreateAtDesc(product)).thenReturn(orders);
         SellerOrdersDTO result = sellerService.getSellerOrders(productId);
+
+        assertThrows(NotFoundException.class,()->sellerService.getSellerOrders(2L));
+
         assertAll(
                 ()->assertEquals(3,result.orders().size(),()->"3개여야함"),
                 ()->assertEquals(1L,result.orders().get(0).id(),()->"올바른 주문이 나와야함"),
