@@ -56,7 +56,7 @@ public class ReviewController {
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @GetMapping("/reviews/delivered")
     public ResponseEntity<MyUnReviewOrdersDTO> getDeliveredOrder(@CurrentUser User user){
-        MyUnReviewOrdersDTO dto = reviewService.GetUnReviewOrder(user);
+        MyUnReviewOrdersDTO dto = reviewService.getUnReviewOrder(user);
         return ResponseEntity.ok().body(dto);
     }
 
@@ -77,7 +77,7 @@ public class ReviewController {
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @GetMapping("/reviews/my")
     public ResponseEntity<MyReviewOrdersDTO> getMyOrder(@CurrentUser User user){
-        MyReviewOrdersDTO dto = reviewService.GetReviewedOrder(user);
+        MyReviewOrdersDTO dto = reviewService.getReviewedOrder(user);
         return ResponseEntity.ok().body(dto);
     }
 

@@ -150,7 +150,8 @@ public class ReviewServiceTest {
                 ()->assertEquals(5.0F,reviewTest.getRating(),()->"5여야함"),
                 ()->assertEquals(3,reviewTest.getOrder().getProductCount(),()->"3여야함"),
                 ()->assertEquals("토마토",reviewTest.getOrder().getProduct().getName(),()->"이름이 토마토임"),
-                ()->assertEquals(5.0F,reviewTest.getOrder().getProduct().getRatingAvg(),()->"평균평점 5.0점")
+                ()->assertEquals(5.0F,reviewTest.getOrder().getProduct().getRatingAvg(),()->"평균평점 5.0점"),
+                ()->assertEquals(5.0F,order3.getReview().getRating(),()-> "주문 -> 리뷰 별점 확인")
         );
     }
 
@@ -162,7 +163,7 @@ public class ReviewServiceTest {
         orders.add(order1);
         orders.add(order2);
         when(orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED.toString())).thenReturn(orders);
-        MyUnReviewOrdersDTO result = reviewService.GetUnReviewOrder(user);
+        MyUnReviewOrdersDTO result = reviewService.getUnReviewOrder(user);
         assertAll(
                 ()->assertEquals(2,result.orders().size(),()->"2개여야함"),
                 ()->assertEquals(1L,result.orders().get(0).id(),()->"올바른 주문이 나와야함"),
@@ -179,7 +180,7 @@ public class ReviewServiceTest {
         List<Order> orders = new ArrayList<>();
         orders.add(order3);
         when(orderRepository.findByUserAndReviewIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED.toString())).thenReturn(orders);
-        MyReviewOrdersDTO result = reviewService.GetReviewedOrder(user);
+        MyReviewOrdersDTO result = reviewService.getReviewedOrder(user);
         assertAll(
                 ()->assertEquals(1,result.orders().size(),()->"1개여야함"),
                 ()->assertEquals(3L,result.orders().get(0).id(),()->"올바른 주문이 나와야함")

@@ -30,7 +30,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class SellerService {
     private final OrderRepository orderRepository;
@@ -46,6 +46,7 @@ public class SellerService {
      * @throws NotFoundException 서브카테고리Id로 찾은 서브카테고리가 존재하지 않을 경우 예외를 던집니다.
      * @throws ConflictException 상품이 이미 존재하는 상품일 경우 예외를 던집니다 (상품 이름으로 확인)
      */
+    @Transactional
     public void createProduct(Seller seller, AddProductDTO dto){ //제품 등록
         SubCategory subCategory = subCategoryRepository.findById(dto.subCategoryId())
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 카테고리입니다."));

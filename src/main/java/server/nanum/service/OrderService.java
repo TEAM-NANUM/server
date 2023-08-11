@@ -29,7 +29,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class OrderService {
     private final OrderRepository orderRepository;
@@ -46,6 +46,7 @@ public class OrderService {
      * @throws NotFoundException 상품Id로 찾은 상품이 존재하지 않을 경우 예외를 던집니다.
      * @throws PaymentRequiredException 주문을 위한 포인트가 부족할 경우 예외를 던집니다
      */
+    @Transactional
     public void createOrder(AddOrderDTO dto, User user){
         Product product = productRepository.findById(dto.productId())
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 제품입니다"));
