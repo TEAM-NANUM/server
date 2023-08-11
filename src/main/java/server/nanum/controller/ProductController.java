@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import server.nanum.dto.response.CartResponseDTO;
 import server.nanum.dto.response.ProductDTO;
 import server.nanum.service.ProductService;
 
@@ -36,7 +37,7 @@ public class ProductController {
      */
     @Operation(summary = "캐러셀 목록을 가져오는 API", description = "캐러셀 목록을 가져오는 API입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(mediaType = "application/json",schema = @Schema(implementation = ProductDTO.CarouselList.class)))
     })
     @GetMapping("/products/carousel")
     public ResponseEntity<ProductDTO.CarouselList> getCarouselProducts() {
@@ -51,7 +52,7 @@ public class ProductController {
      */
     @Operation(summary = "1차 카테고리 목록을 가져오는 API", description = "1차 카테고리 목록을 가져오는 API입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(schema = @Schema(hidden = true)))
+            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(mediaType = "application/json",schema = @Schema(implementation = ProductDTO.CategoryList.class)))
     })
     @GetMapping("/categories")
     public ResponseEntity<ProductDTO.CategoryList> getCategories() {
@@ -67,7 +68,7 @@ public class ProductController {
      */
     @Operation(summary = "하위 카테고리(2차) 목록을 가져오는 API", description = "특정 카테고리의 하위 카테고리(2차) 목록을 가져오는 API입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(mediaType = "application/json",schema = @Schema(implementation = ProductDTO.SubCategoryList.class))),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 1차 카테고리", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/categories/{category_id}/subcategories")
@@ -87,7 +88,7 @@ public class ProductController {
      */
     @Operation(summary = "상품 목록을 가져오는 API", description = "쿼리 파라미터를 기반으로 상품 목록을 가져오는 API입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(mediaType = "application/json",schema = @Schema(implementation = ProductDTO.ProductList.class))),
             @ApiResponse(responseCode = "400", description = "잘못된 클라이언트측 입력 (sort 관련해서 문제가 있을 수 있음)", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping("/products")
@@ -111,7 +112,7 @@ public class ProductController {
      */
     @Operation(summary = "상품의 상세 정보를 가져오는 API", description = "특정 상품의 상세 정보를 가져오는 API입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(mediaType = "application/json",schema = @Schema(implementation = ProductDTO.ProductDetail.class))),
             @ApiResponse(responseCode = "404", description = "존재하지 않는 상품", content = @Content(schema = @Schema(hidden = true))),
     })
     @GetMapping("/products/{product_id}")
