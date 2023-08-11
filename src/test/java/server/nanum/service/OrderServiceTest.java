@@ -13,13 +13,13 @@ import server.nanum.domain.product.Product;
 import server.nanum.domain.product.SubCategory;
 import server.nanum.dto.request.AddOrderDTO;
 import server.nanum.dto.request.AddressDTO;
-import server.nanum.dto.response.MyCompleteOrdersDTO;
-import server.nanum.dto.response.MyProgressOrdersDTO;
+import server.nanum.dto.response.MyOrderListDTO;
 import server.nanum.dto.response.OrderUserInfoDTO;
 import server.nanum.exception.NotFoundException;
 import server.nanum.exception.PaymentRequiredException;
 import server.nanum.repository.*;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.*;
 
@@ -106,6 +106,7 @@ public class OrderServiceTest {
             .productCount(1)
             .deliveryStatus(DeliveryStatus.PAYMENT_COMPLETE)
             .user(user)
+            .createAt(LocalDateTime.now())
             .build();
     Order order2 = Order.builder()
             .id(2L)
@@ -114,6 +115,7 @@ public class OrderServiceTest {
             .productCount(2)
             .deliveryStatus(DeliveryStatus.IN_PROGRESS)
             .user(user)
+            .createAt(LocalDateTime.MAX)
             .build();
     Order order3 = Order.builder()
             .id(3L)
@@ -173,15 +175,21 @@ public class OrderServiceTest {
     @org.junit.jupiter.api.Order(3)
     public void testGetInProgressOrder() {
         List<Order> orders = new ArrayList<>();
-//        orders.add(order1);
         orders.add(order2);
-//        orders.add(order3);
+        List<Order> orders2 = new ArrayList<>();
+        orders.add(order1);
         when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.IN_PROGRESS.toString())).thenReturn(orders);
-        MyProgressOrdersDTO result = orderService.getInProgressOrder(user);
+        when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.PAYMENT_COMPLETE.toString())).thenReturn(orders2);
+        List<DeliveryStatus> deliveryStatusList = new ArrayList<>();
+        deliveryStatusList.add(DeliveryStatus.IN_PROGRESS);
+        deliveryStatusList.add(DeliveryStatus.PAYMENT_COMPLETE);
+        MyOrderListDTO result = orderService.getUserOrder(user,deliveryStatusList);
 
         assertAll(
-                ()->assertEquals(1,result.progressOrders().size(),()->"개수가 1개여야함"),
-                ()->assertEquals(2,result.progressOrders().get(0).quantity(),()->"상품 주문 개수는 2개여야함")
+                ()->assertEquals(2,result.orderList().size(),()->"개수가 2개여야함"),
+                ()->assertEquals(1,result.orderList().get(1).quantity(),()->"상품 주문 개수는 2개여야함"),
+                ()->assertEquals(2,result.orderList().get(0).quantity(),()->"상품 주문 개수는 1개여야함")
+
         );
     }
 
@@ -191,12 +199,13 @@ public class OrderServiceTest {
     public void testGetCompleteOrder() {
         List<Order> orders = new ArrayList<>();
         orders.add(order3);
+
         when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString())).thenReturn(orders);
-        MyCompleteOrdersDTO result = orderService.getCompleteOrder(user);
+        MyOrderListDTO result = orderService.getUserOrder(user,DeliveryStatus.DELIVERED);
 
         assertAll(
-                ()->assertEquals(1,result.completeOrders().size(),()->"개수가 1개여야함"),
-                ()->assertEquals(3,result.completeOrders().get(0).quantity(),()->"상품 주문 개수는 3개여야함")
+                ()->assertEquals(1,result.orderList().size(),()->"개수가 1개여야함"),
+                ()->assertEquals(3,result.orderList().get(0).quantity(),()->"상품 주문 개수는 3개여야함")
         );
 
     }
