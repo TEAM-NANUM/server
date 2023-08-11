@@ -2,6 +2,7 @@ package server.nanum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.*;
@@ -15,10 +16,8 @@ import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+
 
 /**
  * 주문 관리 서비스 클래스
@@ -116,6 +115,8 @@ public class OrderService {
             set.addAll(orderListSub);
         }
         List<Order> orderList= new ArrayList<>(set);
+        Comparator<Order> comparator = Comparator.comparing(Order::getCreateAt).reversed();
+        orderList.sort(comparator);
         return MyOrderListDTO.toEntity(orderList);
     }
 
