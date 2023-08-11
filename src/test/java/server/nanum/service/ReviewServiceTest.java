@@ -19,6 +19,7 @@ import server.nanum.dto.request.AddressDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.ProductReviewDTO;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 import server.nanum.repository.ReviewRepository;
@@ -27,8 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
@@ -160,6 +160,11 @@ public class ReviewServiceTest {
         order3.getProduct().getRatingAvg();
         Review reviewTest = dto.toEntity(order3);
         reviewService.createReview(dto);
+
+
+        AddReviewDTO dto2 = new AddReviewDTO(5L,5.0F,"맛있어요");
+        assertThrows(NotFoundException.class,()-> reviewService.createReview(dto2));
+
         assertAll(
                 ()->assertEquals(5.0F,reviewTest.getRating(),()->"5여야함"),
                 ()->assertEquals(3,reviewTest.getOrder().getProductCount(),()->"3여야함"),
@@ -212,6 +217,9 @@ public class ReviewServiceTest {
         when(productRepository.findById(productId)).thenReturn(Optional.of(product));
         when(reviewRepository.findAllByOrderProductId(productId)).thenReturn(reviews);
         ProductReviewDTO.ReviewList result = reviewService.getProductReviews(productId);
+
+        assertThrows(NotFoundException.class,()->reviewService.getProductReviews(5L));
+        
         assertAll(
                 ()->assertEquals(2,result.getReviews().size(),()->"2개여야함"),
                 ()->assertEquals(1L,result.getReviews().get(0).getId(),()->"올바른 리뷰가 나와야함")
