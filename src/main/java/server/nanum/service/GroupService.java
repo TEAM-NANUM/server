@@ -3,13 +3,16 @@ package server.nanum.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.nanum.domain.*;
+import server.nanum.domain.Address;
+import server.nanum.domain.Delivery;
+import server.nanum.domain.User;
+import server.nanum.domain.UserGroup;
 import server.nanum.dto.response.UserGroupListResponseDTO;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.UserGroupRepository;
 
-import static server.nanum.dto.user.response.UserGroupListResponseFactory.*;
+import static server.nanum.dto.user.response.UserGroupListResponseFactory.createResponse;
 
 /**
  * 그룹 서비스

@@ -2,6 +2,7 @@ package server.nanum.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import server.nanum.domain.product.Product;
+
 import java.util.List;
 
 public record SellerProductsDTO(

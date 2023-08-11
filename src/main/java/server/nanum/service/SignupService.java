@@ -9,8 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.Seller;
 import server.nanum.domain.User;
-import server.nanum.dto.user.request.SellerSignupDTO;
 import server.nanum.dto.user.request.GuestSignupDTO;
+import server.nanum.dto.user.request.SellerSignupDTO;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.SellerRepository;
 

@@ -14,7 +14,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.dto.user.request.GuestLoginRequestDTO;
 import server.nanum.dto.user.request.SellerLoginRequestDTO;
-import server.nanum.dto.user.response.HostGetResponseDTO;
 import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.security.dto.KakaoAuthRequest;
 import server.nanum.security.dto.KakaoUserResponse;

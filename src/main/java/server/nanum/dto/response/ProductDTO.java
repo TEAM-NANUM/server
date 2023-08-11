@@ -4,12 +4,10 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import server.nanum.domain.User;
 import server.nanum.domain.product.Carousel;
 import server.nanum.domain.product.Category;
 import server.nanum.domain.product.Product;
 import server.nanum.domain.product.SubCategory;
-import server.nanum.dto.user.response.HostGetResponseDTO;
 
 import java.util.List;
 

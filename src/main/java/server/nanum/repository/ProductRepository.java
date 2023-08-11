@@ -4,8 +4,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import server.nanum.domain.product.Product;
 import server.nanum.domain.Seller;
+import server.nanum.domain.product.Product;
 import server.nanum.repository.querydsl.ProductRepositoryCustom;
 
 import java.util.List;

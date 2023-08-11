@@ -1,19 +1,17 @@
 package server.nanum.service;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import server.nanum.domain.*;
-import server.nanum.domain.Order;
 import server.nanum.domain.product.Category;
 import server.nanum.domain.product.Product;
 import server.nanum.domain.product.SubCategory;
-import server.nanum.dto.request.AddOrderDTO;
 import server.nanum.dto.request.AddReviewDTO;
 import server.nanum.dto.request.AddressDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
@@ -29,7 +27,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")

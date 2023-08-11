@@ -2,7 +2,6 @@ package server.nanum.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.Getter;
 import org.hibernate.annotations.CreationTimestamp;
 import server.nanum.dto.user.request.HostLoginRequestDTO;
 

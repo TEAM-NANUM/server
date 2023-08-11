@@ -1,13 +1,14 @@
 package server.nanum.service;
 
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 import server.nanum.domain.*;
-import server.nanum.domain.Order;
 import server.nanum.domain.product.Category;
 import server.nanum.domain.product.Product;
 import server.nanum.domain.product.SubCategory;
@@ -17,11 +18,14 @@ import server.nanum.dto.response.MyOrderListDTO;
 import server.nanum.dto.response.OrderUserInfoDTO;
 import server.nanum.exception.NotFoundException;
 import server.nanum.exception.PaymentRequiredException;
-import server.nanum.repository.*;
+import server.nanum.repository.DeliveryRepository;
+import server.nanum.repository.OrderRepository;
+import server.nanum.repository.ProductRepository;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -66,13 +70,6 @@ public class OrderServiceTest {
             .zipCode("100")
             .defaultAddress("00동")
             .detailAddress("001호")
-            .build();
-    Seller seller = Seller.builder()
-            .name("판매")
-            .address(address)
-            .email("string")
-            .password("qwer")
-            .phoneNumber("1234")
             .build();
 
     AddressDTO dto = AddressDTO.builder()
@@ -187,8 +184,8 @@ public class OrderServiceTest {
 
         assertAll(
                 ()->assertEquals(2,result.orderList().size(),()->"개수가 2개여야함"),
-                ()->assertEquals(1,result.orderList().get(1).quantity(),()->"상품 주문 개수는 2개여야함"),
-                ()->assertEquals(2,result.orderList().get(0).quantity(),()->"상품 주문 개수는 1개여야함")
+                ()->assertEquals(1,result.orderList().get(1).quantity(),()->"상품 주문 개수는 1개여야함"),
+                ()->assertEquals(2,result.orderList().get(0).quantity(),()->"상품 주문 개수는 2개여야함")
 
         );
     }

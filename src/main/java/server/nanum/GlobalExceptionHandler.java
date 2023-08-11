@@ -9,11 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import server.nanum.dto.error.ErrorDTO;
-import server.nanum.exception.BadRequestException;
-import server.nanum.exception.KakaoClientException;
-import server.nanum.exception.NotFoundException;
 import server.nanum.exception.*;
-
 
 import java.util.HashMap;
 import java.util.Map;

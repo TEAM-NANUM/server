@@ -7,7 +7,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Component;
 import server.nanum.config.properties.JwtProperties;
 import server.nanum.domain.TokenBlacklist;
-import server.nanum.domain.UserRole;
 import server.nanum.exception.JwtAuthenticationException;
 import server.nanum.repository.TokenBlacklistRepository;
 
