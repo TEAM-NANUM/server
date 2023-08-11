@@ -2,6 +2,7 @@ package server.nanum.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.servers.Server;
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
@@ -13,8 +14,12 @@ import java.util.List;
 
 @OpenAPIDefinition(
         info = @Info(title = "한채 API 명세",
-                description = "한채 API 명세\n ",
-                version = "v1"))
+                description = "한채 API 명세서 입니다. 아래 Servers 에서 환경에 맞는 url을 선택하세요.\n ",
+                version = "v1"),
+        servers = {
+                @Server(url = "https://api.hanche.store", description = "Production 환경"),
+                @Server(url = "http://localhost:8080", description = "Local 환경")
+        })
 @Configuration
 public class SwaggerConfig {
     @Bean

@@ -29,7 +29,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional
+@Transactional(readOnly = true)
 @Slf4j
 public class ReviewService {
     private final ProductRepository productRepository;
@@ -43,6 +43,7 @@ public class ReviewService {
      * @return 리뷰 생성 완료 응답
      * @throws NotFoundException 주문Id로 찾은 주문이 존재하지 않을 경우 예외를 던집니다.
      */
+    @Transactional
     public void createReview(AddReviewDTO dto){
         Order order = orderRepository.findById(dto.orderId())
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 주문입니다."));
@@ -68,7 +69,7 @@ public class ReviewService {
      * @param user 현재 사용자의 정보를 가져옴
      * @return MyUnReviewOrdersDTO 사용자의 리뷰가 없는 주문 정보와 그 개수
      */
-    public MyUnReviewOrdersDTO GetUnReviewOrder(User user){
+    public MyUnReviewOrdersDTO getUnReviewOrder(User user){
         List<Order> orderList = orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
         return MyUnReviewOrdersDTO.toEntity(orderList);
     }
@@ -79,7 +80,7 @@ public class ReviewService {
      * @param user 현재 사용자의 정보를 가져옴
      * @return MyReviewOrdersDTO 사용자의 리뷰가 있는(사용자가 리뷰를 작성 한) 주문 정보와 그 개수
      */
-    public MyReviewOrdersDTO GetReviewedOrder(User user){
+    public MyReviewOrdersDTO getReviewedOrder(User user){
         List<Order> orderList = orderRepository.findByUserAndReviewIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString());
         return MyReviewOrdersDTO.toEntity(orderList);
     }
