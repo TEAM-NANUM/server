@@ -16,6 +16,7 @@ import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
 import server.nanum.dto.request.CartRequestDTO;
 import server.nanum.dto.response.CartResponseDTO;
+import server.nanum.dto.response.OrderUserInfoDTO;
 import server.nanum.service.CartService;
 
 /**
@@ -42,7 +43,7 @@ public class CartController {
      */
     @Operation(summary = "현재 사용자의 장바구니 아이템을 가져오는 API", description = "현재 사용자의 장바구니 목록을 불러오는 API 입니다.")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(mediaType = "application/json",schema = @Schema(implementation = CartResponseDTO.CartList.class))),
             @ApiResponse(responseCode = "403", description= "장바구니 목록 요청 권한이 없음", content = @Content(schema = @Schema(hidden = true)))
     })
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
