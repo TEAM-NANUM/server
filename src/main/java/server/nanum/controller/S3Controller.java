@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.dto.delivery.DeliveryListResponse;
@@ -25,6 +26,7 @@ import java.util.List;
  * @version 1.0.0
  * @date 2023-08-12
  */
+@Tag(name = "이미지 업로드 URL(Presigned URL) 제공 API", description = "이미지 저장 관련 API입니다. Object Stoage에 대한 Presigned URL 및 image_url을 제공합니다.")
 @RestController
 @RequestMapping("/api/presigned")
 @RequiredArgsConstructor
