@@ -39,7 +39,7 @@ public class User {
     @Column(name = "create_at")
     private LocalDateTime createdAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_group_id")
     private UserGroup userGroup;
 
