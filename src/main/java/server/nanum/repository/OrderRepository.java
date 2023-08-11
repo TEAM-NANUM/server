@@ -23,6 +23,6 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
     @Query(value = "SELECT o from Order o WHERE o.product = :product ORDER BY o.createAt DESC")
     List<Order> findByProductOrderByCreateAtDesc(@Param("product") Product product);
 
-    @Query(value = "SELECT o from Order o WHERE o.user.userGroup = :userGroup AND o.deliveryStatus= :delivery ORDER BY o.createAt DESC")
-    List<Order> findByUserUserGroupAndDeliveryStatusOrderByCreateAtDesc(@Param("userGroup") UserGroup userGroup, @Param("delivery") String delivery);
+    @Query(value = "SELECT o from Order o WHERE o.user.userGroup = :userGroup AND o.deliveryStatus= :delivery ORDER BY o.user.name ASC, o.createAt DESC")
+    List<Order> findByUserUserGroupAndDeliveryStatusOrdered(@Param("userGroup") UserGroup userGroup, @Param("delivery") String delivery);
 }

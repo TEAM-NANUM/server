@@ -74,7 +74,7 @@ public class SellerServiceTest {
             .name("판매")
             .address(address)
             .email("string")
-            .password("qwer")
+            .password("1234")
             .phoneNumber("1234")
             .build();
 
@@ -93,14 +93,6 @@ public class SellerServiceTest {
             .uid(100L)
             .userRole(UserRole.HOST)
             .userGroup(userGroup)
-            .build();
-    Delivery delivery = Delivery.builder()
-            .id(1L)
-            .isDefault(true)
-            .user(user)
-            .nickname("본가")
-            .address(address)
-            .phoneNumber("010-1234-5678")
             .build();
     Order order1 = Order.builder()
             .id(1L)
