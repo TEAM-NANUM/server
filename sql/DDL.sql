@@ -13,6 +13,13 @@ CREATE TABLE IF NOT EXISTS user_group(
     point         BIGINT
 );
 
+-- 토큰 블랙리스트 테이블
+CREATE TABLE token_blacklist (
+                                 token VARCHAR(512) NOT NULL,
+                                 PRIMARY KEY (token)
+);
+
+
 
 -- 케러셀 테이블
 CREATE TABLE IF NOT EXISTS carousel (
