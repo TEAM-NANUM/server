@@ -9,6 +9,7 @@ import server.nanum.dto.user.request.GuestLoginRequestDTO;
 import server.nanum.dto.user.request.UserLoginRequestDTO;
 import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.dto.user.response.LoginResponseFactory;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.UserRepository;
 import server.nanum.utils.JwtProvider;
 
@@ -54,7 +55,7 @@ public class GuestUserAdapter implements UserAdapter {
         GuestLoginRequestDTO guestDTO = (GuestLoginRequestDTO) userLoginRequestDTO;
 
         User guest = userRepository.findByInviteCode(guestDTO.inviteCode())
-                .orElseThrow(() -> new RuntimeException("초대코드가 올바르지 않거나 존재하지 않습니다!"));
+                .orElseThrow(() -> new NotFoundException("초대 코드에 대한 사용자가 존재하지 않습니다!"));
 
         return createLoginResponse(guest);
     }

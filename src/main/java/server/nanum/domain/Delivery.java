@@ -50,5 +50,9 @@ public class Delivery {
         this.phoneNumber = phoneNumber;
         this.address = address;
     }
+
+    public String getUsername() {
+        return user.getName();
+    }
 }
 
