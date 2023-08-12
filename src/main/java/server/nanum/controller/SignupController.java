@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +52,7 @@ public class SignupController {
     })
     @PreAuthorize("hasRole('ROLE_HOST')")
     @PostMapping("/guest")
-    public ResponseEntity<Void> registerGuest(@CurrentUser User user, @RequestBody GuestSignupDTO guestSignupDTO) {
+    public ResponseEntity<Void> registerGuest(@CurrentUser User user, @Valid @RequestBody GuestSignupDTO guestSignupDTO) {
 
         signupService.registerGuest(user, guestSignupDTO);
 
@@ -70,7 +71,7 @@ public class SignupController {
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/seller")
-    public ResponseEntity<Void> registerSeller(@RequestBody SellerSignupDTO sellerSignupDTO) {
+    public ResponseEntity<Void> registerSeller(@Valid @RequestBody SellerSignupDTO sellerSignupDTO) {
 
         signupService.registerSeller(sellerSignupDTO);
 

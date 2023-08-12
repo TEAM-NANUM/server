@@ -1,5 +1,7 @@
 package server.nanum.dto.user.request;
 
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import server.nanum.domain.*;
 import server.nanum.dto.request.AddressDTO;
@@ -18,7 +20,9 @@ import java.util.UUID;
  */
 @Getter
 public class GuestSignupDTO {
+    @NotBlank(message="게스트 명은 비어있을 수 없습니다!")
     private String nickname;
+    @Valid
     private AddressDTO address;
 
     /**

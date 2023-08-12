@@ -2,6 +2,10 @@ package server.nanum.dto.user.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import server.nanum.domain.Address;
 import server.nanum.domain.Seller;
@@ -19,13 +23,22 @@ import server.nanum.dto.request.AddressDTO;
 @Getter
 @JsonPropertyOrder({"username", "email", "password", "phone_number", "address"})
 public class SellerSignupDTO {
+    @NotBlank(message = "사용자명은 비어있을 수 없습니다!")
     private String username;
+
+    @NotBlank(message = "전화번호를 입력해주세요!")
+    @Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$", message = "유효한 전화번호 형식이 아닙니다!")
     @JsonProperty("phone_number")
     private String phoneNumber;
+
+    @NotBlank(message = "이메일은 비어있을 수 없습니다!")
+    @Email(message = "유효한 이메일 주소가 아닙니다!")
     private String email;
+
+    @NotBlank(message = "비밀번호는 비어있을 수 없습니다!")
     private String password;
 
-
+    @Valid
     private AddressDTO address;
 
     /**

@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -71,7 +72,7 @@ public class UserController {
     })
     @PreAuthorize("hasRole('ROLE_HOST')")
     @PutMapping("/charge")
-    public ResponseEntity<Void> chargeUserPoint(@CurrentUser User user, @RequestBody ChargeRequestDTO chargeRequestDTO) {
+    public ResponseEntity<Void> chargeUserPoint(@CurrentUser User user, @Valid @RequestBody ChargeRequestDTO chargeRequestDTO) {
         userService.chargePoint(user, chargeRequestDTO.point());
         return ResponseEntity.noContent().build();
     }
