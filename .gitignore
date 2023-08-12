@@ -1,6 +1,5 @@
 /src/main/resources/*.yml
 
-SwaggerConfig.java
 HELP.md
 .gradle
 build/
