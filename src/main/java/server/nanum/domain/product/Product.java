@@ -71,7 +71,18 @@ public class Product {
     @Column(name = "purchase_cnt")
     private Integer purchaseCnt;
 
-    
+    public void setViewCnt(Integer viewCnt) {
+        this.viewCnt = viewCnt;
+    }
+
+    public void setReviewCnt(Integer reviewCnt) {
+        this.reviewCnt = reviewCnt;
+    }
+
+    public void setPurchaseCnt(Integer purchaseCnt) {
+        this.purchaseCnt = purchaseCnt;
+    }
+
     public void setRatingAvg(Float ratingAvg) {
         this.ratingAvg = ratingAvg;
     }
