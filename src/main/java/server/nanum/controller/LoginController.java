@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -89,7 +90,7 @@ public class LoginController {
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/guest")
-    public LoginResponseDTO loginGuest(@RequestBody GuestLoginRequestDTO guestLoginRequestDTO) {
+    public LoginResponseDTO loginGuest(@Valid @RequestBody GuestLoginRequestDTO guestLoginRequestDTO) {
         return loginService.loginOrCreate(guestLoginRequestDTO);
     }
 
@@ -105,7 +106,7 @@ public class LoginController {
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping("/seller")
-    public LoginResponseDTO loginGuest(@RequestBody SellerLoginRequestDTO sellerLoginRequestDTO) {
+    public LoginResponseDTO loginGuest(@Valid @RequestBody SellerLoginRequestDTO sellerLoginRequestDTO) {
         return loginService.loginOrCreate(sellerLoginRequestDTO);
     }
 }

@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.dto.delivery.DeliveryListResponse;
@@ -52,7 +53,7 @@ public class S3Controller {
             @ApiResponse(responseCode = "500", description = "서버 오류", content = @Content(schema = @Schema(hidden = true)))
     })
     @PostMapping
-    public UrlListResponse getPresignedUrls(@RequestBody ImageListRequest request) {
+    public UrlListResponse getPresignedUrls(@Valid @RequestBody ImageListRequest request) {
         return s3Service.createPresignedUrls(request);
     }
 }
