@@ -7,7 +7,7 @@ import server.nanum.domain.Address;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
 import server.nanum.domain.UserGroup;
-import server.nanum.dto.response.UserGroupListResponseDTO;
+import server.nanum.dto.user.response.UserGroupListResponseDTO;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.UserGroupRepository;

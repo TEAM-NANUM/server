@@ -1,24 +1,33 @@
 package server.nanum.dto.delivery;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import server.nanum.domain.Address;
 import server.nanum.domain.Delivery;
 
 import java.util.List;
 
 public record DeliveryListResponse(@JsonProperty("delivery_address") List<DeliveryResponse> deliveryResponses) {
-
-    // DeliveryResponse 레코드 정의
     public record DeliveryResponse(
+            @Schema(example = "1")
             @JsonProperty("delivery_id")
             Long deliveryId,
+
+            @Schema(example = "집")
             String nickname,
+
+            @Schema(example = "true")
             @JsonProperty("is_default")
             Boolean isDefault,
+
+            @Schema(example = "010-1234-5678")
             @JsonProperty("phone_number")
             String phoneNumber,
+
+            @Schema(example = "나눔이")
             @JsonProperty("receiver")
             String username,
+
             Address address
     ) {
         // 이 부분에 필요한 추가적인 메서드나 로직을 넣을 수 있습니다.
