@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import server.nanum.domain.User;
 import server.nanum.domain.UserGroup;
+import server.nanum.domain.UserRole;
 
 import java.util.Optional;
 
@@ -19,5 +20,5 @@ public interface UserRepository extends JpaRepository<User,Long> {
     Optional<User> findByInviteCode(String inviteCode);
 
     @Query("SELECT u FROM User u WHERE u.userGroup= :userGroup AND u.userRole= :role")
-    Optional<User> findByUserGroupAndUserRole(@Param("userGroup") UserGroup userGroup,@Param("role") String role);
+    Optional<User> findByUserGroupAndUserRole(@Param("userGroup") UserGroup userGroup,@Param("role") UserRole role);
 }

@@ -175,8 +175,8 @@ public class OrderServiceTest {
         orders.add(order2);
         List<Order> orders2 = new ArrayList<>();
         orders.add(order1);
-        when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.IN_PROGRESS.toString())).thenReturn(orders);
-        when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.PAYMENT_COMPLETE.toString())).thenReturn(orders2);
+        when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.IN_PROGRESS)).thenReturn(orders);
+        when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.PAYMENT_COMPLETE)).thenReturn(orders2);
         List<DeliveryStatus> deliveryStatusList = new ArrayList<>();
         deliveryStatusList.add(DeliveryStatus.IN_PROGRESS);
         deliveryStatusList.add(DeliveryStatus.PAYMENT_COMPLETE);
@@ -197,7 +197,7 @@ public class OrderServiceTest {
         List<Order> orders = new ArrayList<>();
         orders.add(order3);
 
-        when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED.toString())).thenReturn(orders);
+        when(orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED)).thenReturn(orders);
         MyOrderListDTO result = orderService.getUserOrder(user,DeliveryStatus.DELIVERED);
 
         assertAll(

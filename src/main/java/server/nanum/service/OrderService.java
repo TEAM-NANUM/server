@@ -54,6 +54,7 @@ public class OrderService {
             throw new PaymentRequiredException("포인트가 부족합니다");
         }
         user.getUserGroup().updatePoint(user.getUserGroup().getPoint()-dto.quantity()*product.getPrice());
+        product.setPurchaseCnt(product.getPurchaseCnt()+1);
         Order order = dto.toEntity(product,user);
         orderRepository.save(order);
     }
@@ -82,9 +83,9 @@ public class OrderService {
         /* host가 조회 시 그룹원들 주문도 조회
             List<Order> orderList;
             if(user.getUserRole() == UserRole.HOST){
-                orderList = orderRepository.findByUserUserGroupAndDeliveryStatusOrdered(user.getUserGroup(),deliveryStatus.toString());
+                orderList = orderRepository.findByUserUserGroupAndDeliveryStatusOrdered(user.getUserGroup(),deliveryStatus);
             }else{
-                orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+                orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus);
             }*/
 
 
@@ -93,17 +94,17 @@ public class OrderService {
             List<Order> orderListSub;
             if(user.getUserRole() == UserRole.GUEST){
                 User hostUser = userRepository.findByUserGroupAndUserRole(user.getUserGroup(),UserRole.HOST.toString()).get();
-                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(hostUser,deliveryStatus.toString());
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(hostUser,deliveryStatus);
                 set.addAll(orderListSub);
             }
-                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus);
                 set.addAll(orderListSub);
                 List<Order> orderList= new ArrayList<>(set);
             */
 
 
         //위에 주석 사용 시 이 코드 주석처리 해야함
-        List<Order> orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+        List<Order> orderList = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus);
 
         return MyOrderListDTO.toEntity(orderList);
     }
@@ -122,9 +123,9 @@ public class OrderService {
             /* host가 조회 시 그룹원들 주문도 조회
             List<Order> orderListSub;
             if(user.getUserRole() == UserRole.HOST){
-                orderListSub = orderRepository.findByUserUserGroupAndDeliveryStatusOrdered(user.getUserGroup(),deliveryStatus.toString());
+                orderListSub = orderRepository.findByUserUserGroupAndDeliveryStatusOrdered(user.getUserGroup(),deliveryStatus);
             }else{
-                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus);
             }*/
 
 
@@ -132,15 +133,15 @@ public class OrderService {
             List<Order> orderListSub;
             if(user.getUserRole() == UserRole.GUEST){
                 User hostUser = userRepository.findByUserGroupAndUserRole(user.getUserGroup(),UserRole.HOST.toString()).get();
-                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(hostUser,deliveryStatus.toString());
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(hostUser,deliveryStatus);
                 set.addAll(orderListSub);
             }
-                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+                orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus);
             */
 
 
             //위에 주석 사용 시 이 코드 주석처리 해야함
-            List<Order> orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus.toString());
+            List<Order> orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(user, deliveryStatus);
 
             set.addAll(orderListSub);
         }
