@@ -2,6 +2,7 @@ package server.nanum.utils;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -16,9 +17,14 @@ import java.util.Map;
 public class WebhookExceptionHandler {
     private final RestTemplate restTemplate;
 
-    private final String discordWebhookUrl = "https://discord.com/api/webhooks/1139835592797065297/XZlWtD1Qn5nbVPDO8E52hOGhkwCCd9057z0K66_ImQTLZpo2MxJ_4iQtj82gA3JaNfQM";
+    @Value("${discord.webhookUrl:}") // Load value from application.yml
+    private String discordWebhookUrl;
 
     public void sendExceptionWithDiscord(Exception ex) {
+        if (discordWebhookUrl == null) {
+            return; // Exit the method if the URL is not configured
+        }
+
         int maxMessageLength = 1800;
 
         try {
