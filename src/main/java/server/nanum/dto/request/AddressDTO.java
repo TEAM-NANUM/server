@@ -1,6 +1,7 @@
 package server.nanum.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,12 +13,15 @@ import server.nanum.domain.Address;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressDTO {
+    @NotBlank(message = "우편번호를 입력해주세요.")
     @JsonProperty("zip_code")
     private String zipCode;
 
+    @NotBlank(message = "기본 주소를 입력해주세요.")
     @JsonProperty("default_address")
     private String defaultAddress;
 
+    @NotBlank(message = "상세 주소를 입력해주세요.")
     @JsonProperty("detail_address")
     private String detailAddress;
 

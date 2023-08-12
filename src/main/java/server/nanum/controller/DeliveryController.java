@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -65,7 +66,7 @@ public class DeliveryController {
     })
     @PostMapping
     @PreAuthorize("hasRole('ROLE_HOST')")
-    public ResponseEntity<Void> saveDelivery(@RequestBody DeliveryRequestDTO request, @CurrentUser User user) {
+    public ResponseEntity<Void> saveDelivery(@RequestBody @Valid  DeliveryRequestDTO request, @CurrentUser User user) {
         deliveryService.saveDelivery(request, user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -107,7 +108,7 @@ public class DeliveryController {
     })
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_HOST')")
-    public ResponseEntity<Void> updateDelivery(@PathVariable Long id, @RequestBody DeliveryRequestDTO request, @CurrentUser User user) {
+    public ResponseEntity<Void> updateDelivery(@PathVariable Long id, @Valid @RequestBody DeliveryRequestDTO request, @CurrentUser User user) {
         deliveryService.updateDelivery(id, request, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }

@@ -13,6 +13,7 @@ import server.nanum.exception.*;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestControllerAdvice
@@ -58,13 +59,15 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorDTO> dtoValidation(final MethodArgumentNotValidException ex) {
         Map<String, String> errors = new HashMap<>();
-        ex.getBindingResult().getAllErrors().forEach((error)-> {
+        ex.getBindingResult().getAllErrors().forEach((error) -> {
             String fieldName = ((FieldError) error).getField();
             String errorMessage = error.getDefaultMessage();
             errors.put(fieldName, errorMessage);
         });
 
-        ErrorDTO errorDTO = new ErrorDTO("", errors.toString());
+        String combinedErrorMessage = String.join(", ", errors.values());
+
+        ErrorDTO errorDTO = new ErrorDTO("올바르지 않은 입력값입니다!", combinedErrorMessage);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorDTO);
     }
