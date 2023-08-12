@@ -37,6 +37,10 @@ public record AddProductDTO( //제품 등록 DTO
                 .deliveryType(deliveryType)
                 .subCategory(subCategory)
                 .seller(seller)
+                .ratingAvg(0F)
+                .viewCnt(0)
+                .purchaseCnt(0)
+                .reviewCnt(0)
                 .build();
     }
 }
