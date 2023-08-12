@@ -162,7 +162,7 @@ public class ReviewServiceTest {
         List<Order> orders = new ArrayList<>();
         orders.add(order1);
         orders.add(order2);
-        when(orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED.toString())).thenReturn(orders);
+        when(orderRepository.findByUserAndReview_IdIsNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED)).thenReturn(orders);
         MyUnReviewOrdersDTO result = reviewService.getUnReviewOrder(user);
         assertAll(
                 ()->assertEquals(2,result.orders().size(),()->"2개여야함"),
@@ -179,7 +179,7 @@ public class ReviewServiceTest {
         order3.setReview(review1);
         List<Order> orders = new ArrayList<>();
         orders.add(order3);
-        when(orderRepository.findByUserAndReviewIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED.toString())).thenReturn(orders);
+        when(orderRepository.findByUserAndReview_IdIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED)).thenReturn(orders);
         MyReviewOrdersDTO result = reviewService.getReviewedOrder(user);
         assertAll(
                 ()->assertEquals(1,result.orders().size(),()->"1개여야함"),

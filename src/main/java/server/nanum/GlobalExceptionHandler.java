@@ -2,14 +2,15 @@ package server.nanum;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.client.RestTemplate;
 import server.nanum.dto.error.ErrorDTO;
 import server.nanum.exception.*;
+import server.nanum.utils.WebhookExceptionHandler;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +20,8 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 @RequiredArgsConstructor
 public class GlobalExceptionHandler {
+
+    private final WebhookExceptionHandler webhookExceptionHandler;
 
     @ExceptionHandler(KakaoClientException.class)
     public ResponseEntity<ErrorDTO> handleKakaoClientException(KakaoClientException ex) {
@@ -70,5 +73,12 @@ public class GlobalExceptionHandler {
         ErrorDTO errorDTO = new ErrorDTO("올바르지 않은 입력값입니다!", combinedErrorMessage);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorDTO);
+    }
+
+    // handling 되지 않은 모든 예외를 catch
+    @ExceptionHandler(Exception.class)
+    public void handleUnhandledException(Exception ex) throws Exception {
+        webhookExceptionHandler.sendExceptionWithDiscord(ex);
+        throw ex;
     }
 }
