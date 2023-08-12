@@ -10,6 +10,7 @@ import server.nanum.dto.user.request.SellerLoginRequestDTO;
 import server.nanum.dto.user.request.UserLoginRequestDTO;
 import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.dto.user.response.LoginResponseFactory;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.SellerRepository;
 import server.nanum.utils.JwtProvider;
 
@@ -56,10 +57,10 @@ public class SellerUserAdapter implements UserAdapter {
         SellerLoginRequestDTO sellerDTO = (SellerLoginRequestDTO) userLoginRequestDTO;
 
         Seller seller = sellerRepository.findByEmail(sellerDTO.email())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 이메일입니다."));
+                .orElseThrow(() -> new NotFoundException("가입되지 않은 이메일입니다."));
 
         if (!passwordEncoder.matches(sellerDTO.password(), seller.getPassword())) {
-            throw new IllegalArgumentException("잘못된 비밀번호입니다.");
+            throw new NotFoundException("잘못된 비밀번호입니다.");
         }
 
         return createLoginResponse(seller);

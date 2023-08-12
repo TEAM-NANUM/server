@@ -1,6 +1,7 @@
 package server.nanum.dto.delivery;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -13,10 +14,12 @@ import server.nanum.dto.request.AddressDTO;
 @Getter
 @Setter
 public class DeliveryRequestDTO {
+    @Schema(example = "나눔이")
     @NotBlank(message = "수신자 이름을 입력해주세요!")
     private String receiver;
 
-    @NotBlank(message = "별명을 입력해주세요!")
+    @Schema(example = "집")
+    @NotBlank(message = "주소지 별칭을 입력해주세요!")
     private String nickname;
 
     @NotBlank(message = "전화번호를 입력해주세요!")
@@ -27,7 +30,6 @@ public class DeliveryRequestDTO {
     @Valid
     private AddressDTO address;
 
-    // DTO를 기반으로 Delivery 엔티티 객체를 생성하는 메서드
     public Delivery toEntity(User user) {
         return Delivery.builder()
                 .receiver(receiver)

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
-import server.nanum.dto.response.UserGroupListResponseDTO;
+import server.nanum.dto.user.response.UserGroupListResponseDTO;
 import server.nanum.service.GroupService;
 
 /**
@@ -42,7 +42,7 @@ public class GroupController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "응답 성공!", content = @Content(mediaType = "application/json" ,schema = @Schema(implementation = UserGroupListResponseDTO.class))),
             @ApiResponse(responseCode = "404", description = "Guest의 정보가 없는 경우", content = @Content(schema = @Schema(hidden = true))),
-            @ApiResponse(responseCode = "500", description = "다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!")
+            @ApiResponse(responseCode = "500", description = "다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
     @GetMapping
     @PreAuthorize("hasRole('ROLE_HOST')")

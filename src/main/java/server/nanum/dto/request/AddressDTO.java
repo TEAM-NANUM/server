@@ -1,6 +1,7 @@
 package server.nanum.dto.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -13,14 +14,18 @@ import server.nanum.domain.Address;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AddressDTO {
+
+    @Schema(example = "123-456")
     @NotBlank(message = "우편번호를 입력해주세요!")
     @JsonProperty("zip_code")
     private String zipCode;
 
+    @Schema(example = "서울시 강남구")
     @NotBlank(message = "기본 주소를 입력해주세요!")
     @JsonProperty("default_address")
     private String defaultAddress;
 
+    @Schema(example = "삼성동 123번지")
     @NotBlank(message = "상세 주소를 입력해주세요!")
     @JsonProperty("detail_address")
     private String detailAddress;

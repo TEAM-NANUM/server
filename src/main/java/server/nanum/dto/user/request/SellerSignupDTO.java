@@ -2,6 +2,7 @@ package server.nanum.dto.user.request;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -23,6 +24,7 @@ import server.nanum.dto.request.AddressDTO;
 @Getter
 @JsonPropertyOrder({"username", "email", "password", "phone_number", "address"})
 public class SellerSignupDTO {
+    @Schema(example = "나눔이")
     @NotBlank(message = "사용자명은 비어있을 수 없습니다!")
     private String username;
 
@@ -31,10 +33,12 @@ public class SellerSignupDTO {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
+    @Schema(example = "user@example.com")
     @NotBlank(message = "이메일은 비어있을 수 없습니다!")
     @Email(message = "유효한 이메일 주소가 아닙니다!")
     private String email;
 
+    @Schema(example = "password123")
     @NotBlank(message = "비밀번호는 비어있을 수 없습니다!")
     private String password;
 

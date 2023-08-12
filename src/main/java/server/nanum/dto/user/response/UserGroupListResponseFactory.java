@@ -2,14 +2,13 @@ package server.nanum.dto.user.response;
 
 import server.nanum.domain.User;
 import server.nanum.domain.UserGroup;
-import server.nanum.dto.response.UserGroupListResponseDTO;
 
 import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static server.nanum.dto.response.UserGroupListResponseDTO.GuestDTO;
-import static server.nanum.dto.response.UserGroupListResponseDTO.HostDTO;
+import static server.nanum.dto.user.response.UserGroupListResponseDTO.GuestDTO;
+import static server.nanum.dto.user.response.UserGroupListResponseDTO.HostDTO;
 
 /**
  * 사용자 그룹 정보를 생성하는 팩토리 클래스
