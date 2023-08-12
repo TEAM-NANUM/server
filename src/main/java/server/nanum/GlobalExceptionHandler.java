@@ -74,11 +74,11 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(errorDTO);
     }
-
-    // handling 되지 않은 모든 예외를 catch
-    @ExceptionHandler(Exception.class)
-    public void handleUnhandledException(Exception ex) throws Exception {
-        webhookExceptionHandler.sendExceptionWithDiscord(ex);
-        throw ex;
-    }
+//    Deprecated: 해당 예외는 CustomExceptionResolver에서 처리함
+//    // handling 되지 않은 모든 예외를 catch
+//    @ExceptionHandler(Exception.class)
+//    public void handleUnhandledException(Exception ex) throws Exception {
+//        webhookExceptionHandler.sendExceptionWithDiscord(ex);
+//        throw ex;
+//    }
 }
