@@ -20,7 +20,7 @@ import server.nanum.service.DeliveryService;
 
 /**
  * 배송지 관리 컨트롤러
- * 사용자의 배송지 조회, 추가, 기본 배송지 변경 API를 제공합니다.
+ * 사용자의 배송지 조회, 추가, 기본 배송지 변경, 수정, 삭제 API를 제공합니다.
  *@author hyunjin
  * @version 1.0.0
  * @since 2023-08-05
