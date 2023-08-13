@@ -106,7 +106,7 @@ public class CartController {
     })
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @PostMapping("/delete")
-    public ResponseEntity<Void> removeFromCart(@CurrentUser User user, @RequestBody CartRequestDTO.CartIdList cartIdList) {
+    public ResponseEntity<Void> removeFromCart(@CurrentUser User user, @Valid @RequestBody CartRequestDTO.CartIdList cartIdList) {
         cartService.removeFromCart(cartIdList, user);
         return ResponseEntity.ok().build();
     }
