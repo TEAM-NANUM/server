@@ -2,6 +2,7 @@ package server.nanum.config;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -21,12 +22,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOrigins("http://localhost:3000")
-                .allowedOrigins("https://hanche.store")
-                .allowedOrigins("https://api.hanche.store")
-                .allowedOrigins("http://api.hanche.store")
-                .allowedOrigins("http://118.67.128.48")
-                .allowedMethods("OPTIONS","GET","POST","PUT","DELETE");
+                .allowedOriginPatterns("*")
+                .allowedMethods("GET", "POST", "PATCH", "DELETE", "PUT",
+                        HttpMethod.OPTIONS.name()
+                );
     }
 
     @Override
