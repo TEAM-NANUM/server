@@ -67,8 +67,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
                 .build();
     }
-    // CORS 허용 적용
-    @Bean //--------- (2)
+
+    @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:3000");
@@ -95,6 +95,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // 혹은 다른 구현체를 사용할 수 있습니다.
+        return new BCryptPasswordEncoder();
     }
 }
