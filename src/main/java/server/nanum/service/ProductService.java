@@ -87,7 +87,13 @@ public class ProductService {
 
         // 주소 정보 토큰화, seller명 생성
         String[] tokenizedCityAddress = product.getSeller().getAddress().getDefaultAddress().split(" ");
-        String sellerNameWithAddress = tokenizedCityAddress[0] + " " + tokenizedCityAddress[1] + " " + product.getSeller().getName();
+        String sellerNameWithAddress="";
+        if(tokenizedCityAddress.length==1){
+            sellerNameWithAddress = tokenizedCityAddress[0] + " " + product.getSeller().getName();
+        }else if(tokenizedCityAddress.length>=2){
+            sellerNameWithAddress = tokenizedCityAddress[0] + " " + tokenizedCityAddress[1] + " " + product.getSeller().getName();
+        }
+
         product.setViewCnt(product.getViewCnt()+1);
         return ProductDTO.ProductDetail.toDTO(product, sellerNameWithAddress);
     }
