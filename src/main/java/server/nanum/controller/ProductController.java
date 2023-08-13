@@ -39,7 +39,7 @@ public class ProductController {
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "요청 성공!", content = @Content(mediaType = "application/json",schema = @Schema(implementation = ProductDTO.CarouselList.class)))
     })
-    @GetMapping("/products/carousel")
+    @GetMapping("/carousel")
     public ResponseEntity<ProductDTO.CarouselList> getCarouselProducts() {
         ProductDTO.CarouselList carouselProducts = productService.getCarouselProducts();
         return ResponseEntity.ok(carouselProducts);
