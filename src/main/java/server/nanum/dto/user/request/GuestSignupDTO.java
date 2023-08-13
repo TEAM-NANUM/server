@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
 import lombok.Getter;
 import server.nanum.domain.*;
 import server.nanum.dto.request.AddressDTO;
@@ -21,6 +22,7 @@ import java.util.UUID;
  * @since 2023-08-05
  */
 @Getter
+@Builder
 @JsonPropertyOrder({"nickname","address"})
 public class GuestSignupDTO {
     @NotBlank(message="게스트 명은 비어있을 수 없습니다!")

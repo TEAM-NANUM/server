@@ -21,10 +21,10 @@ public class Seller {
     @Column(name = "name")
     private String name;
 
-    @Column(name = "phone_number")
+    @Column(name = "phone_number", unique = true)
     private String phoneNumber;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
 
     @Column(name = "password")
@@ -40,16 +40,12 @@ public class Seller {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    public Seller withPoint(long point) {
-        // 판매자 포인트 변경
+    public void withPoint(long point) {
         this.point = point;
-        return this;
     }
 
-    public Seller withEncryptedPassword(String encryptedPassword) {
-        // 암호화된 판매자 비밀번호 설정
+    public void withEncryptedPassword(String encryptedPassword) {
         this.password = encryptedPassword;
-        return this;
     }
 }
 
