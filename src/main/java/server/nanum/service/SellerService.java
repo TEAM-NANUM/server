@@ -55,7 +55,7 @@ public class SellerService {
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 카테고리입니다."));
         Product product = dto.toEntity(seller,subCategory);
         if(productRepository.existsByName(product.getName())){
-            throw new ConflictException("이미 존재하는 제품입니다");
+            throw new ConflictException("이미 존재하는 상품입니다");
         }
         productRepository.save(product);
     }
@@ -94,9 +94,9 @@ public class SellerService {
 
     public SellerOrdersDTO getSellerOrders(Long productId,Seller seller){
         Product product = productRepository.findById(productId)
-                .orElseThrow(()-> new NotFoundException("존재하지 않는 제품입니다."));
+                .orElseThrow(()-> new NotFoundException("존재하지 않는 상품입니다."));
         if(product.getSeller().getId()!=seller.getId()){
-            throw new BadRequestException("자신이 등록한 제품이 아닙니다");
+            throw new BadRequestException("자신이 등록한 상품이 아닙니다");
         }
         List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(product);
         Integer completeOrderCount=0,inProgressOrderCount=0;
