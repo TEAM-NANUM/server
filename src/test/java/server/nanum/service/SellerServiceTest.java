@@ -53,6 +53,27 @@ public class SellerServiceTest {
             .id(1L)
             .name("쌀")
             .build();
+    Address address = Address.builder()
+            .zipCode("100")
+            .defaultAddress("00동")
+            .detailAddress("001호")
+            .build();
+    Seller seller = Seller.builder()
+            .name("판매")
+            .id(1L)
+            .address(address)
+            .email("string")
+            .password("1234")
+            .phoneNumber("1234")
+            .build();
+    Seller seller2 = Seller.builder()
+            .name("판매")
+            .id(2L)
+            .address(address)
+            .email("string")
+            .password("1234")
+            .phoneNumber("1234")
+            .build();
     Product product = Product.builder()
             .name("토마토")
             .id(1L)
@@ -64,18 +85,7 @@ public class SellerServiceTest {
             .ratingAvg(5.0F)
             .reviewCnt(5)
             .subCategory(subCategory)
-            .build();
-    Address address = Address.builder()
-            .zipCode("100")
-            .defaultAddress("00동")
-            .detailAddress("001호")
-            .build();
-    Seller seller = Seller.builder()
-            .name("판매")
-            .address(address)
-            .email("string")
-            .password("1234")
-            .phoneNumber("1234")
+            .seller(seller)
             .build();
 
     AddressDTO dto = AddressDTO.builder()
@@ -189,9 +199,9 @@ public class SellerServiceTest {
         Long productId=1L;
         when(productRepository.findById(1L)).thenReturn(Optional.of(product));
         when(orderRepository.findByProductOrderByCreateAtDesc(product)).thenReturn(orders);
-        SellerOrdersDTO result = sellerService.getSellerOrders(productId);
+        SellerOrdersDTO result = sellerService.getSellerOrders(productId,seller);
 
-        assertThrows(NotFoundException.class,()->sellerService.getSellerOrders(2L));
+        assertThrows(NotFoundException.class,()->sellerService.getSellerOrders(2L,seller2));
 
         assertAll(
                 ()->assertEquals(3,result.orders().size(),()->"3개여야함"),
