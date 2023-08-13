@@ -34,7 +34,6 @@ public class AddressDTO {
         return this.zipCode.toString()+" "+this.defaultAddress+" "+this.detailAddress;
     }
 
-    // 새로운 메서드 추가: AddressDTO를 Address로 변환하는 메서드
     public Address toAddress() {
         return Address.builder()
                 .zipCode(this.zipCode)

@@ -11,6 +11,7 @@ import server.nanum.domain.Seller;
 import server.nanum.domain.User;
 import server.nanum.dto.user.request.GuestSignupDTO;
 import server.nanum.dto.user.request.SellerSignupDTO;
+import server.nanum.exception.ConflictException;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.SellerRepository;
 
@@ -40,11 +41,9 @@ public class SignupService {
      * @param guestSignupDTO 게스트 회원가입 요청 DTO
      */
     public void registerGuest(User user, GuestSignupDTO guestSignupDTO) {
-        // 게스트 정보를 사용자 정보로 변환
         User guest = guestSignupDTO.toGuest(user.getUserGroup());
         entityManager.persist(guest);
 
-        // 새로운 배송 정보 생성 및 저장
         Delivery newDelivery = guestSignupDTO.toDelivery(guest);
         deliveryRepository.save(newDelivery);
     }
@@ -55,15 +54,25 @@ public class SignupService {
      * @param sellerSignupDTO 판매자 회원가입 요청 DTO
      */
     public void registerSeller(SellerSignupDTO sellerSignupDTO) {
+        checkDuplicateEmailAndPhoneNumber(sellerSignupDTO);
+
         Seller seller = sellerSignupDTO.toSeller();
 
-        // point를 0으로 초기화
         seller.withPoint(0L);
 
-        // password를 암호화
         seller.withEncryptedPassword(passwordEncoder.encode(seller.getPassword()));
 
         sellerRepository.save(seller);
+    }
+
+    private void checkDuplicateEmailAndPhoneNumber(SellerSignupDTO sellerSignupDTO) {
+        if (sellerRepository.existsByEmail(sellerSignupDTO.getEmail())) {
+            throw new ConflictException("이미 사용 중인 이메일입니다.");
+        }
+
+        if (sellerRepository.existsByPhoneNumber(sellerSignupDTO.getPhoneNumber())) {
+            throw new ConflictException("이미 사용 중인 전화번호입니다.");
+        }
     }
 }
 
