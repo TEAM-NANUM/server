@@ -22,7 +22,7 @@ public record OrderUserInfoDTO( //주문시 유저 정보 불러오기 DTO
         AddressDTO dto= AddressDTO.builder()
                 .zipCode(delivery.getAddress().getZipCode())
                 .defaultAddress(delivery.getAddress().getDefaultAddress())
-                .defaultAddress(delivery.getAddress().getDetailAddress())
+                .detailAddress(delivery.getAddress().getDetailAddress())
                 .build();
         return new OrderUserInfoDTO(
                 delivery.getUser().getName(),
