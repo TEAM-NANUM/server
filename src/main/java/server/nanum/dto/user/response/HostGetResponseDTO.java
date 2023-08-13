@@ -9,16 +9,16 @@ import server.nanum.domain.User;
 @Builder
 @JsonPropertyOrder({"Id", "name", "point", "is_guest"})
 public record HostGetResponseDTO(
-        @Schema(example = "1")
+        @Schema(example = "1",description = "사용자 번호")
         String Id,
 
-        @Schema(example = "나눔이")
+        @Schema(example = "나눔이",description = "사용자명")
         String name,
 
-        @Schema(example = "true")
+        @Schema(example = "true",description = "게스트 여부")
         @JsonProperty("is_guest") boolean isGuest,
 
-        @Schema(example = "1000")
+        @Schema(example = "1000",description = "포인트")
         int point
 ) {
     public static HostGetResponseDTO toDTO(User user) {

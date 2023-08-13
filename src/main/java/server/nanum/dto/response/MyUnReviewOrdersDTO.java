@@ -1,19 +1,26 @@
 package server.nanum.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
 import server.nanum.domain.Order;
 
 import java.util.List;
-
+@JsonPropertyOrder({"count","orders"})
 public record MyUnReviewOrdersDTO(
+        @Schema(example = "1",description ="조회한 주문 개수" )
         Integer count,
+        @Schema(description = "주문 정보")
         List<MyUnReviewDTO> orders){
-
+    @JsonPropertyOrder({"id","name","imgUrl"})
     public record MyUnReviewDTO( //리뷰 안달린 주문 단건 정보 DTO
-            Long id,
-            String name,
-            @JsonProperty("img_url")
-            String imgUrl){
+        @Schema(example = "1",description = "주문 번호")
+        Long id,
+        @Schema(example = "토마토",description = "주문 상품 이름")
+        String name,
+        @JsonProperty("img_url")
+        @Schema(description = "주문 상품 대표이미지")
+        String imgUrl){
     }
 
     public static MyUnReviewOrdersDTO toEntity(List<Order> orderList){

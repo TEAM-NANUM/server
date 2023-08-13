@@ -1,6 +1,7 @@
 package server.nanum.dto.delivery;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -13,12 +14,13 @@ import server.nanum.dto.request.AddressDTO;
 
 @Getter
 @Setter
+@JsonPropertyOrder({"receiver","nickname","phoneNumber","address"})
 public class DeliveryRequestDTO {
-    @Schema(example = "나눔이")
+    @Schema(example = "나눔이",description = "수신자명")
     @NotBlank(message = "수신자 이름을 입력해주세요!")
     private String receiver;
 
-    @Schema(example = "집")
+    @Schema(example = "집",description = "주소지 별칭")
     @NotBlank(message = "주소지 별칭을 입력해주세요!")
     private String nickname;
 
@@ -28,6 +30,7 @@ public class DeliveryRequestDTO {
     private String phoneNumber;
 
     @Valid
+    @Schema(description = "배송지 주소")
     private AddressDTO address;
 
     public Delivery toEntity(User user) {

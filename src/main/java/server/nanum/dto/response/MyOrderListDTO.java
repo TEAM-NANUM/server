@@ -1,12 +1,16 @@
 package server.nanum.dto.response;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
 import server.nanum.domain.Order;
 
 import java.util.List;
-
+@JsonPropertyOrder({"count","orderList"})
 public record MyOrderListDTO(
+        @Schema(example = "1",description ="자신의 주문 개수" )
         Integer count,
+        @Schema(description = "주문 정보")
         @JsonProperty("order_list")
         List<MyOrderDTO> orderList) {
 

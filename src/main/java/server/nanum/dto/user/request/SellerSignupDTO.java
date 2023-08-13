@@ -24,7 +24,7 @@ import server.nanum.dto.request.AddressDTO;
 @Getter
 @JsonPropertyOrder({"username", "email", "password", "phone_number", "address"})
 public class SellerSignupDTO {
-    @Schema(example = "나눔이")
+    @Schema(example = "나눔이",description = "판매자명")
     @NotBlank(message = "사용자명은 비어있을 수 없습니다!")
     private String username;
 
@@ -33,16 +33,17 @@ public class SellerSignupDTO {
     @JsonProperty("phone_number")
     private String phoneNumber;
 
-    @Schema(example = "user@example.com")
+    @Schema(example = "user@example.com",description = "판매자 이메일")
     @NotBlank(message = "이메일은 비어있을 수 없습니다!")
     @Email(message = "유효한 이메일 주소가 아닙니다!")
     private String email;
 
-    @Schema(example = "password123")
+    @Schema(example = "password123",description = "판매자 계정 비밀번호")
     @NotBlank(message = "비밀번호는 비어있을 수 없습니다!")
     private String password;
 
     @Valid
+    @Schema(description = "판매자 주소")
     private AddressDTO address;
 
     /**

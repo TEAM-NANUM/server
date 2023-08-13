@@ -15,17 +15,17 @@ import server.nanum.domain.Address;
 @AllArgsConstructor
 public class AddressDTO {
 
-    @Schema(example = "123-456")
+    @Schema(example = "123-456",description = "우편번호")
     @NotBlank(message = "우편번호를 입력해주세요!")
     @JsonProperty("zip_code")
     private String zipCode;
 
-    @Schema(example = "서울시 강남구")
+    @Schema(example = "서울시 강남구",description = "기본 주소")
     @NotBlank(message = "기본 주소를 입력해주세요!")
     @JsonProperty("default_address")
     private String defaultAddress;
 
-    @Schema(example = "삼성동 123번지")
+    @Schema(example = "삼성동 123번지",description = "상세 주소")
     @NotBlank(message = "상세 주소를 입력해주세요!")
     @JsonProperty("detail_address")
     private String detailAddress;
