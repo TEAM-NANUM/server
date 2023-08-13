@@ -12,7 +12,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import server.nanum.filter.JwtAuthenticationFilter;
 import server.nanum.security.custom.CustomAccessDeniedHandler;
 import server.nanum.security.custom.CustomAuthenticationEntryPoint;
@@ -38,13 +40,14 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors-> cors.configurationSource(corsConfigurationSource))
+                .cors(cors-> cors.configurationSource(corsConfigurationSource()))
+
                 .authorizeHttpRequests((Requests) -> {
                     Requests.requestMatchers(
                             "/api/user/**",
-                            "api/delivery-address",
+                            "/api/delivery-address",
                             "/api/signup/guest",
-                            "api/groups",
+                            "/api/groups",
                             "/api/orders/**",
                             "/api/reviews/**",
                             "/api/seller/**",
@@ -63,6 +66,31 @@ public class SecurityConfig {
                 )
                 .addFilterBefore(jwtAuthenticationFilter, BasicAuthenticationFilter.class)
                 .build();
+    }
+    // CORS 허용 적용
+    @Bean //--------- (2)
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.addAllowedOrigin("http://localhost:3000");
+        configuration.addAllowedOrigin("http://localhost:3000/");
+        configuration.addAllowedOrigin("http://localhost");
+        configuration.addAllowedOrigin("http://localhost/");
+        configuration.addAllowedOrigin("http://localhost:80");
+        configuration.addAllowedOrigin("http://localhost:80/");
+        configuration.addAllowedOrigin("https://tranquil-sorbet-987ec3.netlify.app/");
+        configuration.addAllowedOrigin("https://tranquil-sorbet-987ec3.netlify.app");
+        configuration.addAllowedOrigin("https://api.hanche.store");
+        configuration.addAllowedOrigin("https://api.hanche.store/");
+        configuration.addAllowedOrigin("https://api.hanche.store:443");
+        configuration.addAllowedOrigin("https://hanche.store");
+        configuration.addAllowedOrigin("https://hanche.store/");
+        configuration.addAllowedHeader("*");
+        configuration.addAllowedMethod("*");
+        configuration.setAllowCredentials(true);
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
     @Bean
