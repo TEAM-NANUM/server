@@ -11,6 +11,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.dto.user.request.GuestLoginRequestDTO;
@@ -38,7 +39,8 @@ import java.io.IOException;
 @RequestMapping("/api/login")
 @Slf4j
 public class LoginController {
-
+    @Value("${frontendUrl}")
+    private String frontendUrl;
     private final KakaoClient kakaoClient;
     private final LoginService loginService;
 
@@ -73,7 +75,7 @@ public class LoginController {
         String token = loginResponseDTO.token();
         log.info("엑세스 토큰 = {}", token);
 
-        String redirectUrl = "http://localhost:3000/?token=" + token;
+        String redirectUrl = frontendUrl + "?token=" + token;
         response.sendRedirect(redirectUrl);
     }
 
