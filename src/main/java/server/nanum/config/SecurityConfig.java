@@ -51,7 +51,8 @@ public class SecurityConfig {
                             "/api/orders/**",
                             "/api/reviews/**",
                             "/api/seller/**",
-                            "/api/cart/**"
+                            "/api/cart/**",
+                            "/api/products/**"
                     ).authenticated();
 
                     Requests.anyRequest().permitAll();
