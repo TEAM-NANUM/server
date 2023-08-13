@@ -23,6 +23,9 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addMapping("/**")
                 .allowedOrigins("http://localhost:3000")
                 .allowedOrigins("https://hanche.store")
+                .allowedOrigins("https://api.hanche.store")
+                .allowedOrigins("http://api.hanche.store")
+                .allowedOrigins("http://118.67.128.48")
                 .allowedMethods("OPTIONS","GET","POST","PUT","DELETE");
     }
 
