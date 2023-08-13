@@ -4,11 +4,12 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import server.nanum.annotation.ImageFileType;
 
 import java.util.List;
 
-public record ImageListRequest(@Valid @JsonProperty("image_list") List<ImageInfo> imageList) {
+public record ImageListRequest(@Valid @JsonProperty("image_list") @NotNull(message = "이미지 정보를 입력하셔야 됩니다") List<ImageInfo> imageList) {
         public record ImageInfo(
                 @Schema(example = "test",description = "파일명")
                 @JsonProperty("file_name")

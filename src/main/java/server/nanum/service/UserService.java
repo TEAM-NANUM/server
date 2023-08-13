@@ -41,8 +41,9 @@ public class UserService {
      * @param user 현재 사용자
      * @param pointToAdd 충전할 포인트 양
      */
-    public void chargePoint(User user, int pointToAdd) {
-        int updatedPoint = user.getUserGroupPoint() + pointToAdd;
+    public void chargePoint(User user, Integer pointToAdd) {
+        int chargePointVal = pointToAdd.intValue();
+        int updatedPoint = user.getUserGroupPoint() + chargePointVal;
         user.getUserGroup().updatePoint(updatedPoint);
         userRepository.save(user);
     }
