@@ -27,7 +27,6 @@ public record AddProductDTO( //상품 등록 DTO
         @Schema(description = "상품 대표 이미지")
         @JsonProperty("img_url")
         String imgUrl,
-        @NotBlank(message = "배송 방법을 결정해주세요")
         @JsonProperty("delivery_type")
         @Schema(example = "PACKAGE",defaultValue = "PACKAGE",description ="상품 배송 방법" )
         DeliveryType deliveryType,
