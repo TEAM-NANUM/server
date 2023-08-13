@@ -20,12 +20,10 @@ public class CartRequestDTO {
     @JsonPropertyOrder({"productId","quantity"})
     public static class CartItem {
         @Schema(example = "1",description = "상품 번호")
-        @NotBlank(message = "상품 번호를 입력해주세요")
         @Positive(message = "상품 번호는 양수만 존재합니다")
         @JsonProperty("product_id")
         private Long productId;
         @Schema(defaultValue = "1",description = "상품 개수")
-        @NotBlank(message = "상품 개수를 입력해주세요")
         @Positive(message = "상품 개수는 양수만 가능합니다")
         private Integer quantity;
     }
@@ -36,7 +34,6 @@ public class CartRequestDTO {
     @Setter
     public static class CartIdList {
         @Schema(description = "제거할 상품 번호")
-        @NotBlank(message = "제거할 상품 번호를 입력해주세요")
         @JsonProperty("item_ids")
         List<Long> itemIds;
     }
@@ -48,11 +45,9 @@ public class CartRequestDTO {
     @JsonPropertyOrder({"id","quantity"})
     public static class CartItemQuantity {
         @Positive(message = "상품 번호는 양수만 존재합니다")
-        @NotBlank(message = "상품 번호를 입력해주세요")
         @Schema(example = "1",description = "상품 번호")
         private Long id;
 
-        @NotBlank(message = "상품 개수를 입력해주세요")
         @Positive(message = "상품의 개수는 양수만 가능합니다")
         @Schema(defaultValue = "1",description = "상품 개수")
         private Integer quantity;
