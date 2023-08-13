@@ -3,6 +3,7 @@ package server.nanum.exception.resolver;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 import server.nanum.utils.WebhookExceptionHandler;
@@ -19,7 +20,9 @@ public class CustomExceptionResolver implements HandlerExceptionResolver {
             Object handler,
             Exception ex) {
 
-        webhookExceptionHandler.sendExceptionWithDiscord(ex);
+        if (!(ex instanceof AccessDeniedException)) {
+            webhookExceptionHandler.sendExceptionWithDiscord(ex);
+        }
 
         return null;
     }
