@@ -1,5 +1,6 @@
 package server.nanum.dto.user.request;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -20,12 +21,14 @@ import java.util.UUID;
  * @since 2023-08-05
  */
 @Getter
+@JsonPropertyOrder({"nickname","address"})
 public class GuestSignupDTO {
     @NotBlank(message="게스트 명은 비어있을 수 없습니다!")
-    @Schema(example = "나눔이")
+    @Schema(example = "나눔이",description = "게스트명")
     private String nickname;
 
     @Valid
+    @Schema(description = "게스트 주소")
     private AddressDTO address;
 
     /**

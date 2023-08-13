@@ -1,5 +1,7 @@
 package server.nanum.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,11 +14,17 @@ import java.util.List;
 public class CartResponseDTO {
     @Builder
     @Getter
+    @JsonPropertyOrder({"id","name","imgUrl","quantity","totalPrice"})
     public static class CartListItem {
+        @Schema(example = "1",description = "상품 번호")
         private Long id;
+        @Schema(description = "상품 대표 이미지")
         private String imgUrl;
+        @Schema(example = "토마토",description = "상품 이름")
         private String name;
+        @Schema(example = "1000",description = "총 주문 가격")
         private Integer totalPrice;
+        @Schema(example = "1",description = "상품 개수")
         private Integer quantity;
 
         public static CartListItem toDTO(Cart cart) {
@@ -33,6 +41,7 @@ public class CartResponseDTO {
     @Builder
     @Getter
     public static class CartList {
+        @Schema(description = "장바구니 정보")
         List<CartListItem> items;
 
         public static CartList toDTO(List<CartListItem> cartListItems) {

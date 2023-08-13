@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.Order;
 import server.nanum.domain.Seller;
 import server.nanum.domain.product.Product;
@@ -92,6 +93,14 @@ public class SellerService {
         Product product = productRepository.findById(productId)
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 제품입니다."));
         List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(product);
-        return SellerOrdersDTO.toEntity(product,orderList);
+        Integer completeOrderCount=0,inProgressOrderCount=0;
+        for(Order order:orderList){
+            if(order.checkStatus()==true){
+                completeOrderCount++;
+            }else if(order.checkStatus()==false){
+                inProgressOrderCount++;
+            }
+        }
+        return SellerOrdersDTO.toEntity(product,orderList,completeOrderCount,inProgressOrderCount);
     }
 }

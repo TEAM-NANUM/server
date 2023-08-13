@@ -10,12 +10,12 @@ import java.util.List;
 
 public record ImageListRequest(@Valid @JsonProperty("image_list") List<ImageInfo> imageList) {
         public record ImageInfo(
-                @Schema(example = "test")
+                @Schema(example = "test",description = "파일명")
                 @JsonProperty("file_name")
                 @NotBlank(message = "파일명을 입력하셔야 됩니다!")
                 String fileName,
 
-                @Schema(example = "image/jpeg")
+                @Schema(example = "image/jpeg",description = "이미지 타입")
                 @NotBlank(message = "이미지 타입을 입력하셔야 됩니다!")
                 @JsonProperty("file_type")
                 @ImageFileType String fileType

@@ -50,5 +50,12 @@ public class Order {
     public void setReview(Review review){
         this.review=review;
     }
+    public boolean checkStatus(){
+        if(this.deliveryStatus==DeliveryStatus.DELIVERED){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }
 
