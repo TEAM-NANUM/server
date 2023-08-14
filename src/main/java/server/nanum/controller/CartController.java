@@ -87,9 +87,9 @@ public class CartController {
     })
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @PatchMapping
-    public ResponseEntity<CartResponseDTO.CartListItem> updateCartItemQuantity(@CurrentUser User user, @Valid @RequestBody CartRequestDTO.CartItemQuantity cartItemQuantity) {
-        CartResponseDTO.CartListItem cartListItem = cartService.updateCartItemQuantity(cartItemQuantity, user);
-        return ResponseEntity.ok(cartListItem);
+    public ResponseEntity<CartResponseDTO.CartList> updateCartItemQuantity(@CurrentUser User user, @Valid @RequestBody CartRequestDTO.CartItemQuantity cartItemQuantity) {
+        CartResponseDTO.CartList cartList = cartService.updateCartItemQuantity(cartItemQuantity, user);
+        return ResponseEntity.ok(cartList);
     }
 
     /**
@@ -106,8 +106,8 @@ public class CartController {
     })
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @PostMapping("/delete")
-    public ResponseEntity<Void> removeFromCart(@CurrentUser User user, @Valid @RequestBody CartRequestDTO.CartIdList cartIdList) {
-        cartService.removeFromCart(cartIdList, user);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<CartResponseDTO.CartList> removeFromCart(@CurrentUser User user, @Valid @RequestBody CartRequestDTO.CartIdList cartIdList) {
+        CartResponseDTO.CartList cartList = cartService.removeFromCart(cartIdList, user);
+        return ResponseEntity.ok(cartList);
     }
 }
