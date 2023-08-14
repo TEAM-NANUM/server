@@ -48,6 +48,7 @@ public class Delivery {
     }
 
     public void updateDelivery(String receiver, String nickname, String phoneNumber, Address address) {
+        AddressContainer.removeAddress(this.address);
         this.receiver = receiver;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
@@ -55,8 +56,21 @@ public class Delivery {
         AddressContainer.addAddress(address);
     }
 
+
     public String getUsername() {
         return user.getName();
+    }
+
+    public String getZipCode() {
+        return address.getZipCode();
+    }
+
+    public String getDefaultAddress() {
+        return address.getDefaultAddress();
+    }
+
+    public String getDetailAddress() {
+        return address.getDetailAddress();
     }
 }
 

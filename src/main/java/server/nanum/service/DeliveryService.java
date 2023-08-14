@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import server.nanum.domain.AddressContainer;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
 import server.nanum.dto.delivery.DeliveryListResponse;
@@ -40,6 +41,7 @@ public class DeliveryService {
         List<DeliveryResponse> deliveryResponses = deliveries.stream()
                 .map(DeliveryResponse::fromEntity)
                 .collect(Collectors.toList());
+
         return new DeliveryListResponse(deliveryResponses);
     }
 
@@ -132,6 +134,7 @@ public class DeliveryService {
     @Transactional
     public void deleteDelivery(Long id, User user) {
         Delivery delivery = findDeliveryByIdAndUser(id, user);
+        AddressContainer.removeAddress(delivery.getAddress());
         deliveryRepository.delete(delivery);
     }
 }

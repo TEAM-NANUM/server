@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import server.nanum.domain.Address;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
 import server.nanum.dto.delivery.DeliveryListResponse;
@@ -105,8 +106,8 @@ public class DeliveryServiceTest {
         assertEquals(request.getNickname(), delivery.getNickname());
         assertEquals(request.getPhoneNumber(), delivery.getPhoneNumber());
 
-        System.out.println(request.getAddressDTO().toAddress() + ", " + delivery.getAddress());
-        assertEquals(request.getAddressDTO().toAddress(), delivery.getAddress());
+        Address updatedAddress = request.getAddressDTO().toAddress();
+        assertEquals(updatedAddress, delivery.getAddress());
     }
 
     @Test
@@ -164,6 +165,4 @@ public class DeliveryServiceTest {
                 .addressDTO(addressDTO)
                 .build();
     }
-
-
 }
