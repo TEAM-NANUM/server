@@ -52,6 +52,7 @@ public class Delivery {
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.address = address;
+        AddressContainer.addAddress(address);
     }
 
     public String getUsername() {

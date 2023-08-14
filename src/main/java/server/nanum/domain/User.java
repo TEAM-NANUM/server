@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-import static lombok.Builder.*;
-
 @Entity
 @Table(name = "users")
 @Builder
@@ -44,7 +42,7 @@ public class User {
     @JoinColumn(name = "user_group_id")
     private UserGroup userGroup;
 
-    @Default
+    @Builder. Default
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Delivery> deliveries = new ArrayList<>() ;
 

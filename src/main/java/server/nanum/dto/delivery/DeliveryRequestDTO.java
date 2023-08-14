@@ -6,14 +6,16 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import server.nanum.domain.Address;
+import server.nanum.domain.AddressContainer;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
 import server.nanum.dto.request.AddressDTO;
 
 @Getter
-@Setter
+@Builder
 @JsonPropertyOrder({"receiver","nickname","phoneNumber","address"})
 public class DeliveryRequestDTO {
     @Schema(example = "나눔이",description = "수신자명")
@@ -30,15 +32,17 @@ public class DeliveryRequestDTO {
     private String phoneNumber;
 
     @Valid
+    @JsonProperty("address")
     @Schema(description = "배송지 주소")
-    private AddressDTO address;
+    private AddressDTO addressDTO;
 
     public Delivery toEntity(User user) {
+        Address addressEntity = AddressContainer.getAddress(addressDTO.getZipCode(), addressDTO.getDefaultAddress(), addressDTO.getDetailAddress());
         return Delivery.builder()
                 .receiver(receiver)
                 .nickname(nickname)
                 .phoneNumber(phoneNumber)
-                .address(address.toAddress())
+                .address(addressEntity)
                 .user(user)
                 .build();
     }

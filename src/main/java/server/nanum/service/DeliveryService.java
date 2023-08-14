@@ -9,7 +9,6 @@ import server.nanum.domain.User;
 import server.nanum.dto.delivery.DeliveryListResponse;
 import server.nanum.dto.delivery.DeliveryListResponse.DeliveryResponse;
 import server.nanum.dto.delivery.DeliveryRequestDTO;
-import server.nanum.exception.ConflictException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.DeliveryRepository;
 
@@ -121,7 +120,7 @@ public class DeliveryService {
     @Transactional
     public void updateDelivery(Long id, DeliveryRequestDTO request, User user) {
         Delivery delivery = findDeliveryByIdAndUser(id, user);
-        delivery.updateDelivery(request.getReceiver(), request.getNickname(), request.getPhoneNumber(), request.getAddress().toAddress());
+        delivery.updateDelivery(request.getReceiver(), request.getNickname(), request.getPhoneNumber(), request.getAddressDTO().toAddress());
     }
 
     /**
