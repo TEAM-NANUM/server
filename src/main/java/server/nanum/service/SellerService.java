@@ -13,11 +13,13 @@ import server.nanum.dto.request.AddProductDTO;
 import server.nanum.dto.response.SellerInfoDTO;
 import server.nanum.dto.response.SellerOrdersDTO;
 import server.nanum.dto.response.SellerProductsDTO;
+import server.nanum.exception.BadRequestException;
 import server.nanum.exception.ConflictException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 import server.nanum.repository.SubCategoryRepository;
+import server.nanum.security.custom.CustomAccessDeniedHandler;
 
 import java.util.List;
 
@@ -53,7 +55,7 @@ public class SellerService {
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 카테고리입니다."));
         Product product = dto.toEntity(seller,subCategory);
         if(productRepository.existsByName(product.getName())){
-            throw new ConflictException("이미 존재하는 제품입니다");
+            throw new ConflictException("이미 존재하는 상품입니다");
         }
         productRepository.save(product);
     }
@@ -87,11 +89,15 @@ public class SellerService {
      * @param productId 상품의 Id
      * @return SellerOrdersDTO 상품의 주문 정보와 그 개수 응답
      * @throws NotFoundException 상품Id로 찾은 상품이 존재하지 않을 경우 예외를 던집니다.
+     * @throws BadRequestException 자신이 등록한 것이 아닌 상품을 조회했을 경우 예외를 던집니다.
      */
 
-    public SellerOrdersDTO getSellerOrders(Long productId){
+    public SellerOrdersDTO getSellerOrders(Long productId,Seller seller){
         Product product = productRepository.findById(productId)
-                .orElseThrow(()-> new NotFoundException("존재하지 않는 제품입니다."));
+                .orElseThrow(()-> new NotFoundException("존재하지 않는 상품입니다."));
+        if(product.getSeller().getId()!=seller.getId()){
+            throw new BadRequestException("자신이 등록한 상품이 아닙니다");
+        }
         List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(product);
         Integer completeOrderCount=0,inProgressOrderCount=0;
         for(Order order:orderList){

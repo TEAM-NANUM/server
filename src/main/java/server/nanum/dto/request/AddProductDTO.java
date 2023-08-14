@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Normalized;
 import server.nanum.domain.DeliveryType;
 import server.nanum.domain.Seller;
 import server.nanum.domain.product.Product;
@@ -13,10 +14,11 @@ public record AddProductDTO( //상품 등록 DTO
         @NotBlank(message = "상품 이름을 입력해주세요")
         @Schema(example = "토마토",description = "상품 이름")
         String name,
-
+        @NotNull(message = "상품 가격을 입력해주세요")
         @Schema(example = "1000",description = "상품 가격")
         @PositiveOrZero(message = "상품 가격은 0 또는 양수만 가능합니다")
         Integer price,
+        @NotNull(message = "상품 무게를 입력해주세요")
         @Positive(message = "상품 무게는 양수만 가능합니다")
         @Schema(example = "10",description = "상품 단위(Kg)")
         Integer unit,
@@ -27,11 +29,13 @@ public record AddProductDTO( //상품 등록 DTO
         @Schema(description = "상품 대표 이미지")
         @JsonProperty("img_url")
         String imgUrl,
+        @NotNull(message = "상품 배송 방법을 설정해주세요")
         @JsonProperty("delivery_type")
         @Schema(example = "PACKAGE",defaultValue = "PACKAGE",description ="상품 배송 방법" )
         DeliveryType deliveryType,
 
         @JsonProperty("subcategory_id")
+        @NotNull(message = "카테고리 번호를 입력해주세요")
         @Positive(message = "카테고리 번호는 양수만 존재합니다")
         @Schema(example = "1",description = "카테고리 번호")
         Long subCategoryId) {

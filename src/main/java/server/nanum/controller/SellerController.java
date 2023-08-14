@@ -122,8 +122,9 @@ public class SellerController {
     })
     @GetMapping("/{product_id}")
     public ResponseEntity<SellerOrdersDTO> getSellerOrders(
-            @PathVariable("product_id") Long productId){
-        SellerOrdersDTO dto = sellerService.getSellerOrders(productId);
+            @PathVariable("product_id") Long productId,
+            @CurrentUser Seller seller){
+        SellerOrdersDTO dto = sellerService.getSellerOrders(productId,seller);
         return ResponseEntity.ok().body(dto);
     }
 }
