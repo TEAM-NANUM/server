@@ -119,7 +119,6 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "상품 ID로 상품을 찾을 수 없는 경우", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
-    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @GetMapping("/products/{product_id}/reviews")
     public ResponseEntity<ProductReviewDTO.ReviewList> getProductReviews(
             @PathVariable("product_id") Long productId) {
