@@ -132,6 +132,5 @@ public class DeliveryController {
         deliveryService.deleteDelivery(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
 }
 

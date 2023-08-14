@@ -4,12 +4,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import server.nanum.domain.AddressContainer;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
 import server.nanum.dto.delivery.DeliveryListResponse;
 import server.nanum.dto.delivery.DeliveryListResponse.DeliveryResponse;
 import server.nanum.dto.delivery.DeliveryRequestDTO;
-import server.nanum.exception.ConflictException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.DeliveryRepository;
 
@@ -41,6 +41,7 @@ public class DeliveryService {
         List<DeliveryResponse> deliveryResponses = deliveries.stream()
                 .map(DeliveryResponse::fromEntity)
                 .collect(Collectors.toList());
+
         return new DeliveryListResponse(deliveryResponses);
     }
 
@@ -121,7 +122,7 @@ public class DeliveryService {
     @Transactional
     public void updateDelivery(Long id, DeliveryRequestDTO request, User user) {
         Delivery delivery = findDeliveryByIdAndUser(id, user);
-        delivery.updateDelivery(request.getReceiver(), request.getNickname(), request.getPhoneNumber(), request.getAddress().toAddress());
+        delivery.updateDelivery(request.getReceiver(), request.getNickname(), request.getPhoneNumber(), request.getAddressDTO().toAddress());
     }
 
     /**
@@ -133,6 +134,7 @@ public class DeliveryService {
     @Transactional
     public void deleteDelivery(Long id, User user) {
         Delivery delivery = findDeliveryByIdAndUser(id, user);
+        AddressContainer.removeAddress(delivery.getAddress());
         deliveryRepository.delete(delivery);
     }
 }
