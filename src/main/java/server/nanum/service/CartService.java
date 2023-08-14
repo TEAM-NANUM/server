@@ -48,19 +48,21 @@ public class CartService {
         cartRepository.save(cart);
     }
 
-    public CartResponseDTO.CartListItem updateCartItemQuantity(CartRequestDTO.CartItemQuantity cartItemQuantity, User user) {
+    public CartResponseDTO.CartList updateCartItemQuantity(CartRequestDTO.CartItemQuantity cartItemQuantity, User user) {
         Cart cart = cartRepository.findByIdAndUser(cartItemQuantity.getId(), user)
                 .orElseThrow(() -> new NotFoundException("해당하는 장바구니 항목을 찾을 수 없습니다."));
 
         cart.setProductCount(cartItemQuantity.getQuantity());
         cartRepository.save(cart);
 
-        return CartResponseDTO.CartListItem.toDTO(cart);
+        return getCartItems(user);
     }
 
-    public void removeFromCart(CartRequestDTO.CartIdList cartIdList, User user) {
+    public CartResponseDTO.CartList removeFromCart(CartRequestDTO.CartIdList cartIdList, User user) {
         List<Long> cartIds = cartIdList.getItemIds();
         List<Cart> cartItems = cartRepository.findByUserAndIdIn(user, cartIds);
         cartRepository.deleteAllInBatch(cartItems);
+
+        return getCartItems(user);
     }
 }

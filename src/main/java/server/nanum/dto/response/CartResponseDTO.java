@@ -16,8 +16,10 @@ public class CartResponseDTO {
     @Getter
     @JsonPropertyOrder({"id","name","imgUrl","quantity","totalPrice"})
     public static class CartListItem {
-        @Schema(example = "1",description = "상품 번호")
+        @Schema(example = "1",description = "장바구니 아이템 id")
         private Long id;
+        @Schema(example = "1",description = "상품 id")
+        private Long productId;
         @Schema(description = "상품 대표 이미지")
         private String imgUrl;
         @Schema(example = "토마토",description = "상품 이름")
@@ -30,6 +32,7 @@ public class CartResponseDTO {
         public static CartListItem toDTO(Cart cart) {
             return CartListItem.builder()
                     .id(cart.getId())
+                    .productId(cart.getProduct().getId())
                     .imgUrl(cart.getProduct().getImgUrl())
                     .name(cart.getProduct().getName())
                     .totalPrice((cart.getProduct().getPrice() * cart.getProductCount()))
