@@ -113,14 +113,17 @@ public class ProductDTO {
         @Schema(example = "1000",description = "상품 가격")
         private Integer price;
 
+        @Schema(example = "5.0",description = "평균 평점")
+        private Float ratingAvg;
         public static ProductListItem toDTO(Product product) {
-            return ProductDTO.ProductListItem.builder()
+            return ProductListItem.builder()
                     .id(product.getId())
                     .imgUrl(product.getImgUrl())
-                    .seller(product.getSeller().getName())
+                    .seller(product.getSeller().sellerAddressInfo())
                     .deliveryType(product.getDeliveryType().name())
                     .name(product.getName())
                     .price(product.getPrice())
+                    .ratingAvg(product.getRatingAvg())
                     .build();
         }
     }
@@ -161,10 +164,10 @@ public class ProductDTO {
         @Schema(description = "상품 설명")
         private String description;
 
-        public static ProductDetail toDTO(Product product, String sellerNameWithAddress) {
+        public static ProductDetail toDTO(Product product) {
             return ProductDTO.ProductDetail.builder()
                     .imgUrl(product.getImgUrl())
-                    .seller(sellerNameWithAddress)
+                    .seller(product.getSeller().sellerAddressInfo())
                     .name(product.getName())
                     .unit(product.getUnit()+" kg")
                     .rating(product.getRatingAvg())

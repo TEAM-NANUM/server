@@ -39,6 +39,17 @@ public class Seller {
     @CreationTimestamp
     @Column(name = "create_at")
     private LocalDateTime createAt;
+    public String sellerAddressInfo(){
+        String[] tokenizedCityAddress = this.address.getDefaultAddress().split(" ");
+        String sellerNameWithAddress="";
+        if(tokenizedCityAddress.length==1){
+            sellerNameWithAddress=tokenizedCityAddress[0] + " ";
+        }else if(tokenizedCityAddress.length>=2){
+            sellerNameWithAddress=tokenizedCityAddress[0] + " " + tokenizedCityAddress[1] + " ";
+        }
+        sellerNameWithAddress+=this.name;
+        return sellerNameWithAddress;
+    }
 
     public void withPoint(long point) {
         this.point = point;
