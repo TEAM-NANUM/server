@@ -89,11 +89,11 @@ public class ProductService {
         String[] tokenizedCityAddress = product.getSeller().getAddress().getDefaultAddress().split(" ");
         String sellerNameWithAddress="";
         if(tokenizedCityAddress.length==1){
-            sellerNameWithAddress = tokenizedCityAddress[0] + " " + product.getSeller().getName();
+            sellerNameWithAddress=tokenizedCityAddress[0] + " ";
         }else if(tokenizedCityAddress.length>=2){
-            sellerNameWithAddress = tokenizedCityAddress[0] + " " + tokenizedCityAddress[1] + " " + product.getSeller().getName();
+            sellerNameWithAddress=tokenizedCityAddress[0] + " " + tokenizedCityAddress[1] + " ";
         }
-
+        sellerNameWithAddress+=product.getSeller().getName();
         product.setViewCnt(product.getViewCnt()+1);
         return ProductDTO.ProductDetail.toDTO(product, sellerNameWithAddress);
     }

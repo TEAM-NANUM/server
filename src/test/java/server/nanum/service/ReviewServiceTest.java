@@ -63,7 +63,7 @@ public class ReviewServiceTest {
             .deliveryType(DeliveryType.PACKAGE)
             .imgUrl("String")
             .purchaseCnt(0)
-            .ratingAvg(5.0F)
+            .ratingAvg(0.0F)
             .reviewCnt(5)
             .subCategory(subCategory)
             .build();
@@ -116,6 +116,15 @@ public class ReviewServiceTest {
             .user(user)
             .totalAmount(3000)
             .build();
+    Order order4 = Order.builder()
+            .id(4L)
+            .deliveryAddress(dto.toString())
+            .product(product)
+            .productCount(2)
+            .deliveryStatus(DeliveryStatus.DELIVERED)
+            .user(user)
+            .totalAmount(2000)
+            .build();
     Review review1 = Review.builder()
             .comment("맛있음")
             .rating(4.5F)
@@ -138,6 +147,7 @@ public class ReviewServiceTest {
         orderList.add(order3);
         orderList.add(order2);
         orderList.add(order1);
+        orderList.add(order4);
         when(orderRepository.findByProductOrderByCreateAtDesc(product)).thenReturn(orderList);
         Review reviewTest = dto.toEntity(order3);
         reviewService.createReview(dto);
@@ -146,12 +156,18 @@ public class ReviewServiceTest {
         AddReviewDTO dto2 = new AddReviewDTO(5L,5.0F,"맛있어요");
         assertThrows(NotFoundException.class,()-> reviewService.createReview(dto2));
 
+        AddReviewDTO dto3 = new AddReviewDTO(4L,1.0F,"맛있어요");
+        when(orderRepository.findById(4L)).thenReturn(Optional.of(order4));
+        Review reviewTest2 = dto3.toEntity(order4);
+        reviewService.createReview(dto3);
+
         assertAll(
                 ()->assertEquals(5.0F,reviewTest.getRating(),()->"5여야함"),
                 ()->assertEquals(3,reviewTest.getOrder().getProductCount(),()->"3여야함"),
                 ()->assertEquals("토마토",reviewTest.getOrder().getProduct().getName(),()->"이름이 토마토임"),
-                ()->assertEquals(5.0F,reviewTest.getOrder().getProduct().getRatingAvg(),()->"평균평점 5.0점"),
-                ()->assertEquals(5.0F,order3.getReview().getRating(),()-> "주문 -> 리뷰 별점 확인")
+                ()->assertEquals(3.0F,reviewTest2.getOrder().getProduct().getRatingAvg(),()->"평균평점 5.0점"),
+                ()->assertEquals(5.0F,order3.getReview().getRating(),()-> "주문 -> 리뷰 별점 확인"),
+                ()->assertEquals(1.0F,reviewTest2.getRating(),()->"0여야함")
         );
     }
 
@@ -162,7 +178,7 @@ public class ReviewServiceTest {
         List<Order> orders = new ArrayList<>();
         orders.add(order1);
         orders.add(order2);
-        when(orderRepository.findByUserAndReview_IdIsNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED)).thenReturn(orders);
+        when(orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED)).thenReturn(orders);
         MyUnReviewOrdersDTO result = reviewService.getUnReviewOrder(user);
         assertAll(
                 ()->assertEquals(2,result.orders().size(),()->"2개여야함"),
@@ -179,7 +195,7 @@ public class ReviewServiceTest {
         order3.setReview(review1);
         List<Order> orders = new ArrayList<>();
         orders.add(order3);
-        when(orderRepository.findByUserAndReview_IdIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED)).thenReturn(orders);
+        when(orderRepository.findByUserAndReviewIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user,DeliveryStatus.DELIVERED)).thenReturn(orders);
         MyReviewOrdersDTO result = reviewService.getReviewedOrder(user);
         assertAll(
                 ()->assertEquals(1,result.orders().size(),()->"1개여야함"),

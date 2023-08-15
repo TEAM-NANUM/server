@@ -172,7 +172,7 @@ class ProductServiceTest {
             Long productId = 1L;
 
             Seller seller = Seller.builder().name("Seller Name").address(Address.builder().zipCode("zipcode").defaultAddress("City Street").detailAddress("detail").build()).build();
-            Product product = Product.builder().id(productId).price(100).name("Product 1").ratingAvg(4.2F).deliveryType(DeliveryType.DIRECT).seller(seller).build();
+            Product product = Product.builder().id(productId).price(100).name("Product 1").ratingAvg(4.2F).deliveryType(DeliveryType.DIRECT).seller(seller).viewCnt(0).build();
 
             when(productRepository.findById(productId)).thenReturn(Optional.of(product));
 

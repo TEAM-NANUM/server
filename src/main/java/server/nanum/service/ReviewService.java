@@ -51,27 +51,26 @@ public class ReviewService {
     public void createReview(AddReviewDTO dto){
         Order order = orderRepository.findById(dto.orderId())
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 주문입니다."));
+
         if(order.getDeliveryStatus()!=DeliveryStatus.DELIVERED){
             throw new BadRequestException("리뷰를 작성할 수 없는 주문입니다.");
         }
+
         if(order.getReview()!=null){
             throw new ConflictException("이미 리뷰가 존재합니다");
         }
+
         Review review = dto.toEntity(order);
         reviewRepository.save(review);
         order.setReview(review);
-        List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(order.getProduct());
-        Float ratingAll = (float) 0;
-        int reviewedCount = 0;
-        for(Order orderData: orderList){ //TODO: 리팩토링 방법 있으면 사용
-            if(orderData.getReview()!=null){
-                ratingAll+= orderData.getReview().getRating();
-                reviewedCount++;
-            }
-        }
         order.getProduct().setReviewCnt(order.getProduct().getReviewCnt()+1);
-        order.getProduct().setRatingAvg(ratingAll/(reviewedCount));
-
+        List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(order.getProduct());
+        List<Float> ratingList=orderList.stream()
+                .filter(item -> item.getReview() != null)
+                .map(Order::getRating)
+                .toList();
+        Float ratingAll = ratingList.stream().reduce(Float::sum).get();
+        order.getProduct().setRatingAvg(ratingAll/(ratingList.size()));
     }
 
     /**
@@ -81,7 +80,7 @@ public class ReviewService {
      * @return MyUnReviewOrdersDTO 사용자의 리뷰가 없는 주문 정보와 그 개수
      */
     public MyUnReviewOrdersDTO getUnReviewOrder(User user){
-        List<Order> orderList = orderRepository.findByUserAndReview_IdIsNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED);
+        List<Order> orderList = orderRepository.findByUserAndReviewIsNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED);
         return MyUnReviewOrdersDTO.toEntity(orderList);
     }
 
@@ -92,7 +91,7 @@ public class ReviewService {
      * @return MyReviewOrdersDTO 사용자의 리뷰가 있는(사용자가 리뷰를 작성 한) 주문 정보와 그 개수
      */
     public MyReviewOrdersDTO getReviewedOrder(User user){
-        List<Order> orderList = orderRepository.findByUserAndReview_IdIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED);
+        List<Order> orderList = orderRepository.findByUserAndReviewIsNotNullAndDeliveryStatusOrderByCreateAtDesc(user, DeliveryStatus.DELIVERED);
         return MyReviewOrdersDTO.toEntity(orderList);
     }
 

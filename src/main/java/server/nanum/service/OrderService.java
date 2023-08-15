@@ -50,10 +50,12 @@ public class OrderService {
     public void createOrder(AddOrderDTO dto, User user){
         Product product = productRepository.findById(dto.productId())
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 제품입니다"));
-        if(user.getUserGroup().getPoint()-dto.quantity()*product.getPrice()<0){
+        int toPoint = user.getUserGroup().getPoint()-dto.quantity()*product.getPrice();
+        if(toPoint<0){
             throw new PaymentRequiredException("포인트가 부족합니다");
         }
-        user.getUserGroup().updatePoint(user.getUserGroup().getPoint()-dto.quantity()*product.getPrice());
+
+        user.getUserGroup().updatePoint(toPoint);
         product.setPurchaseCnt(product.getPurchaseCnt()+1);
         Order order = dto.toEntity(product,user);
         orderRepository.save(order);
@@ -80,7 +82,8 @@ public class OrderService {
      * @return MyOrderListDTO 사용자의 현재 진행 중인 주문 정보와 개수
      */
     public MyOrderListDTO getUserOrder(User user,DeliveryStatus deliveryStatus){ //진행중인 주문 정보
-        /* host가 조회 시 그룹원들 주문도 조회
+        // host가 조회 시 그룹원들 주문도 조회
+        /*
             List<Order> orderList;
             if(user.getUserRole() == UserRole.HOST){
                 orderList = orderRepository.findByUserUserGroupAndDeliveryStatusOrdered(user.getUserGroup(),deliveryStatus);
@@ -89,11 +92,12 @@ public class OrderService {
             }*/
 
 
-        /* Guest가 조회 시 호스트 주문도 조회
+        // Guest가 조회 시 호스트 주문도 조회
+        /*
             Set<Order> set = new LinkedHashSet<>();
             List<Order> orderListSub;
             if(user.getUserRole() == UserRole.GUEST){
-                User hostUser = userRepository.findByUserGroupAndUserRole(user.getUserGroup(),UserRole.HOST.toString()).get();
+                User hostUser = userRepository.findByUserGroupAndUserRole(user.getUserGroup(),UserRole.HOST).get();
                 orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(hostUser,deliveryStatus);
                 set.addAll(orderListSub);
             }
@@ -120,7 +124,8 @@ public class OrderService {
         Set<Order> set = new LinkedHashSet<>();
         for(DeliveryStatus deliveryStatus:deliveryStatusList){
 
-            /* host가 조회 시 그룹원들 주문도 조회
+            // host가 조회 시 그룹원들 주문도 조회
+            /*
             List<Order> orderListSub;
             if(user.getUserRole() == UserRole.HOST){
                 orderListSub = orderRepository.findByUserUserGroupAndDeliveryStatusOrdered(user.getUserGroup(),deliveryStatus);
@@ -129,10 +134,11 @@ public class OrderService {
             }*/
 
 
-            /* Guest가 조회 시 호스트 주문도 조회
+            // Guest가 조회 시 호스트 주문도 조회
+            /*
             List<Order> orderListSub;
             if(user.getUserRole() == UserRole.GUEST){
-                User hostUser = userRepository.findByUserGroupAndUserRole(user.getUserGroup(),UserRole.HOST.toString()).get();
+                User hostUser = userRepository.findByUserGroupAndUserRole(user.getUserGroup(),UserRole.HOST).get();
                 orderListSub = orderRepository.findByUserAndDeliveryStatusOrderByCreateAtDesc(hostUser,deliveryStatus);
                 set.addAll(orderListSub);
             }
