@@ -22,5 +22,4 @@ public class SubCategory {
     @JoinColumn(name = "category_id")
     private Category category;
 
-    // Getters and Setters
 }

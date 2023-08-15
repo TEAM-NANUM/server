@@ -3,6 +3,9 @@ package server.nanum.dto.user.request;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
+import lombok.Builder;
+
+@Builder
 @JsonPropertyOrder({"email","password"})
 public record SellerLoginRequestDTO(
         @Schema(example = "user@example.com",description = "판매자 이메일")

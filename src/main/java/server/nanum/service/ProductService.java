@@ -68,9 +68,9 @@ public class ProductService {
 
     @Transactional(readOnly = true)
     public ProductDTO.ProductList getProductsByQueryParameters(
-            Long subcategory, String q, String sort, Integer limit
+            Long category, Long subcategory, String q, String sort, Integer limit
     ) {
-        List<Product> products = productRepository.getProductsByQueryParameters(subcategory, q, sort, limit);
+        List<Product> products = productRepository.getProductsByQueryParameters(category, subcategory, q, sort, limit);
 
         // Entity ->  DTO
         List<ProductDTO.ProductListItem> productItems = products.stream()
