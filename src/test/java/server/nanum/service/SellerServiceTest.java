@@ -32,7 +32,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 @ActiveProfiles("test")
-@DataJpaTest
 public class SellerServiceTest {
     @Mock
     private OrderRepository orderRepository;
