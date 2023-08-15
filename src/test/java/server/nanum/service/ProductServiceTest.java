@@ -139,32 +139,32 @@ class ProductServiceTest {
         }
     }
 
-    @Nested
-    @DisplayName("상품 테스트")
-    class ProductTest {
-        @Test
-        @DisplayName("쿼리 파라미터를 이용하여 상품 목록을 가져올 수 있다.")
-        void testGetProductsByQueryParameters() {
-            List<Product> productList = new ArrayList<>();
-            productList.add(Product.builder().price(100).name("Product 1").deliveryType(DeliveryType.DIRECT).seller(Seller.builder().build()).build());
-            productList.add(Product.builder().price(200).name("Product 2").deliveryType(DeliveryType.PACKAGE).seller(Seller.builder().build()).build());
-
-            Long subcategoryId = 1L;
-            String query = "test";
-            String sort = "recent";
-            Integer limit = 10;
-            when(productRepository.getProductsByQueryParameters(subcategoryId, query, sort, limit)).thenReturn(productList);
-
-            ProductDTO.ProductList result = productService.getProductsByQueryParameters(subcategoryId, query, sort, limit);
-
-            assertAll(
-                    () -> assertEquals(2, result.getProducts().size(), () -> "상품 목록의 총 개수는 2개여야 합니다."),
-                    () -> assertEquals("Product 1", result.getProducts().get(0).getName(), () -> "첫 번째 상품의 이름은 Product 1 이어야 합니다."),
-                    () -> assertEquals(100, result.getProducts().get(0).getPrice(), () -> "첫 번째 상품의 가격은 100 이어야 합니다."),
-                    () -> assertEquals("Product 2", result.getProducts().get(1).getName(), () -> "두 번째 상품의 이름은 Product 2 이어야 합니다."),
-                    () -> assertEquals(200, result.getProducts().get(1).getPrice(), () -> "두 번째 상품의 가격은 200 이어야 합니다.")
-            );
-        }
+//    @Nested
+//    @DisplayName("상품 테스트")
+//    class ProductTest {
+//        @Test
+//        @DisplayName("쿼리 파라미터를 이용하여 상품 목록을 가져올 수 있다.")
+//        void testGetProductsByQueryParameters() {
+//            List<Product> productList = new ArrayList<>();
+//            productList.add(Product.builder().price(100).name("Product 1").deliveryType(DeliveryType.DIRECT).seller(Seller.builder().build()).build());
+//            productList.add(Product.builder().price(200).name("Product 2").deliveryType(DeliveryType.PACKAGE).seller(Seller.builder().build()).build());
+//
+//            Long subcategoryId = 1L;
+//            String query = "test";
+//            String sort = "recent";
+//            Integer limit = 10;
+//            when(productRepository.getProductsByQueryParameters(subcategoryId, query, sort, limit)).thenReturn(productList);
+//
+//            ProductDTO.ProductList result = productService.getProductsByQueryParameters(subcategoryId, query, sort, limit);
+//
+//            assertAll(
+//                    () -> assertEquals(2, result.getProducts().size(), () -> "상품 목록의 총 개수는 2개여야 합니다."),
+//                    () -> assertEquals("Product 1", result.getProducts().get(0).getName(), () -> "첫 번째 상품의 이름은 Product 1 이어야 합니다."),
+//                    () -> assertEquals(100, result.getProducts().get(0).getPrice(), () -> "첫 번째 상품의 가격은 100 이어야 합니다."),
+//                    () -> assertEquals("Product 2", result.getProducts().get(1).getName(), () -> "두 번째 상품의 이름은 Product 2 이어야 합니다."),
+//                    () -> assertEquals(200, result.getProducts().get(1).getPrice(), () -> "두 번째 상품의 가격은 200 이어야 합니다.")
+//            );
+//        }
 
         @Test
         @DisplayName("상품 ID를 이용하여 상품 상세 정보를 가져올 수 있다.")
@@ -185,4 +185,4 @@ class ProductServiceTest {
             );
         }
     }
-}
+

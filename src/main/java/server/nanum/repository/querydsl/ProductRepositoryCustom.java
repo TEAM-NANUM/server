@@ -4,5 +4,5 @@ import server.nanum.domain.product.Product;
 import java.util.List;
 
 public interface ProductRepositoryCustom {
-    List<Product> getProductsByQueryParameters(Long subcategory, String q, String sort, Integer limit);
+    List<Product> getProductsByQueryParameters(Long category, Long subcategory, String q, String sort, Integer limit);
 }

@@ -93,13 +93,14 @@ public class ProductController {
     })
     @GetMapping("/products")
     public ResponseEntity<ProductDTO.ProductList> getProducts(
+            @RequestParam(required = false) Long category,
             @RequestParam(required = false) Long subcategory,
             @RequestParam(required = false) String q,
             @RequestParam(defaultValue = "recent") String sort,
             @RequestParam(required = false) Integer limit
     ) {
         ProductDTO.ProductList productList =
-                productService.getProductsByQueryParameters(subcategory, q, sort, limit);
+                productService.getProductsByQueryParameters(category, subcategory, q, sort, limit);
 
         return ResponseEntity.ok(productList);
     }
