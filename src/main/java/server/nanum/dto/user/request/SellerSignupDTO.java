@@ -7,9 +7,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import server.nanum.domain.Address;
 import server.nanum.domain.Seller;
 import server.nanum.dto.request.AddressDTO;
@@ -26,6 +24,8 @@ import server.nanum.dto.request.AddressDTO;
 @Getter
 @Builder
 @JsonPropertyOrder({"username", "email", "password", "phone_number", "address"})
+@NoArgsConstructor
+@AllArgsConstructor
 public class SellerSignupDTO {
     @Schema(example = "나눔이",description = "판매자명")
     @NotBlank(message = "사용자명은 비어있을 수 없습니다!")
