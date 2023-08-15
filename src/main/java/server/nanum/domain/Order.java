@@ -57,5 +57,8 @@ public class Order {
             return false;
         }
     }
+    public Float getRating(){
+        return this.review.getRating();
+    }
 }
 
