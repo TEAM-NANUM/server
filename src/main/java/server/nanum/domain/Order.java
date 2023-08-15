@@ -44,7 +44,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order")
     private Review review;
 
     public void setReview(Review review){
