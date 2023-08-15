@@ -99,14 +99,8 @@ public class SellerService {
             throw new BadRequestException("자신이 등록한 상품이 아닙니다");
         }
         List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(product);
-        Integer completeOrderCount=0,inProgressOrderCount=0;
-        for(Order order:orderList){
-            if(order.checkStatus()==true){
-                completeOrderCount++;
-            }else if(order.checkStatus()==false){
-                inProgressOrderCount++;
-            }
-        }
+        Integer completeOrderCount=(int)orderRepository.countByDeliveryStatus(DeliveryStatus.DELIVERED);
+        Integer inProgressOrderCount=(int)orderRepository.countByDeliveryStatus(DeliveryStatus.IN_PROGRESS)+(int)orderRepository.countByDeliveryStatus(DeliveryStatus.PAYMENT_COMPLETE);
         return SellerOrdersDTO.toEntity(product,orderList,completeOrderCount,inProgressOrderCount);
     }
 }
