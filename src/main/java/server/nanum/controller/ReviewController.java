@@ -126,6 +126,14 @@ public class ReviewController {
         ProductReviewDTO.ReviewList productReviews = reviewService.getProductReviews(productId);
         return ResponseEntity.ok(productReviews);
     }
+
+    /**
+     * 리뷰 전체 조회 API
+     *
+     * @param limit 리뷰 개수 제한
+     * @return ResponseEntity<AllReviewsDTO> 리뷰 정보 응답
+     *
+     */
     @Operation(summary = "리뷰 전체 조회 API", description = "모든 리뷰를 개수만큼 가져오는 API 입니다.")
 
     @ApiResponses(value = {
