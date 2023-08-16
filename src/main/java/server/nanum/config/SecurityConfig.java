@@ -49,7 +49,9 @@ public class SecurityConfig {
                             "/api/signup/guest",
                             "/api/groups",
                             "/api/orders/**",
-                            "/api/reviews/**",
+                            "/api/reviews/delivered",
+                            "/api/reviews/my",
+                            "/api/reviews",
                             "/api/seller/**",
                             "/api/cart/**"
                     ).authenticated();
