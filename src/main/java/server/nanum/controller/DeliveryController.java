@@ -49,7 +49,7 @@ public class DeliveryController {
     @GetMapping
     @PreAuthorize("hasRole('ROLE_HOST')")
     public DeliveryListResponse getDeliveryList(@CurrentUser User user) {
-        return deliveryService.getDeliveryList(user);
+        return deliveryService.getUserDeliveries(user);
     }
 
     /**
@@ -67,7 +67,7 @@ public class DeliveryController {
     @PostMapping
     @PreAuthorize("hasRole('ROLE_HOST')")
     public ResponseEntity<Void> saveDelivery(@RequestBody @Valid  DeliveryRequestDTO request, @CurrentUser User user) {
-        deliveryService.saveDelivery(request, user);
+        deliveryService.save(request, user);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -88,7 +88,7 @@ public class DeliveryController {
     @PutMapping("/default")
     @PreAuthorize("hasRole('ROLE_HOST')")
     public ResponseEntity<Void> udpateDefault(@RequestParam Long id, @CurrentUser User user) {
-        deliveryService.toggleDefault(id, user);
+        deliveryService.toggleDefaultStatus(id, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -109,7 +109,7 @@ public class DeliveryController {
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_HOST')")
     public ResponseEntity<Void> updateDelivery(@PathVariable Long id, @Valid @RequestBody DeliveryRequestDTO request, @CurrentUser User user) {
-        deliveryService.updateDelivery(id, request, user);
+        deliveryService.update(id, request, user);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -129,7 +129,7 @@ public class DeliveryController {
     @DeleteMapping("/{id}")
     @PreAuthorize("hasRole('ROLE_HOST')")
     public ResponseEntity<Void> deleteDelivery(@PathVariable Long id, @CurrentUser User user) {
-        deliveryService.deleteDelivery(id, user);
+        deliveryService.delete(id, user);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

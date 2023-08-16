@@ -5,14 +5,12 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import server.nanum.domain.Address;
-import server.nanum.domain.AddressContainer;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
 import server.nanum.dto.request.AddressDTO;
@@ -47,7 +45,6 @@ public class DeliveryRequestDTO {
                 .defaultAddress(addressDTO.getDefaultAddress())
                 .detailAddress(addressDTO.getDetailAddress())
                 .build();
-        AddressContainer.addAddress(addressEntity);
 
         return Delivery.builder()
                 .receiver(receiver)

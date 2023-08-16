@@ -15,5 +15,8 @@ public interface DeliveryRepository extends JpaRepository<Delivery,Long> {
     Optional<Delivery> findByUserAndIsDefaultTrue(@Param("user") User user);
 
     Optional<Delivery> findByIdAndUser(Long id, User user);
+
     List<Delivery> findByUser(User user);
+
+    int countByUser(User user);
 }

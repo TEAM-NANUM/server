@@ -4,7 +4,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import server.nanum.domain.Address;
-import server.nanum.domain.AddressContainer;
 import server.nanum.domain.Delivery;
 
 import java.util.List;
@@ -37,19 +36,13 @@ public record DeliveryListResponse(@JsonProperty("delivery_address") List<Delive
             Address address
     ) {
         public static DeliveryResponse fromEntity(Delivery delivery) {
-            Address address = AddressContainer.getAddress(
-                    delivery.getZipCode(),
-                    delivery.getDefaultAddress(),
-                    delivery.getDetailAddress()
-            );
-
             return new DeliveryResponse(
                     delivery.getId(),
                     delivery.getNickname(),
                     delivery.isDefault(),
                     delivery.getPhoneNumber(),
                     delivery.getReceiver(),
-                    address
+                    delivery.getAddress()
             );
         }
     }
