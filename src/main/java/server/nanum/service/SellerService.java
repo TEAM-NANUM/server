@@ -18,6 +18,7 @@ import server.nanum.exception.ConflictException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
+import server.nanum.repository.SellerRepository;
 import server.nanum.repository.SubCategoryRepository;
 import server.nanum.security.custom.CustomAccessDeniedHandler;
 
@@ -39,6 +40,7 @@ public class SellerService {
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final SubCategoryRepository subCategoryRepository;
+    private final SellerRepository sellerRepository;
 
     /**
      * 새로운 상품 생성을 수행합니다
@@ -102,5 +104,32 @@ public class SellerService {
         Integer completeOrderCount=(int)orderRepository.countByDeliveryStatus(DeliveryStatus.DELIVERED);
         Integer inProgressOrderCount=(int)orderRepository.countByDeliveryStatus(DeliveryStatus.IN_PROGRESS)+(int)orderRepository.countByDeliveryStatus(DeliveryStatus.PAYMENT_COMPLETE);
         return SellerOrdersDTO.toEntity(product,orderList,completeOrderCount,inProgressOrderCount);
+    }
+    /**
+     * 판매자의 상품에 대한 주문의 배송상태를 수정합니다
+     *
+     * @param orderId 주문의 Id
+     * @param deliveryStatus 수정할 배송 상태
+     * @param  seller 판매자
+     * @return 상품 생성 완료 응답
+     * @throws BadRequestException 판매자가 등록한 상품에 대한 주문이 아닌 경우, 이미 주문이 배송완료된 상태인 경우 예외를 던집니다.
+     * @throws NotFoundException 주문 Id로 주문을 찾을 수 없는 경우 예외를 던집니다.
+     */
+    @Transactional
+    public void updateOrderDelivery(Long orderId,DeliveryStatus deliveryStatus,Seller seller){
+        Order order = orderRepository.findById(orderId)
+                .orElseThrow(()-> new NotFoundException("존재하지 않는 주문입니다."));
+        if(order.getProduct().getSeller().getId()==seller.getId()){
+            throw new BadRequestException("자신이 등록한 상품에 대한 주문이 아닙니다.");
+        }
+        if(order.getDeliveryStatus()==DeliveryStatus.DELIVERED){
+            throw new BadRequestException("이미 배송 완료된 상품입니다.");
+        }
+        order.setDeliveryStatus(deliveryStatus);
+        if(deliveryStatus==DeliveryStatus.DELIVERED){
+            seller.withPoint(seller.getPoint()+(order.getTotalAmount().longValue()));
+        }
+        orderRepository.save(order);
+        sellerRepository.save(seller);
     }
 }

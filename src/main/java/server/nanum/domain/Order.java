@@ -57,6 +57,9 @@ public class Order {
             return false;
         }
     }
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus){
+        this.deliveryStatus=deliveryStatus;
+    }
     public Float getRating(){
         return this.review.getRating();
     }
