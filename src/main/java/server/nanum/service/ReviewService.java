@@ -2,6 +2,8 @@ package server.nanum.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.DeliveryStatus;
@@ -9,6 +11,7 @@ import server.nanum.domain.Order;
 import server.nanum.domain.Review;
 import server.nanum.domain.User;
 import server.nanum.dto.request.AddReviewDTO;
+import server.nanum.dto.response.AllReviewsDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.ProductReviewDTO;
@@ -118,5 +121,9 @@ public class ReviewService {
         return ProductReviewDTO.ReviewList.builder()
                 .reviews(reviewItems)
                 .build();
+    }
+    public AllReviewsDTO getAllReviews(Integer limit){
+        List<Review> reviewList = reviewRepository.findAllByOrderByCreateAtDesc();
+        return AllReviewsDTO.toEntity(reviewList.subList(0,limit));
     }
 }

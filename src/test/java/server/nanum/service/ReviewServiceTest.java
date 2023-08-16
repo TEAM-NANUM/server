@@ -7,6 +7,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import server.nanum.domain.*;
 import server.nanum.domain.product.Category;
@@ -14,6 +18,7 @@ import server.nanum.domain.product.Product;
 import server.nanum.domain.product.SubCategory;
 import server.nanum.dto.request.AddReviewDTO;
 import server.nanum.dto.request.AddressDTO;
+import server.nanum.dto.response.AllReviewsDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.ProductReviewDTO;
@@ -22,6 +27,7 @@ import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
 import server.nanum.repository.ReviewRepository;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -130,12 +136,14 @@ public class ReviewServiceTest {
             .rating(4.5F)
             .id(1L)
             .order(order3)
+            .createAt(LocalDateTime.MIN)
             .build();
     Review review2 = Review.builder()
             .comment("약간 상함")
             .rating(4.1F)
             .id(2L)
             .order(order2)
+            .createAt(LocalDateTime.now().minusDays(3))
             .build();
     @Test
     @DisplayName("리뷰생성 테스트")
@@ -221,6 +229,30 @@ public class ReviewServiceTest {
         assertAll(
                 ()->assertEquals(2,result.getReviews().size(),()->"2개여야함"),
                 ()->assertEquals(1L,result.getReviews().get(0).getId(),()->"올바른 리뷰가 나와야함")
+        );
+    }
+
+    @Test
+    @DisplayName("리뷰 개수제한 조회")
+    @org.junit.jupiter.api.Order(4)
+    public void testAllReview() {
+        List<Review> reviews = new ArrayList<>();
+        reviews.add(review1);
+        reviews.add(review2);
+        Review review3 = Review.builder()
+                .comment("약간 상함333")
+                .rating(4.1F)
+                .id(3L)
+                .order(order3)
+                .createAt(LocalDateTime.now())
+                .build();
+        reviews.add(review3);
+        when(reviewRepository.findAllByOrderByCreateAtDesc()).thenReturn(reviews);
+        AllReviewsDTO result = reviewService.getAllReviews(2);
+        assertAll(
+                ()->assertEquals(2,result.reviews().size(),()->"2개여야함"),
+                ()->assertEquals(2,result.count(),()->"2개여야함"),
+                ()->assertEquals(1L,result.reviews().get(0).id(),()->"올바른 리뷰가 나와야함")
         );
     }
 
