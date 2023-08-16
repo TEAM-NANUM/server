@@ -46,7 +46,6 @@ public class User {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Delivery> deliveries = new ArrayList<>() ;
 
-    // Host 사용자를 생성하는 메서드
     public static User createHost(HostLoginRequestDTO hostDTO, UserGroup userGroup) {
         return User.builder()
                 .uid(hostDTO.uid())
@@ -60,7 +59,6 @@ public class User {
         return userRole == UserRole.GUEST;
     }
 
-    // 사용자가 속한 UserGroup의 포인트를 반환하는 메서드
     public int getUserGroupPoint() {
         return userGroup.getPoint();
     }

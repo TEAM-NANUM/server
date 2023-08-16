@@ -56,4 +56,16 @@ public class CartRequestDTO {
         @Schema(defaultValue = "1",description = "상품 개수")
         private Integer quantity;
     }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Getter
+    @Setter
+    public static class CartIdListAndAddress {
+        @JsonProperty("item_list")
+        List<Long> itemIds;
+
+        @JsonProperty("address")
+        private AddressDTO address;
+    }
 }

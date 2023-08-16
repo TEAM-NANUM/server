@@ -110,4 +110,17 @@ public class CartController {
         CartResponseDTO.CartList cartList = cartService.removeFromCart(cartIdList, user);
         return ResponseEntity.ok(cartList);
     }
+
+
+    @Operation(summary = "장바구니에서 아이템을 일괄 구매하는 API", description = "장바구니 항목의 Id를 받아서 일괄 구매를 진행하는 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "주문 성공!", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "404", description= "삭제 할 장바구니 아이템이 존재하지 않음.", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
+    @PostMapping("/purchase")
+    public ResponseEntity<Void> purchaseFromCart(@CurrentUser User user, @Valid @RequestBody CartRequestDTO.CartIdListAndAddress cartIdListAndAddress) {
+        cartService.purchaseFromCart(cartIdListAndAddress, user);
+        return ResponseEntity.ok().build();
+    }
 }
