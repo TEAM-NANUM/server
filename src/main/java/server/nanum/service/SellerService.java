@@ -119,16 +119,21 @@ public class SellerService {
     public void updateOrderDelivery(Long orderId,DeliveryStatus deliveryStatus,Seller seller){
         Order order = orderRepository.findById(orderId)
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 주문입니다."));
-        if(order.getProduct().getSeller().getId()==seller.getId()){
+
+        if(!order.getProduct().getSeller().getId().equals(seller.getId())){
             throw new BadRequestException("자신이 등록한 상품에 대한 주문이 아닙니다.");
         }
+
         if(order.getDeliveryStatus()==DeliveryStatus.DELIVERED){
             throw new BadRequestException("이미 배송 완료된 상품입니다.");
         }
+
         order.setDeliveryStatus(deliveryStatus);
+
         if(deliveryStatus==DeliveryStatus.DELIVERED){
             seller.withPoint(seller.getPoint()+(order.getTotalAmount().longValue()));
         }
+
         orderRepository.save(order);
         sellerRepository.save(seller);
     }
