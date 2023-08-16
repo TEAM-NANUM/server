@@ -124,6 +124,10 @@ public class ReviewService {
     }
     public AllReviewsDTO getAllReviews(Integer limit){
         List<Review> reviewList = reviewRepository.findAllByOrderByCreateAtDesc();
+        if(limit==0){
+            return AllReviewsDTO.toEntity(reviewList);
+        }
         return AllReviewsDTO.toEntity(reviewList.subList(0,limit));
+
     }
 }
