@@ -14,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
+import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.Seller;
 import server.nanum.dto.request.AddProductDTO;
 import server.nanum.dto.response.SellerInfoDTO;
@@ -126,5 +127,31 @@ public class SellerController {
             @CurrentUser Seller seller){
         SellerOrdersDTO dto = sellerService.getSellerOrders(productId,seller);
         return ResponseEntity.ok().body(dto);
+    }
+
+    /**
+     * 주문 배송 상태 업데이트
+     *
+     * @param
+     * @return ResponseEntity<Void> 주문 배송 상태 업데이트 결과 응답
+     *
+     */
+
+    @Operation(summary = "주문 배송 상태 수정 API", description = "주문의 ID로 해당 주문의 배송 상태를 수정하는 API입니다.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "400", description = "요청에 누락이 있는 경우", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "401", description = "토큰이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "403", description = "토큰은 있으나 권한이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "404", description = "주문 ID로 상품을 찾을 수 없는 경우", content = @Content(schema = @Schema(hidden = true))),
+            @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @PatchMapping("/order/{order_id}")
+    public ResponseEntity<Void> updateOrderStatus(
+            @PathVariable("order_id") Long orderId,
+            @CurrentUser Seller seller,
+            @RequestParam DeliveryStatus deliveryStatus){
+        sellerService.updateOrderDelivery(orderId,deliveryStatus,seller);
+        return ResponseEntity.ok().build();
     }
 }
