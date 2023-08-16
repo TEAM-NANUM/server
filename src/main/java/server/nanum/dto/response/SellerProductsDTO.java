@@ -3,6 +3,7 @@ package server.nanum.dto.response;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
+import server.nanum.domain.DeliveryType;
 import server.nanum.domain.product.Product;
 
 import java.util.List;
@@ -13,7 +14,7 @@ public record SellerProductsDTO(
         @Schema(description = "상품 정보")
         List<SellerProductOneDTO> products) {
 
-    @JsonPropertyOrder({"productId","name","imgUrl","unit","price"})
+    @JsonPropertyOrder({"productId","name","imgUrl","unit","price","ratingAvg","deliveryType"})
     public record SellerProductOneDTO( //판매 상품 단건 정보 DTO
             @JsonProperty("product_id")
             @Schema(example = "1",description = "상품 번호")
@@ -26,7 +27,11 @@ public record SellerProductsDTO(
             @Schema(example = "10",description = "상품 단위(Kg)")
             Integer unit,
             @Schema(example = "1000",description = "상품 가격")
-            Integer price) {
+            Integer price,
+            @Schema(example = "5.0",description = "살품 평균 별점")
+            Float ratingAvg,
+            @Schema(example="PACKAGE",description = "배송 방법")
+            DeliveryType deliveryType) {
     }
 
 
@@ -37,7 +42,9 @@ public record SellerProductsDTO(
                     product.getName(),
                     product.getImgUrl(),
                     product.getUnit(),
-                    product.getPrice());
+                    product.getPrice(),
+                    product.getRatingAvg(),
+                    product.getDeliveryType());
         }).toList();
         return new SellerProductsDTO(dtoList.size(),dtoList);
     }
