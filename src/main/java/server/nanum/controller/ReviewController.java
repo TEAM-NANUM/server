@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.User;
 import server.nanum.dto.request.AddReviewDTO;
+import server.nanum.dto.response.AllReviewsDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.ProductReviewDTO;
@@ -124,5 +125,25 @@ public class ReviewController {
             @PathVariable("product_id") Long productId) {
         ProductReviewDTO.ReviewList productReviews = reviewService.getProductReviews(productId);
         return ResponseEntity.ok(productReviews);
+    }
+
+    /**
+     * 리뷰 전체 조회 API
+     *
+     * @param limit 리뷰 개수 제한
+     * @return ResponseEntity<AllReviewsDTO> 리뷰 정보 응답
+     *
+     */
+    @Operation(summary = "리뷰 전체 조회 API", description = "모든 리뷰를 개수만큼 가져오는 API 입니다.")
+
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "응답 성공!",  content = @Content(mediaType = "application/json" ,schema = @Schema(implementation = AllReviewsDTO.class))),
+            @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
+    })
+    @GetMapping("/reviews/all")
+    public ResponseEntity<AllReviewsDTO> getAllReviews(
+            @RequestParam(required = false,defaultValue = "0") Integer limit){
+        AllReviewsDTO dto = reviewService.getAllReviews(limit);
+        return ResponseEntity.ok(dto);
     }
 }

@@ -28,7 +28,7 @@ public class Review {
     @Column(name = "create_at")
     private LocalDateTime createAt;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
     @JoinColumn(name = "order_id")
     private Order order;
 

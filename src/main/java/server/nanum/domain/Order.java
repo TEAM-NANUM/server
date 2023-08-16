@@ -44,7 +44,7 @@ public class Order {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @OneToOne(mappedBy = "order",cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "order")
     private Review review;
 
     public void setReview(Review review){
@@ -56,6 +56,9 @@ public class Order {
         }else{
             return false;
         }
+    }
+    public void setDeliveryStatus(DeliveryStatus deliveryStatus){
+        this.deliveryStatus=deliveryStatus;
     }
     public Float getRating(){
         return this.review.getRating();

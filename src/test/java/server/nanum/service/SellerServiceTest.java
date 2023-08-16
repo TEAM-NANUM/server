@@ -18,6 +18,7 @@ import server.nanum.dto.request.AddressDTO;
 import server.nanum.dto.response.SellerInfoDTO;
 import server.nanum.dto.response.SellerOrdersDTO;
 import server.nanum.dto.response.SellerProductsDTO;
+import server.nanum.exception.BadRequestException;
 import server.nanum.exception.ConflictException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
@@ -66,6 +67,7 @@ public class SellerServiceTest {
             .email("string")
             .password("1234")
             .phoneNumber("1234")
+            .point(0L)
             .build();
     Seller seller2 = Seller.builder()
             .name("판매")
@@ -209,6 +211,23 @@ public class SellerServiceTest {
                 ()->assertEquals(1L,result.orders().get(0).id(),()->"올바른 주문이 나와야함"),
                 ()->assertEquals(2L,result.orders().get(1).id(),()->"올바른 주문이 나와야함"),
                 ()->assertEquals(3L,result.orders().get(2).id(),()->"올바른 주문이 나와야함")
+        );
+    }
+
+    @Test
+    @DisplayName("주문 수정 테스트")
+    @org.junit.jupiter.api.Order(5)
+    public void testUpdateOrder() {
+        Long orderId=1L;
+        when(orderRepository.findById(orderId)).thenReturn(Optional.of(order1));
+
+        sellerService.updateOrderDelivery(orderId,DeliveryStatus.PAYMENT_COMPLETE,seller);
+        assertThrows(BadRequestException.class,()->sellerService.updateOrderDelivery(orderId,DeliveryStatus.DELIVERED,seller2));
+        sellerService.updateOrderDelivery(orderId,DeliveryStatus.DELIVERED,seller);
+        assertThrows(BadRequestException.class,()->sellerService.updateOrderDelivery(orderId,DeliveryStatus.PAYMENT_COMPLETE,seller));
+        assertAll(
+                ()->assertEquals(1000,seller.getPoint(),()->"포인트 수정되야함"),
+                ()->assertEquals(DeliveryStatus.DELIVERED,order1.getDeliveryStatus(),()->"수정되야함")
         );
     }
 }

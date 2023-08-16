@@ -15,11 +15,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.DeliveryStatus;
+import server.nanum.domain.DeliveryType;
 import server.nanum.domain.User;
 import server.nanum.dto.request.AddOrderDTO;
 import server.nanum.dto.response.MyOrderListDTO;
 import server.nanum.dto.response.OrderUserInfoDTO;
 import server.nanum.service.OrderService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 주문 관련 컨트롤러
@@ -101,7 +105,10 @@ public class OrderController {
     })
     @GetMapping("/in-progress")
     public ResponseEntity<MyOrderListDTO> getProgressOrders(@CurrentUser User user){
-        MyOrderListDTO dto = orderService.getUserOrder(user, DeliveryStatus.IN_PROGRESS);
+        List<DeliveryStatus> deliveryStatusList = new ArrayList<>();
+        deliveryStatusList.add(DeliveryStatus.PAYMENT_COMPLETE);
+        deliveryStatusList.add(DeliveryStatus.IN_PROGRESS);
+        MyOrderListDTO dto = orderService.getUserOrder(user, deliveryStatusList);
         return ResponseEntity.ok().body(dto);
     }
 
