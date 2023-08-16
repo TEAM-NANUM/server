@@ -43,19 +43,21 @@ public class Delivery {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public void changeDefaultStatus(boolean isDefault) {
-        this.isDefault = isDefault;
+    public void resetDefault() {
+        this.isDefault = false;
     }
 
-    public void updateDelivery(String receiver, String nickname, String phoneNumber, Address address) {
-        AddressContainer.removeAddress(this.address);
+    public void makeDefault() {
+        this.isDefault = true;
+    }
+
+
+    public void update(String receiver, String nickname, String phoneNumber, Address address) {
         this.receiver = receiver;
         this.nickname = nickname;
         this.phoneNumber = phoneNumber;
         this.address = address;
-        AddressContainer.addAddress(address);
     }
-
 
     public String getUsername() {
         return user.getName();

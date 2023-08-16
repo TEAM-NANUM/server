@@ -8,7 +8,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import server.nanum.domain.Address;
-import server.nanum.domain.AddressContainer;
 
 @Getter
 @Builder
@@ -36,13 +35,12 @@ public class AddressDTO {
     }
 
     public Address toAddress() {
-        Address addressEntity = Address.builder()
+        Address address = Address.builder()
                 .zipCode(this.zipCode)
                 .defaultAddress(this.defaultAddress)
                 .detailAddress(this.detailAddress)
                 .build();
 
-        AddressContainer.addAddress(addressEntity);
-        return addressEntity;
+        return address;
     }
 }
