@@ -56,6 +56,7 @@ public class OrderService {
         }
 
         user.getUserGroup().updatePoint(toPoint);
+        userRepository.save(user);
         product.setPurchaseCnt(product.getPurchaseCnt()+1);
         Order order = dto.toEntity(product,user);
         orderRepository.save(order);
