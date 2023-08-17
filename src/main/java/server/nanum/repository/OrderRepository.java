@@ -20,10 +20,10 @@ public interface OrderRepository extends JpaRepository<Order,Long> {
 
     @Query(value = "SELECT o from Order o WHERE o.product = :product ORDER BY o.createAt DESC")
     List<Order> findByProductOrderByCreateAtDesc(@Param("product") Product product);
-    @Query(value = "SELECT SUM(COALESCE(o.review.rating, 0)) FROM Order o")
-    Float  calculateTotalRatingSum();
-    @Query("SELECT COUNT(o) FROM Order o LEFT JOIN o.review r WHERE r IS NOT NULL")
-    long countByReviewIsNotNull();
+    @Query(value = "SELECT SUM(COALESCE(o.review.rating, 0)) FROM Order o WHERE o.product= :product")
+    Float  calculateTotalRatingSum(@Param("product") Product product);
+    @Query("SELECT COUNT(o) FROM Order o LEFT JOIN o.review r WHERE r IS NOT NULL AND o.product= :product")
+    long countByReviewIsNotNull(@Param("product") Product product);
     @Query("SELECT COUNT(o) FROM Order o WHERE o.deliveryStatus = :delivery")
     long countByDeliveryStatus(@Param("delivery") DeliveryStatus delivery);
     @Query(value = "SELECT o from Order o WHERE o.user.userGroup = :userGroup AND o.deliveryStatus= :delivery ORDER BY o.user.name ASC, o.createAt DESC")

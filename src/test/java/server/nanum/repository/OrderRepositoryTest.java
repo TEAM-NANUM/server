@@ -178,7 +178,7 @@ public class OrderRepositoryTest {
     @org.junit.jupiter.api.Order(5)
     @DisplayName("총합조회")
     public void sumRating(){
-        Float sum = orderRepository.calculateTotalRatingSum();
+        Float sum = orderRepository.calculateTotalRatingSum(product);
         assertAll(
                 ()-> assertEquals(8.6F,sum,()->"평균 이상함")
         );
@@ -187,7 +187,7 @@ public class OrderRepositoryTest {
     @org.junit.jupiter.api.Order(6)
     @DisplayName("개수조회")
     public void countReview(){
-        long count = orderRepository.countByReviewIsNotNull();
+        long count = orderRepository.countByReviewIsNotNull(product);
         assertAll(
                 ()-> assertEquals(2,count,()->"개수 이상함")
         );
