@@ -36,6 +36,9 @@ public record SellerOrdersDTO(
     public record SellerOrdersInfoDTO( //판매 상품 정보
             @Schema(example = "토마토",description = "상품 이름")
             String name,
+            @Schema(description = "상품 대표 이미지")
+            @JsonProperty("img_url")
+            String imgUrl,
             @Schema(example = "10",description = "상품 단위(Kg)")
             Integer unit,
             @Schema(example = "1000",description = "상품 가격")
@@ -51,6 +54,7 @@ public record SellerOrdersDTO(
         }).toList();
         SellerOrdersInfoDTO productInfoDto = new SellerOrdersInfoDTO( //제품 객체 -> 판매자 제품 정보 DTO
                 product.getName(),
+                product.getImgUrl(),
                 product.getUnit(),
                 product.getPrice());
         return new SellerOrdersDTO(productInfoDto,completeCount,inProgressCount,orderDtoList);
