@@ -27,8 +27,16 @@ public class DiscordWebHookService {
         if(discordWebhookUrl.isEmpty()){
             return;
         }
+        String userRoleChange="";
+        if (userRole == "GUEST") {
+            userRoleChange="게스트유저";
+        }else if(userRole=="SELLER"){
+            userRoleChange="판매자";
+        }else if(userRole == "HOST"){
+            userRoleChange="카카오유저";
+        }
 
-        String message = userRole+" 번호: " +userPk + "  " + username + "님이 로그인 하셨습니다.";
+        String message = userRoleChange+" 번호: " +userPk + "  " + username + "님이 로그인 하셨습니다.";
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
