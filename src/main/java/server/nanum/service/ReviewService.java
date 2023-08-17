@@ -115,7 +115,8 @@ public class ReviewService {
                         .id(review.getId())
                         .username(review.getOrder().getUser().getName())
                         .rating(review.getRating())
-                        .comment(review.getComment()).build())
+                        .comment(review.getComment())
+                        .createdAt(review.getCreateAt()).build())
                 .toList();
 
         return ProductReviewDTO.ReviewList.builder()
