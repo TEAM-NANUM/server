@@ -14,6 +14,8 @@ import server.nanum.dto.user.request.SellerSignupDTO;
 import server.nanum.exception.ConflictException;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.SellerRepository;
+import server.nanum.service.DiscordWebHook.DiscordWebHookService;
+import server.nanum.service.DiscordWebHook.UserStatus;
 
 /**
  * SignupService는 회원가입 관련 비즈니스 로직을 처리하는 서비스입니다.
@@ -33,6 +35,7 @@ public class SignupService {
     private final SellerRepository sellerRepository;
     private final PasswordEncoder passwordEncoder;
     private final EntityManager entityManager;
+    private final DiscordWebHookService discordWebHookService;
 
     /**
      * 게스트 회원가입 처리
@@ -43,9 +46,9 @@ public class SignupService {
     public void registerGuest(User user, GuestSignupDTO guestSignupDTO) {
         User guest = guestSignupDTO.toGuest(user.getUserGroup());
         entityManager.persist(guest);
-
         Delivery newDelivery = guestSignupDTO.toDelivery(guest);
         deliveryRepository.save(newDelivery);
+        discordWebHookService.sendLoginMessage(UserStatus.REGISTER,guest.getId().toString(),guest.getName(),guest.getUserRole().toString());
     }
 
     /**
@@ -57,12 +60,11 @@ public class SignupService {
         checkDuplicateEmailAndPhoneNumber(sellerSignupDTO);
 
         Seller seller = sellerSignupDTO.toSeller();
-
         seller.withPoint(0L);
 
         seller.withEncryptedPassword(passwordEncoder.encode(seller.getPassword()));
-
         sellerRepository.save(seller);
+        discordWebHookService.sendLoginMessage(UserStatus.REGISTER,seller.getId().toString(),seller.getName(),"SELLER");
     }
 
     private void checkDuplicateEmailAndPhoneNumber(SellerSignupDTO sellerSignupDTO) {

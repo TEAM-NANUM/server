@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.dto.user.request.UserLoginRequestDTO;
 import server.nanum.dto.user.response.LoginResponseDTO;
+import server.nanum.service.DiscordWebHook.DiscordWebHookService;
+import server.nanum.service.DiscordWebHook.UserStatus;
 import server.nanum.service.adapter.UserAdapter;
 
 import java.util.List;
@@ -42,8 +44,9 @@ public class LoginService {
         LoginResponseDTO loginResponseDTO = getUserAdapterFor(userLoginRequestDTO)
                 .map(adapter -> adapter.login(userLoginRequestDTO))
                 .orElseThrow(() -> new IllegalArgumentException("지원되지 않는 사용자 유형입니다."));
+
         LoginResponseDTO.UserResponseDTO dto = loginResponseDTO.userResponseDTO();
-        discordWebHookService.sendLoginMessage(dto.id(),dto.username(),dto.role());
+        discordWebHookService.sendLoginMessage(UserStatus.LOGIN,dto.id(),dto.username(),dto.role());
         return loginResponseDTO;
     }
 

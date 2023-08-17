@@ -12,6 +12,8 @@ import server.nanum.dto.user.response.LoginResponseDTO;
 import server.nanum.dto.user.response.LoginResponseFactory;
 import server.nanum.repository.UserRepository;
 import server.nanum.dto.user.request.UserLoginRequestDTO;
+import server.nanum.service.DiscordWebHook.DiscordWebHookService;
+import server.nanum.service.DiscordWebHook.UserStatus;
 import server.nanum.utils.JwtProvider;
 
 /**
@@ -31,7 +33,7 @@ public class HostUserAdapter implements UserAdapter {
     private final EntityManager entityManager;
     private final JwtProvider jwtProvider;
     private final LoginResponseFactory loginResponseFactory;
-
+    private final DiscordWebHookService discordWebHookService;
     /**
      * 호스트 사용자 어댑터가 주어진 사용자 로그인 정보를 지원하는지 여부를 반환합니다.
      *
@@ -61,6 +63,7 @@ public class HostUserAdapter implements UserAdapter {
                     entityManager.persist(newUserGroup);
                     User newUser = User.createHost(hostDTO, newUserGroup);
                     userRepository.save(newUser);
+                    discordWebHookService.sendLoginMessage(UserStatus.REGISTER,newUser.getId().toString(),newUser.getName(),newUser.getUserRole().toString());
                     return createLoginResponse(newUser);
                 });
     }
