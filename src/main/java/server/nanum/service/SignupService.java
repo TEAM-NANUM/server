@@ -46,7 +46,8 @@ public class SignupService {
     public void registerGuest(User user, GuestSignupDTO guestSignupDTO) {
         User guest = guestSignupDTO.toGuest(user.getUserGroup());
         entityManager.persist(guest);
-        Delivery newDelivery = guestSignupDTO.toDelivery(guest);
+
+        Delivery newDelivery = guestSignupDTO.toDelivery(guest, guestSignupDTO.getPhoneNumber());
         deliveryRepository.save(newDelivery);
         discordWebHookService.sendLoginMessage(UserStatus.REGISTER,guest.getId().toString(),guest.getName(),guest.getUserRole().toString());
     }

@@ -1,9 +1,11 @@
 package server.nanum.dto.user.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -33,6 +35,11 @@ public class GuestSignupDTO {
     @Schema(example = "나눔이",description = "게스트명")
     private String nickname;
 
+    @NotBlank(message = "전화번호를 입력해주세요!")
+    @Pattern(regexp = "^\\d{3}-\\d{3,4}-\\d{4}$", message = "유효한 전화번호 형식이 아닙니다!")
+    @JsonProperty("phone_number")
+    private String phoneNumber;
+
     @Valid
     @Schema(description = "게스트 주소")
     private AddressDTO address;
@@ -59,15 +66,17 @@ public class GuestSignupDTO {
      * @param user 사용자 정보
      * @return Delivery 생성된 배송 정보 객체
      */
-    public Delivery toDelivery(User user) {
+    public Delivery toDelivery(User user, String phoneNumber) {
         Address address = this.address.toAddress();
 
         return Delivery.builder()
                 .nickname("기본")
+                .receiver(user.getName())
                 .phoneNumber(null)
                 .address(address)
                 .isDefault(true)
                 .user(user)
+                .phoneNumber(phoneNumber)
                 .build();
     }
 }
