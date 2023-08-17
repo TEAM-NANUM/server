@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.sql.Update;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,6 +18,7 @@ import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.Seller;
 import server.nanum.dto.request.AddProductDTO;
+import server.nanum.dto.request.UpdateSellerOrderDTO;
 import server.nanum.dto.response.SellerInfoDTO;
 import server.nanum.dto.response.SellerOrdersDTO;
 import server.nanum.dto.response.SellerProductsDTO;
@@ -150,8 +152,8 @@ public class SellerController {
     public ResponseEntity<Void> updateOrderStatus(
             @PathVariable("order_id") Long orderId,
             @CurrentUser Seller seller,
-            @RequestParam DeliveryStatus deliveryStatus){
-        sellerService.updateOrderDelivery(orderId,deliveryStatus,seller);
+            @RequestBody UpdateSellerOrderDTO updateSellerOrderDTO){
+        sellerService.updateOrderDelivery(orderId,updateSellerOrderDTO.deliveryStatus(),seller);
         return ResponseEntity.ok().build();
     }
 }
