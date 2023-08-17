@@ -67,8 +67,8 @@ public class ReviewService {
         reviewRepository.save(review);
         order.setReview(review);
         order.getProduct().setReviewCnt(order.getProduct().getReviewCnt()+1);
-        Float ratingAll = orderRepository.calculateTotalRatingSum();
-        long ratingSize = orderRepository.countByReviewIsNotNull();
+        Float ratingAll = orderRepository.calculateTotalRatingSum(order.getProduct());
+        long ratingSize = orderRepository.countByReviewIsNotNull(order.getProduct());
         //리펙토링 전 코드 -> 만약 오류 발생시 롤백
         /*List<Order> orderList = orderRepository.findByProductOrderByCreateAtDesc(order.getProduct());
         List<Float> ratingList=orderList.stream()
@@ -76,7 +76,9 @@ public class ReviewService {
                 .map(Order::getRating)
                 .toList();
         Float ratingAll = ratingList.stream().reduce(Float::sum).get();*/
-        order.getProduct().setRatingAvg((Float)ratingAll/(ratingSize));
+        Float rating = ratingAll/ratingSize;
+        Float ratingAvg = (float) (Math.round(rating*10)/10.0);
+        order.getProduct().setRatingAvg(ratingAvg);
     }
 
     /**
