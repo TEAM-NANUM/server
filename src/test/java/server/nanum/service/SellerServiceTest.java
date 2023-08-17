@@ -23,6 +23,7 @@ import server.nanum.exception.ConflictException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
+import server.nanum.repository.SellerRepository;
 import server.nanum.repository.SubCategoryRepository;
 
 import java.util.ArrayList;
@@ -42,6 +43,8 @@ public class SellerServiceTest {
 
     @Mock
     private SubCategoryRepository subCategoryRepository;
+    @Mock
+    private SellerRepository sellerRepository;
 
     @InjectMocks
     private SellerService sellerService;

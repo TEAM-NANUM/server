@@ -57,9 +57,9 @@ class ProductServiceTest {
         @BeforeEach
         void innerSetup() {
             carouselList = new ArrayList<>();
-            carouselList.add(new Carousel(1L, "Carousel 1", "Carousel 1 Url"));
-            carouselList.add(new Carousel(2L, "Carousel 2", "Carousel 2 Url"));
-            carouselList.add(new Carousel(3L, "Carousel 3", "Carousel 3 Url"));
+            carouselList.add(new Carousel(1L, "Carousel 1", "Carousel 1 Url","returnUrl1"));
+            carouselList.add(new Carousel(2L, "Carousel 2", "Carousel 2 Url","returnUrl2"));
+            carouselList.add(new Carousel(3L, "Carousel 3", "Carousel 3 Url","returnUrl3"));
         }
 
         @Test
