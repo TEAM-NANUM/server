@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.Order;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @JsonPropertyOrder({"count","orderList"})
 public record MyOrderListDTO(
@@ -24,6 +25,9 @@ public record MyOrderListDTO(
                 @Schema(example = "1000",description = "총 주문 가격")
                 @JsonProperty("total_price")
                 Integer totalPrice,
+                @Schema(example = "9999-99-99 99:99:99.999999",description = "주문 생성 날짜")
+                @JsonProperty("created_at")
+                LocalDateTime createdAt,
                 @JsonProperty("delivery_status")
                 @Schema(example = "IN_PROGRESS",description ="주문 상태")
                 DeliveryStatus deliveryStatus,
@@ -41,6 +45,7 @@ public record MyOrderListDTO(
                                 order.getId(),
                                 order.getUser().getName(),
                                 order.getTotalAmount(),
+                                order.getCreateAt(),
                                 order.getDeliveryStatus(),
                                 order.getProduct().getName(),
                                 order.getProduct().getUnit(),
