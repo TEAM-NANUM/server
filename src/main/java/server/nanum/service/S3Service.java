@@ -48,7 +48,9 @@ public class S3Service {
                 .stream()
                 .map(imageInfo -> {
                     String fileName = createFileName(imageInfo.fileName());
-                    URL presignedUrl = createPresignedUrl(fileName, imageInfo.fileType());
+                    String fileType = imageInfo.fileType();
+                    URL presignedUrl = createPresignedUrl(fileName, fileType);
+
                     String imageUrl = s3Util.createImageUrl(fileName);
                     return new UrlResponse(presignedUrl, imageUrl);
                 })
