@@ -21,6 +21,7 @@ import server.nanum.exception.PaymentRequiredException;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
+import server.nanum.repository.UserRepository;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -40,8 +41,8 @@ public class OrderServiceTest {
 
     @Mock
     private DeliveryRepository deliveryRepository;
-
-
+    @Mock
+    private UserRepository userRepository;
     @InjectMocks
     OrderService orderService;
 

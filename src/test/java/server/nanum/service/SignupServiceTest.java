@@ -3,6 +3,7 @@ package server.nanum.service;
 import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import server.nanum.domain.Delivery;
@@ -15,6 +16,8 @@ import server.nanum.exception.ConflictException;
 import server.nanum.repository.DeliveryRepository;
 import server.nanum.repository.SellerRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import server.nanum.repository.UserRepository;
+import server.nanum.service.DiscordWebHook.DiscordWebHookService;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,11 +38,13 @@ public class SignupServiceTest {
 
     @Mock
     private EntityManager entityManager;
+    @Mock
+    private DiscordWebHookService discordWebHookService;
 
     @BeforeEach
     public void setUp() {
         MockitoAnnotations.openMocks(this);
-        signupService = new SignupService(deliveryRepository, sellerRepository, passwordEncoder, entityManager);
+        signupService = new SignupService(deliveryRepository, sellerRepository, passwordEncoder, entityManager,discordWebHookService);
     }
 
     /**
@@ -53,7 +58,6 @@ public class SignupServiceTest {
 
         // When
         signupService.registerGuest(user, guestSignupDTO);
-
         // Then
         verify(entityManager, times(1)).persist(any(User.class));
         verify(deliveryRepository, times(1)).save(any(Delivery.class));

@@ -156,7 +156,8 @@ public class ReviewServiceTest {
         orderList.add(order2);
         orderList.add(order1);
         orderList.add(order4);
-        when(orderRepository.findByProductOrderByCreateAtDesc(product)).thenReturn(orderList);
+        when(orderRepository.calculateTotalRatingSum()).thenReturn(5.0F);
+        when(orderRepository.countByReviewIsNotNull()).thenReturn(1L);
         Review reviewTest = dto.toEntity(order3);
         reviewService.createReview(dto);
 
@@ -166,6 +167,8 @@ public class ReviewServiceTest {
 
         AddReviewDTO dto3 = new AddReviewDTO(4L,1.0F,"맛있어요");
         when(orderRepository.findById(4L)).thenReturn(Optional.of(order4));
+        when(orderRepository.calculateTotalRatingSum()).thenReturn(6.0F);
+        when(orderRepository.countByReviewIsNotNull()).thenReturn(2L);
         Review reviewTest2 = dto3.toEntity(order4);
         reviewService.createReview(dto3);
 
