@@ -29,6 +29,7 @@ import java.util.Optional;
 @Slf4j
 public class LoginService {
     private final List<UserAdapter> userAdapters;
+    private final DiscordWebHookService discordWebHookService;
 
     /**
      * 로그인 또는 회원 가입 처리를 수행합니다.
@@ -38,9 +39,12 @@ public class LoginService {
      * @throws IllegalArgumentException 지원되지 않는 사용자 유형일 경우 예외를 던집니다.
      */
     public LoginResponseDTO loginOrCreate(UserLoginRequestDTO userLoginRequestDTO) {
-        return getUserAdapterFor(userLoginRequestDTO)
+        LoginResponseDTO loginResponseDTO = getUserAdapterFor(userLoginRequestDTO)
                 .map(adapter -> adapter.login(userLoginRequestDTO))
                 .orElseThrow(() -> new IllegalArgumentException("지원되지 않는 사용자 유형입니다."));
+        LoginResponseDTO.UserResponseDTO dto = loginResponseDTO.userResponseDTO();
+        discordWebHookService.sendLoginMessage(dto.id(),dto.username(),dto.role());
+        return loginResponseDTO;
     }
 
     private Optional<UserAdapter> getUserAdapterFor(UserLoginRequestDTO userLoginRequestDTO) {

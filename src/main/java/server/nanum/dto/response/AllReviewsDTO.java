@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import server.nanum.domain.Order;
 import server.nanum.domain.Review;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @JsonPropertyOrder({"count","reviews"})
@@ -29,7 +30,10 @@ public record AllReviewsDTO(
                                  @Schema(example = "5.0",description = "리뷰 별점")
                                  Float rating,
                                  @Schema(example = "음식이 맛있어요",description = "리뷰 내용")
-                                 String comment){
+                                 String comment,
+                                 @Schema(example = "9999-99-99 99:99:99.999999",description = "리뷰 생성 날짜")
+                                 @JsonProperty("created_at")
+                                 LocalDateTime createdAt){
     }
 
     public static AllReviewsDTO toEntity(List<Review> reviewList){
@@ -40,7 +44,8 @@ public record AllReviewsDTO(
                     review.getOrder().getProduct().getId(),
                     review.getOrder().getProduct().getImgUrl(),
                     review.getRating(),
-                    review.getComment());
+                    review.getComment(),
+                    review.getCreateAt());
         }).toList();
         return new AllReviewsDTO(DtoList.size(),DtoList);
     }
