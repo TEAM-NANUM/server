@@ -13,6 +13,7 @@ import server.nanum.dto.request.CartRequestDTO;
 import server.nanum.dto.response.CartResponseDTO;
 import server.nanum.exception.BadRequestException;
 import server.nanum.exception.NotFoundException;
+import server.nanum.exception.PaymentRequiredException;
 import server.nanum.repository.CartRepository;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
@@ -95,7 +96,7 @@ public class CartService {
 
         int userPoint = user.getUserGroupPoint();
         if (userPoint < totalAmount) {
-            throw new BadRequestException("보유 포인트가 모자릅니다!");
+            throw new PaymentRequiredException("보유 포인트가 모자릅니다!");
         }
 
         List<Order> orders = new ArrayList<>();
