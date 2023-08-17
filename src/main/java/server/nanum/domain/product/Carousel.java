@@ -23,4 +23,7 @@ public class Carousel {
 
     @Column(name = "img_url")
     private String imgUrl;
+
+    @Column(name = "hyper_link")
+    private String hyperLink;
 }
