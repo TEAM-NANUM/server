@@ -8,6 +8,7 @@ import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.Order;
 import server.nanum.domain.product.Product;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @JsonPropertyOrder({"products","inProgressCount","comPleteCount","orders"})
 public record SellerOrdersDTO(
@@ -30,7 +31,10 @@ public record SellerOrdersDTO(
             String userName,
             @Schema(example = "IN_PROGRESS",description = "주문 상태")
             @JsonProperty("delivery_status")
-            DeliveryStatus deliveryStatus) {
+            DeliveryStatus deliveryStatus,
+            @Schema(example = "9999-99-99 99:99:99.999999",description = "주문 생성 날짜")
+            @JsonProperty("created_at")
+            LocalDateTime createdAt){
     }
     @JsonPropertyOrder({"name","unit","price"})
     public record SellerOrdersInfoDTO( //판매 상품 정보
@@ -50,7 +54,8 @@ public record SellerOrdersDTO(
                     order.getId(),
                     order.getProductCount(),
                     order.getUser().getName(),
-                    order.getDeliveryStatus());
+                    order.getDeliveryStatus(),
+                    order.getCreateAt());
         }).toList();
         SellerOrdersInfoDTO productInfoDto = new SellerOrdersInfoDTO( //제품 객체 -> 판매자 제품 정보 DTO
                 product.getName(),

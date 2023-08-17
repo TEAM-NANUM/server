@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import server.nanum.domain.Order;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @JsonPropertyOrder({"count","orders"})
 public record MyReviewOrdersDTO(
@@ -22,10 +23,16 @@ public record MyReviewOrdersDTO(
             @JsonProperty("img_url")
             @Schema(description = "주문 상품 대표이미지")
             String imgUrl,
+            @Schema(example = "9999-99-99 99:99:99.999999",description = "주문 생성 날짜")
+            @JsonProperty("order_created_at")
+            LocalDateTime order_createdAt,
             @Schema(example = "5.0",description = "자신이 남긴 별점")
             Float rating,
             @Schema(example = "음식이 맛있어요",description = "자신이 작성한 후기")
-            String comment){
+            String comment,
+            @Schema(example = "9999-99-99 99:99:99.999999",description = "리뷰 생성 날짜")
+            @JsonProperty("review_created_at")
+            LocalDateTime reviewCreatedAt){
 
     }
     public static MyReviewOrdersDTO toEntity(List<Order> orderList){
@@ -34,8 +41,10 @@ public record MyReviewOrdersDTO(
                     order.getId(),
                     order.getProduct().getName(),
                     order.getProduct().getImgUrl(),
+                    order.getCreateAt(),
                     order.getReview().getRating(),
-                    order.getReview().getComment());
+                    order.getReview().getComment(),
+                    order.getReview().getCreateAt());
         }).toList();
         return new MyReviewOrdersDTO(DtoList.size(),DtoList);
     }

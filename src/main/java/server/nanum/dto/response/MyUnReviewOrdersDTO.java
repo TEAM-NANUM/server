@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import server.nanum.domain.Order;
 
+import java.time.LocalDateTime;
 import java.util.List;
 @JsonPropertyOrder({"count","orders"})
 public record MyUnReviewOrdersDTO(
@@ -20,7 +21,10 @@ public record MyUnReviewOrdersDTO(
         String name,
         @JsonProperty("img_url")
         @Schema(description = "주문 상품 대표이미지")
-        String imgUrl){
+        String imgUrl,
+        @Schema(example = "9999-99-99 99:99:99.999999",description = "주문 생성 날짜")
+        @JsonProperty("order_created_at")
+        LocalDateTime orderCreatedAt){
     }
 
     public static MyUnReviewOrdersDTO toEntity(List<Order> orderList){
@@ -28,7 +32,8 @@ public record MyUnReviewOrdersDTO(
             return new MyUnReviewDTO(
                     order.getId(),
                     order.getProduct().getName(),
-                    order.getProduct().getImgUrl());
+                    order.getProduct().getImgUrl(),
+                    order.getCreateAt());
         }).toList();
         return new MyUnReviewOrdersDTO(DtoList.size(),DtoList);
     }
