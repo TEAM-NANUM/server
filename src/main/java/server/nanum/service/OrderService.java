@@ -9,12 +9,10 @@ import server.nanum.domain.product.Product;
 import server.nanum.dto.request.AddOrderDTO;
 import server.nanum.dto.response.MyOrderListDTO;
 import server.nanum.dto.response.OrderUserInfoDTO;
+import server.nanum.exception.BadRequestException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.exception.PaymentRequiredException;
-import server.nanum.repository.DeliveryRepository;
-import server.nanum.repository.OrderRepository;
-import server.nanum.repository.ProductRepository;
-import server.nanum.repository.UserRepository;
+import server.nanum.repository.*;
 
 import java.util.*;
 
@@ -32,6 +30,7 @@ import java.util.*;
 @Transactional(readOnly = true)
 @Slf4j
 public class OrderService {
+    private final UserGroupRepository userGroupRepository;
     private final OrderRepository orderRepository;
     private final ProductRepository productRepository;
     private final DeliveryRepository deliveryRepository;
@@ -169,5 +168,22 @@ public class OrderService {
             }
         }); */
 
+    }
+
+    @Transactional
+    public void deleteOrder(User user, Long deleteId) {
+        Order deleteOrder = orderRepository.findById(deleteId)
+                .orElseThrow(() -> new NotFoundException("id에 해당하는 상품이 존재하지 않습니다"));
+
+        if (!deleteOrder.getDeliveryStatus().equals(DeliveryStatus.PAYMENT_COMPLETE)) {
+            throw new BadRequestException("주문 취소는 배송 시작 전에만 가능합니다.");
+        }
+
+        int cancelPrice = user.getUserGroupPoint() + deleteOrder.getTotalAmount();
+        UserGroup userGroup = user.getUserGroup();
+        userGroup.updatePoint(cancelPrice);
+        userGroupRepository.save(userGroup);
+
+        orderRepository.delete(deleteOrder);
     }
 }

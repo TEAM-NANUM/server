@@ -15,7 +15,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import server.nanum.annotation.CurrentUser;
 import server.nanum.domain.DeliveryStatus;
-import server.nanum.domain.DeliveryType;
 import server.nanum.domain.User;
 import server.nanum.dto.request.AddOrderDTO;
 import server.nanum.dto.response.MyOrderListDTO;
@@ -130,5 +129,12 @@ public class OrderController {
     public ResponseEntity<MyOrderListDTO> getCompleteOrders(@CurrentUser User user){
         MyOrderListDTO dto = orderService.getUserOrder(user, DeliveryStatus.DELIVERED);
         return ResponseEntity.ok().body(dto);
+    }
+
+    @Operation(summary = "주문  취소 API", description = "상품이 배송되기 전인 API에 대해서만 주문을 취소하는 API입니다.")
+    @DeleteMapping("delete/{deleteId}")
+    public ResponseEntity<Void> deleteOrder(@CurrentUser User user, @PathVariable Long deleteId) {
+        orderService.deleteOrder(user, deleteId);
+        return ResponseEntity.ok().build();
     }
 }
