@@ -48,12 +48,16 @@ public class ProductDTO {
         private String name;
         @Schema(description = "캐러셀 이미지 주소")
         private String imgUrl;
+        @Schema(description = "캐러셀 HyperLine")
+        private String hyperLink;
 
         public static CarouselItem toDTO(Carousel carousel) {
-            return ProductDTO.CarouselItem.builder()
+            return CarouselItem.builder()
                     .id(carousel.getId())
                     .name(carousel.getName())
-                    .imgUrl(carousel.getImgUrl()).build();
+                    .imgUrl(carousel.getImgUrl())
+                    .hyperLink(carousel.getHyperLink())
+                    .build();
         }
     }
 
