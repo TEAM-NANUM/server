@@ -1,5 +1,6 @@
 package server.nanum.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -13,7 +14,7 @@ public record MyUnReviewOrdersDTO(
         Integer count,
         @Schema(description = "주문 정보")
         List<MyUnReviewDTO> orders){
-    @JsonPropertyOrder({"id","name","imgUrl"})
+    @JsonPropertyOrder({"id","name","imgUrl","orderCreatedAt"})
     public record MyUnReviewDTO( //리뷰 안달린 주문 단건 정보 DTO
         @Schema(example = "1",description = "주문 번호")
         Long id,
@@ -22,7 +23,8 @@ public record MyUnReviewOrdersDTO(
         @JsonProperty("img_url")
         @Schema(description = "주문 상품 대표이미지")
         String imgUrl,
-        @Schema(example = "9999-99-99 99:99:99.999999",description = "주문 생성 날짜")
+        @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+        @Schema(example = "9999-99-99T99:99:99:99",description = "주문 생성 날짜")
         @JsonProperty("order_created_at")
         LocalDateTime orderCreatedAt){
     }

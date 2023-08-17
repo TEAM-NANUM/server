@@ -1,5 +1,6 @@
 package server.nanum.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -14,7 +15,7 @@ public record MyReviewOrdersDTO(
         Integer count,
         @Schema(description = "주문 정보")
         List<MyReviewDTO> orders){
-    @JsonPropertyOrder({"id","name","imgUrl","rating","comment"})
+    @JsonPropertyOrder({"id","name","imgUrl","orderCreatedAt","rating","comment","reviewCreatedAt"})
     public record MyReviewDTO( //리뷰 달린 주문 단건 정보 DTO
             @Schema(example = "1",description = "주문 번호")
             Long id,
@@ -23,14 +24,16 @@ public record MyReviewOrdersDTO(
             @JsonProperty("img_url")
             @Schema(description = "주문 상품 대표이미지")
             String imgUrl,
-            @Schema(example = "9999-99-99 99:99:99.999999",description = "주문 생성 날짜")
+            @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+            @Schema(example = "9999-99-99T99:99:99:99",description = "주문 생성 날짜")
             @JsonProperty("order_created_at")
-            LocalDateTime order_createdAt,
+            LocalDateTime orderCreatedAt,
             @Schema(example = "5.0",description = "자신이 남긴 별점")
             Float rating,
             @Schema(example = "음식이 맛있어요",description = "자신이 작성한 후기")
             String comment,
-            @Schema(example = "9999-99-99 99:99:99.999999",description = "리뷰 생성 날짜")
+            @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+            @Schema(example = "9999-99-99T99:99:99:99",description = "리뷰 생성 날짜")
             @JsonProperty("review_created_at")
             LocalDateTime reviewCreatedAt){
 

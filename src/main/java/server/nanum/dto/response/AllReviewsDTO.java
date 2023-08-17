@@ -1,6 +1,7 @@
 package server.nanum.dto.response;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,7 +17,7 @@ public record AllReviewsDTO(
         Integer count,
         @Schema(description = "리뷰 정보")
         List<ReviewInfoDTO> reviews){
-    @JsonPropertyOrder({"id","userName","productId","imgUrl","rating","comment"})
+    @JsonPropertyOrder({"id","userName","productId","imgUrl","rating","comment","createdAt"})
     public record ReviewInfoDTO( //리뷰 안달린 주문 단건 정보 DTO
                                  @Schema(example = "1",description = "리뷰 번호")
                                  Long id,
@@ -31,7 +32,8 @@ public record AllReviewsDTO(
                                  Float rating,
                                  @Schema(example = "음식이 맛있어요",description = "리뷰 내용")
                                  String comment,
-                                 @Schema(example = "9999-99-99 99:99:99.999999",description = "리뷰 생성 날짜")
+                                 @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                                 @Schema(example = "9999-99-99T99:99:99:99",description = "리뷰 생성 날짜")
                                  @JsonProperty("created_at")
                                  LocalDateTime createdAt){
     }

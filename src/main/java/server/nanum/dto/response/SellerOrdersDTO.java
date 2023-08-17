@@ -1,5 +1,6 @@
 package server.nanum.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -20,7 +21,7 @@ public record SellerOrdersDTO(
         Integer completeOrderCount,
         @Schema(description = "주문 정보")
         List<SellerOrderOneDTO> orders){
-    @JsonPropertyOrder({"id","userName","quantity","deliveryStatus"})
+    @JsonPropertyOrder({"id","userName","quantity","deliveryStatus","createdAt"})
     public record SellerOrderOneDTO( //상품의 주문 단건 정보
             @Schema(example = "1",description = "주문 번호")
             Long id,
@@ -32,11 +33,12 @@ public record SellerOrdersDTO(
             @Schema(example = "IN_PROGRESS",description = "주문 상태")
             @JsonProperty("delivery_status")
             DeliveryStatus deliveryStatus,
-            @Schema(example = "9999-99-99 99:99:99.999999",description = "주문 생성 날짜")
+            @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+            @Schema(example = "9999-99-99T99:99:99:99",description = "주문 생성 날짜")
             @JsonProperty("created_at")
             LocalDateTime createdAt){
     }
-    @JsonPropertyOrder({"name","unit","price"})
+    @JsonPropertyOrder({"name","imgUrl","unit","price"})
     public record SellerOrdersInfoDTO( //판매 상품 정보
             @Schema(example = "토마토",description = "상품 이름")
             String name,

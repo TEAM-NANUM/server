@@ -1,5 +1,6 @@
 package server.nanum.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -15,7 +16,7 @@ public record MyOrderListDTO(
         @Schema(description = "주문 정보")
         @JsonProperty("order_list")
         List<MyOrderDTO> orderList) {
-        @JsonPropertyOrder({"orderId","customer","name","deliveryStatus","totalPrice","unit","quantity"})
+        @JsonPropertyOrder({"orderId","customer","name","createdAt","deliveryStatus","totalPrice","unit","quantity"})
         public record MyOrderDTO( //주문조회 단건 정보
                 @JsonProperty("order_id")
                 @Schema(example = "1",description = "주문 번호")
@@ -25,7 +26,8 @@ public record MyOrderListDTO(
                 @Schema(example = "1000",description = "총 주문 가격")
                 @JsonProperty("total_price")
                 Integer totalPrice,
-                @Schema(example = "9999-99-99 99:99:99.999999",description = "주문 생성 날짜")
+                @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+                @Schema(example = "9999-99-99T99:99:99:99",description = "주문 생성 날짜")
                 @JsonProperty("created_at")
                 LocalDateTime createdAt,
                 @JsonProperty("delivery_status")
