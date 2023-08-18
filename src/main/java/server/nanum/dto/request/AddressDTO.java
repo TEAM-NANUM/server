@@ -7,6 +7,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import server.nanum.domain.Address;
 
 @Getter
@@ -28,6 +29,7 @@ public class AddressDTO {
     @Schema(example = "삼성동 123번지",description = "상세 주소")
     @NotBlank(message = "상세 주소를 입력해주세요!")
     @JsonProperty("detail_address")
+    @Length(max = 254,message = "상세 주소의 길이 제한을 넘었습니다")
     private String detailAddress;
 
     public String toString(){

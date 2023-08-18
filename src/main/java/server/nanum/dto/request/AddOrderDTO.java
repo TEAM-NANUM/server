@@ -4,11 +4,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.*;
 import org.hibernate.annotations.HQLSelect;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Normalized;
 import server.nanum.domain.DeliveryStatus;
 import server.nanum.domain.Order;
@@ -24,6 +22,7 @@ public record AddOrderDTO( //주문 등록 DTO
         @NotNull(message = "상품 개수를 입력해 주세요")
         @Schema(example = "10",defaultValue = "1",description = "상품개수")
         @Positive(message = "상품 개수는 양수만 가능합니다")
+        @Max(value = 2147483646,message = "상품 개수의 최댓값을 넘었습니다")
         Integer quantity,
         @Valid
         @NotNull(message = "배송지 주소를 입력해주세요")

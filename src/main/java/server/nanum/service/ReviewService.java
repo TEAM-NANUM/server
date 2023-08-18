@@ -51,7 +51,7 @@ public class ReviewService {
      * @throws ConflictException 해당 주문에 이미 리뷰가 존재할 경우 예외를 던집니다
      */
     @Transactional
-    public void createReview(AddReviewDTO dto){
+    public void createReview(AddReviewDTO dto, User user){
         Order order = orderRepository.findById(dto.orderId())
                 .orElseThrow(()-> new NotFoundException("존재하지 않는 주문입니다."));
 
@@ -61,6 +61,10 @@ public class ReviewService {
 
         if(order.getReview()!=null){
             throw new ConflictException("이미 리뷰가 존재합니다");
+        }
+
+        if(order.getUser() != user ){
+            throw new BadRequestException("주문을 한 사용자가 아닙니다");
         }
 
         Review review = dto.toEntity(order);
@@ -110,9 +114,15 @@ public class ReviewService {
      * @return ProductReviewDTO.ReviewList 상품의 리뷰 정보
      * @throws NotFoundException 상품Id로 찾은 상품이 존재하지 않을 경우 예외를 던집니다.
      */
-    public ProductReviewDTO.ReviewList getProductReviews(Long productId) {
+    public ProductReviewDTO.ReviewList getProductReviews(Long productId){ // , String sort) {
         productRepository.findById(productId).orElseThrow(()->new NotFoundException("존재하지 않는 상품입니다."));
-
+//         if (sort == "rating"){
+//            List<Review> result = reviewRepository.findAllByOrderProductIdOrderByRatingAsc(productId);
+//         }else if (sort == "recent"){
+//             List<Review> result = reviewRepository.findAllByOrderProductIdOrderByCreateAtDesc(productId);
+//         }else{
+//             List<Review> result = reviewRepository.findAllByOrderProductId(productId);
+//         }
         List<Review> result = reviewRepository.findAllByOrderProductId(productId);
 
         List<ProductReviewDTO.ReviewListItem> reviewItems = result.stream()

@@ -53,28 +53,31 @@ public class DiscordWebHookService {
         }
 
         String message = "\n역할: "+userRoleChange+"\nId: " +userPk + "\n닉네임: "+ username;
+        try {
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_JSON);
+            Map<String, Object> payload = new HashMap<>();
+            String finalUserStatusChange = userStatusChange;
+            int intColorInt = Integer.parseInt(colorCode, 16);
+            payload.put("embeds", new Object[]{
+                    new HashMap<String, Object>() {{
+                        put("title", finalUserStatusChange);
+                        put("description", message);
+                        put("color", intColorInt);
+                    }}
+            });
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        Map<String, Object> payload = new HashMap<>();
-        String finalUserStatusChange = userStatusChange;
-        int intColorInt = Integer.parseInt(colorCode, 16);
-        payload.put("embeds", new Object[]{
-                new HashMap<String, Object>() {{
-                    put("title", finalUserStatusChange);
-                    put("description", message);
-                    put("color", intColorInt);
-                }}
-        });
+            HttpEntity<Map<String, Object>> entity = new HttpEntity<>(payload, headers);
 
-        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(payload, headers);
-
-        ResponseEntity<String> response = restTemplate.exchange(
-                discordWebhookUrl,
-                HttpMethod.POST,
-                entity,
-                String.class
-        );
+            ResponseEntity<String> response = restTemplate.exchange(
+                    discordWebhookUrl,
+                    HttpMethod.POST,
+                    entity,
+                    String.class
+            );
+        }catch(Exception ex){
+            log.error("Error sending login data to Discord: " + ex.getMessage());
+        }
     }
 }
 

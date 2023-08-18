@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import server.nanum.domain.*;
 import server.nanum.dto.request.AddressDTO;
 
@@ -33,6 +34,7 @@ import java.util.UUID;
 public class GuestSignupDTO {
     @NotBlank(message="게스트 명은 비어있을 수 없습니다!")
     @Schema(example = "나눔이",description = "게스트명")
+    @Length(max = 254,message = "게스트명의 길이 제한을 넘었습니다")
     private String nickname;
 
     @NotBlank(message = "전화번호를 입력해주세요!")

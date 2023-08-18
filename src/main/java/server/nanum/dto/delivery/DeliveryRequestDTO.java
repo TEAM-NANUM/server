@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.validator.constraints.Length;
 import server.nanum.domain.Address;
 import server.nanum.domain.Delivery;
 import server.nanum.domain.User;
@@ -23,10 +24,12 @@ import server.nanum.dto.request.AddressDTO;
 public class DeliveryRequestDTO {
     @Schema(example = "나눔이",description = "수신자명")
     @NotBlank(message = "수신자 이름을 입력해주세요!")
+    @Length(max = 254,message = "수신자 이름의 길이 제한을 넘었습니다")
     private String receiver;
 
     @Schema(example = "집",description = "주소지 별칭")
     @NotBlank(message = "주소지 별칭을 입력해주세요!")
+    @Length(max = 254,message = "주소지 별칭의 길이 제한을 넘었습니다")
     private String nickname;
 
     @NotBlank(message = "전화번호를 입력해주세요!")

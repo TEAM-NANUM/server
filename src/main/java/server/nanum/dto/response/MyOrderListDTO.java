@@ -16,7 +16,7 @@ public record MyOrderListDTO(
         @Schema(description = "주문 정보")
         @JsonProperty("order_list")
         List<MyOrderDTO> orderList) {
-        @JsonPropertyOrder({"orderId","customer","name","createdAt","deliveryStatus","totalPrice","unit","quantity"})
+        @JsonPropertyOrder({"orderId","customer","name","createdAt","deliveryStatus","totalPrice","unit","quantity","imgUrl"})
         public record MyOrderDTO( //주문조회 단건 정보
                 @JsonProperty("order_id")
                 @Schema(example = "1",description = "주문 번호")
@@ -38,7 +38,10 @@ public record MyOrderListDTO(
                 @Schema(example = "10",description = "주문 상품 단위(Kg)")
                 Integer unit,
                 @Schema(example = "1",description = "주문 상품 개수")
-                Integer quantity){
+                Integer quantity,
+                @JsonProperty("img_url")
+                @Schema(description = "주문 상품 대표이미지")
+                String imgUrl){
         }
 
         public static MyOrderListDTO toEntity(List<Order> orderList){
@@ -51,7 +54,8 @@ public record MyOrderListDTO(
                                 order.getDeliveryStatus(),
                                 order.getProduct().getName(),
                                 order.getProduct().getUnit(),
-                                order.getProductCount());
+                                order.getProductCount(),
+                                order.getProduct().getImgUrl());
                 }).toList();
                 return new MyOrderListDTO(DtoList.size(),DtoList);
         }

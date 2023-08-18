@@ -26,6 +26,7 @@ public class CartRequestDTO {
         @Schema(defaultValue = "1",description = "상품 개수")
         @NotNull(message = "상품 개수를 입력해주세요")
         @Positive(message = "상품 개수는 양수만 가능합니다")
+        @Max(value = 2147483646,message = "상품 개수의 최댓값을 넘었습니다")
         private Integer quantity;
     }
 
@@ -54,6 +55,7 @@ public class CartRequestDTO {
         @NotNull(message = "상품 개수를 입력해주세요")
         @Positive(message = "상품의 개수는 양수만 가능합니다")
         @Schema(defaultValue = "1",description = "상품 개수")
+        @Max(value = 2147483646,message = "상품 개수의 최댓값을 넘었습니다")
         private Integer quantity;
     }
 

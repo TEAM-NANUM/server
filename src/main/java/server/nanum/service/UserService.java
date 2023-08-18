@@ -6,7 +6,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import server.nanum.domain.User;
+import server.nanum.domain.UserRole;
 import server.nanum.dto.user.response.HostGetResponseDTO;
+import server.nanum.exception.BadRequestException;
+import server.nanum.exception.NotFoundException;
 import server.nanum.repository.UserRepository;
 
 
@@ -56,4 +59,13 @@ public class UserService {
     public void deleteUser(User user) {
         userRepository.delete(user);
     }
+
+//    public void deleteGuest(User user, Long guestId){
+//        User guest = userRepository.findById(guestId)
+//                .orElseThrow(()->new NotFoundException("게스트를 찾을 수 없습니다"));
+//        if (user.getUserRole() != UserRole.HOST || user.getUserGroup() != guest.getUserGroup()){
+//            throw new BadRequestException("게스트를 삭제할 수 없습니다");
+//        }
+//        userRepository.delete(guest);
+//    }
 }

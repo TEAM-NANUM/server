@@ -100,8 +100,8 @@ public class ReviewController {
     })
     @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
     @PostMapping("/reviews")
-    public ResponseEntity<Void> addReview(@Valid @RequestBody AddReviewDTO dto){
-        reviewService.createReview(dto);
+    public ResponseEntity<Void> addReview(@Valid @RequestBody AddReviewDTO dto, @CurrentUser User user){
+        reviewService.createReview(dto,user);
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 

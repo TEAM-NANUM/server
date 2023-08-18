@@ -22,6 +22,7 @@ import server.nanum.dto.response.AllReviewsDTO;
 import server.nanum.dto.response.MyReviewOrdersDTO;
 import server.nanum.dto.response.MyUnReviewOrdersDTO;
 import server.nanum.dto.response.ProductReviewDTO;
+import server.nanum.exception.BadRequestException;
 import server.nanum.exception.NotFoundException;
 import server.nanum.repository.OrderRepository;
 import server.nanum.repository.ProductRepository;
@@ -95,6 +96,13 @@ public class ReviewServiceTest {
             .userRole(UserRole.HOST)
             .userGroup(userGroup)
             .build();
+    User user2 = User.builder()
+            .name("test")
+            .id(2L)
+            .uid(200L)
+            .userRole(UserRole.HOST)
+            .userGroup(userGroup)
+            .build();
     Order order1 = Order.builder()
             .id(1L)
             .deliveryAddress(dto.toString())
@@ -131,6 +139,15 @@ public class ReviewServiceTest {
             .user(user)
             .totalAmount(2000)
             .build();
+    Order order6 = Order.builder()
+            .id(6L)
+            .deliveryAddress(dto.toString())
+            .product(product)
+            .productCount(6)
+            .deliveryStatus(DeliveryStatus.DELIVERED)
+            .user(user)
+            .totalAmount(6000)
+            .build();
     Review review1 = Review.builder()
             .comment("맛있음")
             .rating(4.5F)
@@ -159,18 +176,21 @@ public class ReviewServiceTest {
         when(orderRepository.calculateTotalRatingSum(product)).thenReturn(5.0F);
         when(orderRepository.countByReviewIsNotNull(product)).thenReturn(1L);
         Review reviewTest = dto.toEntity(order3);
-        reviewService.createReview(dto);
+        reviewService.createReview(dto,user);
 
 
         AddReviewDTO dto2 = new AddReviewDTO(5L,5.0F,"맛있어요");
-        assertThrows(NotFoundException.class,()-> reviewService.createReview(dto2));
+        assertThrows(NotFoundException.class,()-> reviewService.createReview(dto2,user));
 
         AddReviewDTO dto3 = new AddReviewDTO(4L,1.0F,"맛있어요");
         when(orderRepository.findById(4L)).thenReturn(Optional.of(order4));
         when(orderRepository.calculateTotalRatingSum(product)).thenReturn(6.0F);
         when(orderRepository.countByReviewIsNotNull(product)).thenReturn(2L);
+        when(orderRepository.findById(6L)).thenReturn(Optional.of(order6));
+        AddReviewDTO dto4 = new AddReviewDTO(6L,1.0F,"맛있어요");
+        assertThrows(BadRequestException.class,()->reviewService.createReview(dto4,user2));
         Review reviewTest2 = dto3.toEntity(order4);
-        reviewService.createReview(dto3);
+        reviewService.createReview(dto3,user);
 
         assertAll(
                 ()->assertEquals(5.0F,reviewTest.getRating(),()->"5여야함"),
