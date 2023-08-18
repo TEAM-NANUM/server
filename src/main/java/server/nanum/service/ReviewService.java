@@ -63,9 +63,9 @@ public class ReviewService {
             throw new ConflictException("이미 리뷰가 존재합니다");
         }
 
-//        if(order.getUser().getId()!= user.getId() ){
-//            throw new BadRequestException("주문을 한 사용자가 아닙니다");
-//        }
+        if(order.getUser().getId()!= user.getId() ){
+            throw new BadRequestException("주문을 한 사용자가 아닙니다");
+        }
 
         Review review = dto.toEntity(order);
         reviewRepository.save(review);
