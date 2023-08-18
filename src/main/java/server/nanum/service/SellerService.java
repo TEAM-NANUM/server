@@ -21,6 +21,7 @@ import server.nanum.repository.ProductRepository;
 import server.nanum.repository.SellerRepository;
 import server.nanum.repository.SubCategoryRepository;
 import server.nanum.security.custom.CustomAccessDeniedHandler;
+import server.nanum.service.DiscordWebHook.DiscordWebHookService;
 
 import java.util.List;
 
@@ -41,6 +42,7 @@ public class SellerService {
     private final ProductRepository productRepository;
     private final SubCategoryRepository subCategoryRepository;
     private final SellerRepository sellerRepository;
+    private final DiscordWebHookService discordWebHookService;
 
     /**
      * 새로운 상품 생성을 수행합니다
@@ -60,6 +62,7 @@ public class SellerService {
             throw new ConflictException("이미 존재하는 상품입니다");
         }
         productRepository.save(product);
+        discordWebHookService.sendProductMessage(product);
     }
 
     /**
