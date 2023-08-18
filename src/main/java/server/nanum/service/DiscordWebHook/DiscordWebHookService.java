@@ -103,8 +103,8 @@ public class DiscordWebHookService {
                     " 님이 상품을 등록했습니다\n\n상품번호: " +product.getId()+
                     "\n상품명:"+product.getName()+
                     "\n상품카테고리: "+product.getSubCategory().getCategory().getName()+
-                    "-"+product.getSubCategory().getName()+
-                    "상품 이미지:";
+                    ":  "+product.getSubCategory().getName()+
+                    "\n상품 이미지:";
             imageEmbed.put("title", "상품등록");
             imageEmbed.put("description", message);
             imageEmbed.put("color", 8388736);
