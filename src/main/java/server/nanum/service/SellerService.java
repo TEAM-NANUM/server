@@ -62,7 +62,7 @@ public class SellerService {
             throw new ConflictException("이미 존재하는 상품입니다");
         }
         productRepository.save(product);
-//        discordWebHookService.sendProductMessage(product);
+        discordWebHookService.sendProductMessage(product);
     }
 
     /**
