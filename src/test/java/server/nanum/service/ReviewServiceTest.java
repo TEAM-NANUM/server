@@ -71,7 +71,7 @@ public class ReviewServiceTest {
             .imgUrl("String")
             .purchaseCnt(0)
             .ratingAvg(0.0F)
-            .reviewCnt(5)
+            .reviewCnt(0)
             .subCategory(subCategory)
             .build();
     Address address = Address.builder()
@@ -173,8 +173,8 @@ public class ReviewServiceTest {
         orderList.add(order2);
         orderList.add(order1);
         orderList.add(order4);
-        when(orderRepository.calculateTotalRatingSum(product)).thenReturn(5.0F);
-        when(orderRepository.countByReviewIsNotNull(product)).thenReturn(1L);
+//        when(orderRepository.calculateTotalRatingSum(product)).thenReturn(5.0F);
+//        when(orderRepository.countByReviewIsNotNull(product)).thenReturn(1L);
         Review reviewTest = dto.toEntity(order3);
         reviewService.createReview(dto,user);
 
@@ -184,8 +184,8 @@ public class ReviewServiceTest {
 
         AddReviewDTO dto3 = new AddReviewDTO(4L,1.0F,"맛있어요");
         when(orderRepository.findById(4L)).thenReturn(Optional.of(order4));
-        when(orderRepository.calculateTotalRatingSum(product)).thenReturn(6.0F);
-        when(orderRepository.countByReviewIsNotNull(product)).thenReturn(2L);
+//        when(orderRepository.calculateTotalRatingSum(product)).thenReturn(6.0F);
+//        when(orderRepository.countByReviewIsNotNull(product)).thenReturn(2L);
         when(orderRepository.findById(6L)).thenReturn(Optional.of(order6));
         AddReviewDTO dto4 = new AddReviewDTO(6L,1.0F,"맛있어요");
         assertThrows(BadRequestException.class,()->reviewService.createReview(dto4,user2));
