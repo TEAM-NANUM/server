@@ -54,7 +54,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "403", description = "토큰은 있으나 권한이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
-    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
+    @PreAuthorize("hasRole('ROLE_HOST')")
     @GetMapping("/reviews/delivered")
     public ResponseEntity<MyUnReviewOrdersDTO> getDeliveredOrder(@CurrentUser User user){
         MyUnReviewOrdersDTO dto = reviewService.getUnReviewOrder(user);
@@ -75,7 +75,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "403", description = "토큰은 있으나 권한이 없는 경우", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
-    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
+    @PreAuthorize("hasRole('ROLE_HOST')")
     @GetMapping("/reviews/my")
     public ResponseEntity<MyReviewOrdersDTO> getMyOrder(@CurrentUser User user){
         MyReviewOrdersDTO dto = reviewService.getReviewedOrder(user);
@@ -98,7 +98,7 @@ public class ReviewController {
             @ApiResponse(responseCode = "404", description = "주문 ID로 주문을 찾을 수 없는 경우 ", content = @Content(schema = @Schema(hidden = true))),
             @ApiResponse(responseCode = "500", description= " 다뤄지지 않은 Server 오류, 백엔드 담당자에게 문의!", content = @Content(schema = @Schema(hidden = true)))
     })
-    @PreAuthorize("hasAnyRole('ROLE_HOST', 'ROLE_GUEST')")
+    @PreAuthorize("hasRole('ROLE_HOST')")
     @PostMapping("/reviews")
     public ResponseEntity<Void> addReview(@Valid @RequestBody AddReviewDTO dto, @CurrentUser User user){
         reviewService.createReview(dto,user);
