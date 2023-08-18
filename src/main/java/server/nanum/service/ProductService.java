@@ -80,7 +80,7 @@ public class ProductService {
         return ProductDTO.ProductList.toDTO(productItems);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public ProductDTO.ProductDetail getProductDetailById(Long productId) {
         Product product = productRepository.findById(productId)
                 .orElseThrow(() -> new NotFoundException("존재하지 않는 상품입니다."));
