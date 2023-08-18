@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.*;
+import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.Normalized;
 import server.nanum.domain.Order;
 import server.nanum.domain.Review;
@@ -23,6 +24,7 @@ public record AddReviewDTO( //리뷰 등록 DTO
         Float rating,
         @NotNull(message = "상품의 후기가 존재하지 않습니다") //후기 작성 없이 별점만 줄 수도 있으니 notnull 사용
         @Schema(example = "음식이 맛있어요",description = "상품 후기")
+        @Length(max = 254,message = "후기의 길이 제한을 넘었습니다")
         String comment) {
     public Review toEntity(Order order){ //DTO -> 리뷰 객체
         return Review.builder()

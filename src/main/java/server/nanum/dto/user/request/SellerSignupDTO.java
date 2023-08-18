@@ -8,6 +8,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import lombok.*;
+import org.hibernate.validator.constraints.Length;
 import server.nanum.domain.Address;
 import server.nanum.domain.Seller;
 import server.nanum.dto.request.AddressDTO;
@@ -29,6 +30,7 @@ import server.nanum.dto.request.AddressDTO;
 public class SellerSignupDTO {
     @Schema(example = "나눔이",description = "판매자명")
     @NotBlank(message = "사용자명은 비어있을 수 없습니다!")
+    @Length(max = 254,message = "사용자명의 길이 제한을 넘었습니다")
     private String username;
 
     @NotBlank(message = "전화번호를 입력해주세요!")
@@ -39,10 +41,12 @@ public class SellerSignupDTO {
     @Schema(example = "user@example.com",description = "판매자 이메일")
     @NotBlank(message = "이메일은 비어있을 수 없습니다!")
     @Email(message = "유효한 이메일 주소가 아닙니다!")
+    @Length(max = 254,message = "이메일 주소의 길이 제한을 넘었습니다")
     private String email;
 
     @Schema(example = "password123",description = "판매자 계정 비밀번호")
     @NotBlank(message = "비밀번호는 비어있을 수 없습니다!")
+    @Length(max = 254,message = "비밀번호의 길이 제한을 넘었습니다")
     private String password;
 
     @Valid
