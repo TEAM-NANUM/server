@@ -92,11 +92,11 @@ public class DiscordWebHookService {
 
 
 
-//    @Value("${discord.productWebhookUrl:}") // Load value from application.yml
-//    private String discordProductWebhookUrl;
-    private final String discordProductWebhookUrl2 = "https://discord.com/api/webhooks/1142067860441669682/d0C9vouv8X9Nb7acu1SBxcMwTgfDkMUXbEyDPPwS-6485fQqcVqH-1_rR2nqFfpAFWpd";
+    @Value("${discord.productWebhookUrl:}") // Load value from application.yml
+    private String discordProductWebhookUrl;
+//    private final String discordProductWebhookUrl2 = "https://discord.com/api/webhooks/1142067860441669682/d0C9vouv8X9Nb7acu1SBxcMwTgfDkMUXbEyDPPwS-6485fQqcVqH-1_rR2nqFfpAFWpd";
     public void sendProductMessage(Product product) {
-        if (discordProductWebhookUrl2.isEmpty()) {
+        if (discordProductWebhookUrl.isEmpty()) {
             return;
         }
         try {
@@ -152,13 +152,13 @@ public class DiscordWebHookService {
             HttpEntity<Map<String, Object>> entity = new HttpEntity<>(payload, headers);
 
             ResponseEntity<String> response = restTemplate.exchange(
-                    discordProductWebhookUrl2,
+                    discordProductWebhookUrl,
                     HttpMethod.POST,
                     entity,
                     String.class
             );
         } catch (Exception ex) {
-            log.error("Error sending login data to Discord: " + ex.getMessage());
+            log.error("Error sending product data to Discord: " + ex.getMessage());
         }
     }
 }
